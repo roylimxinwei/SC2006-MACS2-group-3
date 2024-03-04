@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary, // primary colour
   },
   ImageDesign: {
-    borderRadius: "130%",
+    borderRadius: 130,
     width: 250,
     height: 250,
   },
