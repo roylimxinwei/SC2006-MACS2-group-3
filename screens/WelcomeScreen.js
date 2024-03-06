@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   signUpText: {
-    color: "#FFFFFF",
+    color: "#7F2B0F",
+    textDecorationLine: "underline",
     fontSize: 16,
   },
 });

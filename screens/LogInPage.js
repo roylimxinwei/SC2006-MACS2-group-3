@@ -40,7 +40,7 @@ const LoginPage = ({ navigation }) => {
         secureTextEntry={true}
       />
       <TouchableOpacity
-        onPress={() => navigation.navigate("HomeScreen")} // Replace 'HomeScreen' with your home screen route name
+        onPress={() => navigation.navigate("ReviewLandingPage")} // Replace 'HomeScreen' with your home screen route name
         style={styles.button}
       >
         <Text style={styles.buttonText}>Log In</Text>
