@@ -3,13 +3,28 @@
 // Welcome screen links to sign up and log in screen
 
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { 
+  Image,
+  StyleSheet, 
+  Text, 
+  View,
+  TouchableOpacity,
+} from "react-native";
 import colors from "../config/colors";
 
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
+      <TouchableOpacity 
+        style={styles.historyButton} 
+        onPress={() => navigation.navigate ("DiningHistoryPage")}
+      >
+        <Image 
+          style={styles.buttonImage}
+          source={require('../assets/jiakIcon.png')} // replace with your button image path
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -38,9 +53,22 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
   },
+  historyButton: {
+    position: 'absolute', // Position the button over the screen
+    right: 10,            // Distance from the left
+    bottom: 10,          // Distance from the bottom
+    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+    overflow: 'hidden', // Ensures the image doesn't bleed outside the border radius  
+  },
   buttonText: {
     color: "#FFFFFF",
     fontSize: 18,
+  },
+  buttonImage: {
+    width: 70, // Set the width of your button image
+    height: 70, // Set the height of your button image
+    borderRadius: 70, // Makes the image round
   },
   signUpText: {
     color: "#FFFFFF",
