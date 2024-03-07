@@ -1,24 +1,17 @@
 import React, { useState } from "react";
 import {
+  Image,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  Image,
 } from "react-native";
 
 const Star = ({ selected, onPress, index }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.starContainer}>
-      <Text
-        style={[
-          styles.star,
-          selected && styles.starSelected,
-        ]}
-      >
-        ★
-      </Text>
+      <Text style={[styles.star, selected && styles.starSelected]}>★</Text>
     </TouchableOpacity>
   );
 };
@@ -84,7 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     position: "absolute",
     top: 45,
-    left:30,
+    left: 30,
   },
   input: {
     borderWidth: 1,
@@ -103,6 +96,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   buttonText: {
     color: "#FFFFFF",

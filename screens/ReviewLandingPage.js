@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../config/colors";
 
 const ReviewLandingPage = ({ navigation }) => {
@@ -12,10 +12,12 @@ const ReviewLandingPage = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.smallText}>
-        Dining at: 
-      </Text>
-      <TouchableOpacity style={styles.smallButton} onPress={handleReviewsPressReferral}>
+      <Text style={styles.smallText}>Dining at:</Text>
+      <Text style={styles.smallText}>ARestaurantName</Text>
+      <TouchableOpacity
+        style={styles.smallButton}
+        onPress={handleReviewsPressReferral}
+      >
         <Text style={styles.smallButtonText}>Have a referrel code?</Text>
       </TouchableOpacity>
       <Image
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
   },
   smallText: {
     color: "#7F2B0F",
-    fontSize: 25,
+    fontSize: 40,
     marginBottom: 80,
     marginTop: -80,
     textAlign: "left",
@@ -63,9 +65,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: "transparent",
     borderWidth: 0,
-    position: "absolute",
-    right: 125,
-    bottom: 130,
   },
   smallButtonText: {
     color: "#9e8f8d",
@@ -79,6 +78,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   buttonText: {
     color: "#FFFFFF",
