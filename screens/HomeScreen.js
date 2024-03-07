@@ -3,13 +3,21 @@
 // Welcome screen links to sign up and log in screen
 
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import colors from "../config/colors";
 
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>View Profile</Text>
+      </TouchableOpacity>
+
     </View>
   );
 };

@@ -1,11 +1,13 @@
 // App.js
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import 'react-native-gesture-handler';
 import HomeScreen from "./screens/HomeScreen";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import WelcomeScreen from "./screens/WelcomeScreen";
+import ViewProfile from "./screens/ViewProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +20,7 @@ export default function App() {
         <Stack.Screen name="LogInPage" component={LoginScreen} />
         <Stack.Screen name="SignUpPage" component={SignUpScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="ViewProfile" component={ViewProfile} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>
