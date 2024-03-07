@@ -2,20 +2,35 @@
 
 // Welcome screen links to sign up and log in screen
 
-import React from "react";
+import React, {useState}  from "react";
 import { 
   Image,
   StyleSheet, 
   Text, 
   View,
   TouchableOpacity,
+  Dimensions
 } from "react-native";
 import colors from "../config/colors";
 
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+
+
 const HomeScreen = ({ navigation }) => {
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
+
+
+      <MapView customMapStyle={styles.mapStyle} provider={PROVIDER_GOOGLE} style={styles.mapStyle} initialRegion={{
+          latitude: 41.3995345,
+          longitude: 2.1909796,
+          latitudeDelta: 0.003,
+          longitudeDelta: 0.003,
+        }}mapType="standard"></MapView>
+
+
       <TouchableOpacity 
         style={styles.historyButton} 
         onPress={() => navigation.navigate ("DiningHistoryPage")}
@@ -73,6 +88,10 @@ const styles = StyleSheet.create({
   signUpText: {
     color: "#FFFFFF",
     fontSize: 16,
+  },
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 

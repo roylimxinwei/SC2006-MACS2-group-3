@@ -15,7 +15,7 @@ const diningHistoryData = [
     id: '1',
     name: 'ARestaurantName',
     image: require('../assets/restaurant1_placeholder.jpg'), // replace with actual image path
-    review: 'This is a review about the food...',
+    review: 'Food was alright. But its free so cannot complain much',
     date: '8/2/2024',
     rating: 3.5,
   },
@@ -23,7 +23,7 @@ const diningHistoryData = [
     id: '2',
     name: 'AnotherRestaurantName',
     image: require('../assets/restaurant2_placeholder.png'), // replace with actual image path
-    review: 'This is a review about the food...',
+    review: 'Food is great but Utena chan is greater ~',
     date: '20/12/2023',
     rating: 4,
   },
