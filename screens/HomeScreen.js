@@ -4,7 +4,6 @@
 
 
 import React, {useState, useEffect}  from "react";
-import { 
 
 import {
   Dimensions,
@@ -132,11 +131,10 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
-  
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-
+  },
   historyButton: {
     position: "absolute", // Position the button over the screen
     right: 10, // Distance from the left
