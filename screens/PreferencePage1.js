@@ -15,7 +15,7 @@ const CuisineSelection = ({ cuisineOptions, onNext }) => {
 
   return (
     <div className="CuisineSelection">
-      <h2>Select your favourite cuisines : Choose a minimum of 3</h2>
+      <text><h2>Select your favourite cuisines : Choose a minimum of 3</h2></text>
       <div className="cuisine-grid">
         {cuisineOptions.map((item, index) => (
           <div
@@ -23,11 +23,11 @@ const CuisineSelection = ({ cuisineOptions, onNext }) => {
             className={`cuisine-option ${selected[index] ? 'selected' : ''}`}
             onClick={() => handleSelect(index)}
           >
-            {item}
+            <text>{item}</text>
           </div>
         ))}
       </div>
-      <p>Selected: {selectedCount}</p>
+      <text><p>Selected: {selectedCount}</p></text>
       <button className="next-button" disabled={selectedCount < 3} onClick={onNext}>Next</button>
     </div>
   );
