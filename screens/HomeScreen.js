@@ -36,16 +36,24 @@ const HomeScreen = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location.coords);
 
-      setInitialRegion({
+      // setInitialRegion({
+      //   latitude: location.coords.latitude,
+      //   longitude: location.coords.longitude,
+      //   latitudeDelta: 0.005,
+      //   longitudeDelta: 0.005,
+      // });
+      const newInitialRegion = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
-      });
-      console.log("Initial Region: ", initialRegion);
+      };
+      
+      setInitialRegion(newInitialRegion);
+      console.log("Initial Region Set: ", newInitialRegion);
     };
 
-    getLocation();
+      getLocation();
   }, []);
 
   useEffect(() => {
@@ -55,24 +63,51 @@ const HomeScreen = ({ navigation }) => {
   }, [currentLocation]);
 
   const GetNearbyPlace = () => {
-    const data = {
-      "includedTypes": ["restaurant"],
-      "maxResultCount": 10,
-      "locationRestriction": {
-        "circle": {
-          "center": {
-            "latitude": currentLocation.latitude,
-            "longitude": currentLocation.longitude,
-          },
-          "radius": 1000.0,
-        },
-      },
-    }
+    // const data = {
+    //   "includedTypes": ["restaurant"],
+    //   "maxResultCount": 10,
+    //   "locationRestriction": {
+    //     "circle": {
+    //       "center": {
+    //         "latitude": currentLocation.latitude,
+    //         "longitude": currentLocation.longitude,
+    //       },
+    //       "radius": 1000.0,
+    //     },
+    //   },
+    // }
 
-    GlobalApi.NewNearByPlace(data).then((resp) => {
-      console.log(JSON.stringify(resp.data));
-    })
+    // GlobalApi.NewNearByPlace(data).then((resp) => {
+    //   console.log(JSON.stringify(resp.data));
+    // })
+
+    // Assuming `currentLocation` is defined and has `latitude` and `longitude` properties
+    const location = `${currentLocation.latitude},${currentLocation.longitude}`;
+    const radius = 1000; // 1000 meters (1 km)
+    const type = 'restaurant';
+    
+    GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
+      setRawPlacesData(resp); // Store raw API response
+      console.log("API Response:", resp); // Log the entire response
+    }).catch((error) => {
+      console.error('Error fetching nearby places:', error);
+    });
   }
+
+  const [rawPlacesData, setRawPlacesData] = useState(null);
+  const [processedPlaces, setProcessedPlaces] = useState([]);
+
+  useEffect(() => {
+    if (rawPlacesData && rawPlacesData.results) {
+      const processedData = rawPlacesData.results.map(place => ({
+        latitude: place.geometry.location.lat,
+        longitude: place.geometry.location.lng,
+        name: place.name
+      }));
+      
+      setProcessedPlaces(processedData); // Update state with processed data
+    }
+  }, [rawPlacesData]); // This effect depends on rawPlacesData
 
   return (
     <View style={styles.headerContainer}>
@@ -88,18 +123,23 @@ const HomeScreen = ({ navigation }) => {
                 longitude: currentLocation.longitude,
               }}
               title="Your Location"
-            />
+            > 
+              <Image
+                source={require('../assets/userIcon.png')}
+                style={styles.icon}
+              />
+            </Marker>
           )}
-          {/* {restaurants.map((restaurant, index) => (
+          {processedPlaces.map((place, index) => (
             <Marker
               key={index}
               coordinate={{
-                latitude: restaurant.latitude,
-                longitude: restaurant.longitude,
+                latitude: place.latitude,
+                longitude: place.longitude,
               }}
-              title={restaurant.name}
+              title={place.name}
             />
-          ))} */}
+            ))}
         </MapView>
       )}
 
@@ -204,6 +244,11 @@ const styles = StyleSheet.create({
     borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
   },
+  icon :{
+    width: 40, // Set the width of your image
+    height: 40, // Set the height of your image to the same value to maintain aspect ratio
+    borderRadius: 20, // Half the width or height to make it round
+  }
 });
 
 export default HomeScreen;
