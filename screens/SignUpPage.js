@@ -26,7 +26,7 @@ const SignUpPage = ({ navigation }) => {
     // Add your sign up logic here
     // For example, you can send the data to your server
 
-    navigation.navigate("HomeScreen"); // Replace 'HomePage' with your home screen route name
+    navigation.navigate("PreferencePage"); // Replace 'HomePage' with your home screen route name
   };
 
   return (

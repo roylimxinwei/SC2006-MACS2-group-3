@@ -6,6 +6,7 @@ import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import WelcomeScreen from "./screens/WelcomeScreen";
+import PreferencePage from "./screens/PreferencePage";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,7 @@ export default function App() {
         <Stack.Screen name="LogInPage" component={LoginScreen} />
         <Stack.Screen name="SignUpPage" component={SignUpScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="PreferencePage" component={PreferencePage} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>
