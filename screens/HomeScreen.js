@@ -4,19 +4,43 @@
 
 import React from "react";
 
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 
 import colors from "../config/colors";
 
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+
+
 const HomeScreen = ({ navigation }) => {
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
+
+
+      <MapView customMapStyle={styles.mapStyle} provider={PROVIDER_GOOGLE} style={styles.mapStyle} initialRegion={{
+          latitude: 41.3995345,
+          longitude: 2.1909796,
+          latitudeDelta: 0.003,
+          longitudeDelta: 0.003,
+        }}mapType="standard"></MapView>
+
+
       <TouchableOpacity
-        onPress={() => navigation.navigate("GeolocationPage")}
-        style={styles.button}
+        style={styles.historyButton}
+        onPress={() => navigation.navigate ("DiningHistoryPage")}
       >
-        <Text> To GeolocationPage </Text>
+        <Image
+          style={styles.buttonImage}
+          source={require('../assets/jiakIcon.png')} // replace with your button image path
+        />
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
@@ -62,9 +86,26 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 18,
   },
+  buttonImage: {
+    width: 70, // Set the width of your button image
+    height: 70, // Set the height of your button image
+    borderRadius: 70, // Makes the image round
+  },
   signUpText: {
     color: "#FFFFFF",
     fontSize: 16,
+  },
+  mapStyle: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+  historyButton: {
+    position: 'absolute', // Position the button over the screen
+    right: 10,            // Distance from the left
+    bottom: 10,          // Distance from the bottom
+    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+    overflow: 'hidden', // Ensures the image doesn't bleed outside the border radius
   },
 });
 
