@@ -3,13 +3,19 @@
 // Welcome screen links to sign up and log in screen
 
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../config/colors";
 
 const HomeScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("GeolocationPage")}
+        style={styles.button}
+      >
+        <Text> To GeolocationPage </Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -32,11 +38,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    backgroundColor: "#CD5C5C",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 90,
     borderRadius: 5,
     marginBottom: 10,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   buttonText: {
     color: "#FFFFFF",

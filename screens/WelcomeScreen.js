@@ -38,26 +38,35 @@ const styles = StyleSheet.create({
     borderRadius: 130,
     width: 250,
     height: 250,
+    bottom: 50,
   },
   welcomeText: {
     color: "#7F2B0F",
     fontSize: 24,
     marginBottom: 20,
+    bottom: 10,
   },
   button: {
-    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    backgroundColor: "#CD5C5C",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 90,
     borderRadius: 5,
     marginBottom: 10,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   buttonText: {
     color: "#FFFFFF",
     fontSize: 18,
   },
   signUpText: {
-    color: "#FFFFFF",
+    color: "#7F2B0F",
+    textDecorationLine: "underline",
     fontSize: 16,
+    top: 10,
   },
 });
 
