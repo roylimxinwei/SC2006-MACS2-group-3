@@ -20,8 +20,6 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import colors from "../config/colors";
 
 
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
