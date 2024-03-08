@@ -2,7 +2,7 @@
 
 // Welcome screen links to sign up and log in screen
 
-import React, {useState}  from "react";
+import React, {useState, useEffect}  from "react";
 import { 
   Image,
   StyleSheet, 
@@ -13,23 +13,53 @@ import {
 } from "react-native";
 import colors from "../config/colors";
 
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import * as Location from "expo-location";
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 
 const HomeScreen = ({ navigation }) => {
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [initialRegion, setInitialRegion] = useState(null);
+
+  useEffect (() => {
+    const getLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation(location.coords);
+
+      setInitialRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      });
+    };
+
+    getLocation();
+  }, []) ;
 
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
 
-
-      <MapView customMapStyle={styles.mapStyle} provider={PROVIDER_GOOGLE} style={styles.mapStyle} initialRegion={{
-          latitude: 41.3995345,
-          longitude: 2.1909796,
-          latitudeDelta: 0.003,
-          longitudeDelta: 0.003,
-        }}mapType="standard"></MapView>
-
+      {initialRegion && (
+        <MapView style={styles.map} initialRegion={initialRegion}>
+          {currentLocation && (
+            <Marker
+              coordinate={{
+                latitude: currentLocation.latitude,
+                longitude: currentLocation.longitude,
+              }}
+              title="Your Location"
+            />
+          )}
+        </MapView>
+      )}
 
       <TouchableOpacity 
         style={styles.historyButton} 
@@ -89,7 +119,7 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
-  mapStyle: {
+  map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
