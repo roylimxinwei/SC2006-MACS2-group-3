@@ -1,13 +1,20 @@
 // App.js
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import 'react-native-gesture-handler';
+
+import DiningHistoryPage from "./screens/DiningHistoryPage";
 import HomeScreen from "./screens/HomeScreen";
+import InputReferralCodePage from "./screens/InputReferralCodePage";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
-import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
-import WelcomeScreen from "./screens/WelcomeScreen";
-import DiningHistoryPage from "./screens/DiningHistoryPage";
+import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
+import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
+import ViewProfile from "./screens/ViewProfile";
+import WelcomeScreen from "./screens/WelcomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,8 +27,15 @@ export default function App() {
         <Stack.Screen name="LogInPage" component={LoginScreen} />
         <Stack.Screen name="SignUpPage" component={SignUpScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="DiningHistoryPage" component={DiningHistoryPage} />
         <Stack.Screen name="ReviewPage" component={ReviewPage} />
+        <Stack.Screen name="ReviewLandingPage" component={ReviewLandingPage} />
+        <Stack.Screen
+          name="InputReferralCodePage"
+          component={InputReferralCodePage}
+        />
+        <Stack.Screen name="ViewProfile" component={ViewProfile} />
+
+        <Stack.Screen name="DiningHistoryPage" component={DiningHistoryPage} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>

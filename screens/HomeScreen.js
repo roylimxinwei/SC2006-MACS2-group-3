@@ -2,20 +2,26 @@
 
 // Welcome screen links to sign up and log in screen
 
+
 import React, {useState, useEffect}  from "react";
 import { 
+
+import {
+  Dimensions,
   Image,
-  StyleSheet, 
-  Text, 
-  View,
+  StyleSheet,
+  Text,
   TouchableOpacity,
-  Dimensions
+  View,
 } from "react-native";
-import colors from "../config/colors";
+
 
 import * as Location from "expo-location";
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import colors from "../config/colors";
 
+
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -43,6 +49,7 @@ const HomeScreen = ({ navigation }) => {
     getLocation();
   }, []) ;
 
+
   return (
     <View style={styles.container}>
       <Text style={styles.welcomeText}>Home Screen!</Text>
@@ -61,13 +68,21 @@ const HomeScreen = ({ navigation }) => {
         </MapView>
       )}
 
-      <TouchableOpacity 
-        style={styles.historyButton} 
-        onPress={() => navigation.navigate ("DiningHistoryPage")}
+
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
+        style={styles.button}
       >
-        <Image 
+        <Text style={styles.buttonText}>View Profile</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.historyButton}
+        onPress={() => navigation.navigate("DiningHistoryPage")}
+      >
+        <Image
           style={styles.buttonImage}
-          source={require('../assets/jiakIcon.png')} // replace with your button image path
+          source={require("../assets/jiakIcon.png")} // replace with your button image path
         />
       </TouchableOpacity>
     </View>
@@ -92,19 +107,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    position: "absolute",
+    backgroundColor: "#CD5C5C",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 90,
     borderRadius: 5,
     marginBottom: 10,
-  },
-  historyButton: {
-    position: 'absolute', // Position the button over the screen
-    right: 10,            // Distance from the left
-    bottom: 10,          // Distance from the bottom
-    backgroundColor: "#CD5C5C", // Replace with your desired button color
-    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
-    overflow: 'hidden', // Ensures the image doesn't bleed outside the border radius  
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
   buttonText: {
     color: "#FFFFFF",
@@ -119,9 +132,19 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
+  
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+
+  historyButton: {
+    position: "absolute", // Position the button over the screen
+    right: 10, // Distance from the left
+    bottom: 10, // Distance from the bottom
+    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+    overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
+
   },
 });
 
