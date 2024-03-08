@@ -26,7 +26,7 @@ const SignUpPage = ({ navigation }) => {
     // Add your sign up logic here
     // For example, you can send the data to your server
 
-    navigation.navigate("HomePage"); // Replace 'HomePage' with your home screen route name
+    navigation.navigate("HomeScreen"); // Replace 'HomePage' with your home screen route name
   };
 
   return (
@@ -80,11 +80,13 @@ const styles = StyleSheet.create({
     borderRadius: 130,
     width: 250,
     height: 250,
+    bottom: 50,
   },
   title: {
     color: "#7F2B0F",
     fontSize: 24,
     marginBottom: 20,
+    bottom: 10,
   },
   input: {
     width: "80%",
@@ -97,9 +99,15 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#CD5C5C",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 90,
     borderRadius: 5,
     marginBottom: 10,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    top: 10,
   },
   buttonText: {
     color: "#FFFFFF",

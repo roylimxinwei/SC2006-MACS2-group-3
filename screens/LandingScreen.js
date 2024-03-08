@@ -1,7 +1,7 @@
 // landing screen redirects to the welcome(signup/login) screen
 
 import React, { useEffect } from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import colors from "../config/colors";
 
 const LandingScreen = ({ navigation }) => {
@@ -16,12 +16,19 @@ const LandingScreen = ({ navigation }) => {
     };
   }, []);
 
+  const handleRedirect = () => {
+    navigation.navigate("WelcomeScreen");
+  };
+
   return (
     <View style={styles.container}>
       <Image source={require("../assets/jiakIcon.png")} />
       <Text style={styles.text}>
         Ready to Jiak? Redirecting in 3 seconds...
       </Text>
+      <TouchableOpacity style={styles.button} onPress={handleRedirect}>
+        <Text style={styles.buttonText}>Go back to Welcome Screen</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -36,6 +43,17 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     textAlign: "center",
+  },
+  button: {
+    backgroundColor: "#CD5C5C",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 18,
   },
 });
 
