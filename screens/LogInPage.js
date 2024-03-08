@@ -11,7 +11,7 @@ import {
 } from "react-native";
 
 const LoginPage = ({ navigation }) => {
-  const [username, set] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleUsernameChange = (text) => {

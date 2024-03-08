@@ -2,7 +2,10 @@
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import GeolocationPage from "./screens/GeolocationPage";
+import 'react-native-gesture-handler';
+
 import HomeScreen from "./screens/HomeScreen";
 import InputReferralCodePage from "./screens/InputReferralCodePage";
 import LandingScreen from "./screens/LandingScreen";
@@ -11,6 +14,7 @@ import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import WelcomeScreen from "./screens/WelcomeScreen";
+import ViewProfile from "./screens/ViewProfile";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +34,8 @@ export default function App() {
           name="InputReferralCodePage"
           component={InputReferralCodePage}
         />
+        <Stack.Screen name="ViewProfile" component={ViewProfile} />
+
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>
