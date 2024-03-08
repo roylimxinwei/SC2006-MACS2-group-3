@@ -3,7 +3,7 @@
 // Welcome screen links to sign up and log in screen
 
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Dimensions,
   Image,
@@ -15,13 +15,15 @@ import {
 import * as Location from "expo-location";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import colors from "../config/colors";
-//import GlobalApi from "../config/GlobalApi";
+import Header from "./Header";
+import { Switch } from 'react-native-switch';
+import GlobalApi from "../config/GlobalApi";
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
-  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
-  const [restaurants, setRestaurants] = useState([]);
+  const [isEnabled, setIsEnabled] = useState(true);
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -30,10 +32,10 @@ const HomeScreen = ({ navigation }) => {
         console.log("Permission to access location was denied");
         return;
       }
-    
+
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location.coords);
-    
+
       setInitialRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -44,42 +46,37 @@ const HomeScreen = ({ navigation }) => {
     };
 
     getLocation();
-    
-    // useEffect(()=>{
-    //   location&&GetNearbyLocation();
-    // },[location])
+  }, []);
 
-    // const GetNearbyLocation = ()=>{
-    //   const data ={
-    //     "includedTypes": ["restaurant","bakery","cafe"],
-    //     "maxResultCount": 10,
-    //     "locationRestriction": {
-    //       "circle": {
-    //         "center": {
-    //           "latitude": location?.latitude,
-    //           "longitude": location?.longtitude},
-    //         "radius": 500.0
-    //   }}}
-    //   GlobalApi.NewNearByPlace(data).then(resp =>{
-    //     console.log(resp.data);
-    //   })
-    // }
+  useEffect(() => {
+    currentLocation && GetNearbyLocation();
+  }, [currentLocation]);
 
-  //   const fetchRestaurants = async () => {
-  //     try {
-  //       const data = require("./restaurants.json");
-  //       console.log(data);
-  //       setRestaurants(data);
-  //     } catch (error) {
-  //       console.error("Error fetching restaurants:", error);
-  //     }
-  //   };
+  const GetNearbyLocation = () => {
+    const data = {
+      includedTypes: ["restaurant"],
+      maxResultCount: 10,
+      locationRestriction: {
+        circle: {
+          center: {
+            latitude: currentLocation.latitude,
+            longitude: currentLocation.longitude,
+          },
+          radius: 500.0,
+        },
+      },
+    };
 
-  //   fetchRestaurants();
-  // }, []);
+    GlobalApi.NewNearByPlace(data).then((resp) => {
+      console.log(resp.data);
+    });
+  }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.headerContainer}>
+      <View style>
+         <Header/>
+      </View>
       {initialRegion && (
         <MapView style={styles.map} initialRegion={initialRegion}>
           {currentLocation && (
@@ -91,7 +88,7 @@ const HomeScreen = ({ navigation }) => {
               title="Your Location"
             />
           )}
-          {restaurants.map((restaurant, index) => (
+          {/* {restaurants.map((restaurant, index) => (
             <Marker
               key={index}
               coordinate={{
@@ -100,7 +97,7 @@ const HomeScreen = ({ navigation }) => {
               }}
               title={restaurant.name}
             />
-          ))}
+          ))} */}
         </MapView>
       )}
 
@@ -125,24 +122,37 @@ const HomeScreen = ({ navigation }) => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.notificationsButton}
-        onPress={() => setNotificationsEnabled(!notificationsEnabled)}
-      >
-        <Image
-          style={styles.notificationsButtonImage}
-          source={
-            notificationsEnabled
-              ? require("../assets/notifon.png")
-              : require("../assets/notifoff.png")
-          }
-        />
-      </TouchableOpacity>
+      <View style={styles.switch}>
+
+      <Switch
+        value={isEnabled}
+        onValueChange={toggleSwitch}
+        activeText={'Notification On'}
+        inActiveText={'Notification Off'}
+        circleSize={30}
+        barHeight={30}
+        circleBorderWidth={2}
+        backgroundActive={'green'}
+        backgroundInactive={'#DC4731'}
+        circleActiveColor={'#30a566'}
+        circleInActiveColor={'#DC4731'}
+        changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+        outerCircleStyle={{}} // style for outer animated circle
+        switchLeftPx={1} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+        switchRightPx={1} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+        switchWidthMultiplier={7} // multiplied by the `circleSize` prop to calculate total width of the Switch
+        switchBorderRadius={25}
+      />
+    </View>
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
+  headerContainer:{
+    position:"absolute",
+    width:"100%",
+  },
   container: {
     flex: 1,
     alignItems: "center", // Centers objects according to the secondary axis
@@ -154,16 +164,9 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
   },
-  // welcomeText: {
-  //   color: "#7F2B0F",
-  //   fontSize: 24,
-  //   marginBottom: 0,
-  //   position: "absolute",
-  //   top: 40,
-  // },
   button: {
     position: "absolute",
-    top:20,
+    top:60,
     right:20,
     backgroundColor: "#CD5C5C",
     marginBottom: 10,
@@ -173,27 +176,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-
-  notificationsButton: {
-    position: "absolute",
-    top: 100,
-    right: 30,
-    backgroundColor: "transparent",
-    borderRadius: 100,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  notificationsButtonImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  // buttonText: {
-  //   color: "#FFFFFF",
-  //   fontSize: 18,
-  // },
   buttonImage: {
     width: 70, // Set the width of your button image
     height: 70, // Set the height of your button image
@@ -203,6 +185,11 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
+  switch:{
+    position:"absolute",
+    top:100,
+    left:20,
+  },
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
@@ -210,11 +197,10 @@ const styles = StyleSheet.create({
   historyButton: {
     position: "absolute", // Position the button over the screen
     right: 20, // Distance from the left
-    bottom: 20, // Distance from the bottom
+    top: 650, // Distance from the bottom
     backgroundColor: "#CD5C5C", // Replace with your desired button color
     borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
-
   },
 });
 
