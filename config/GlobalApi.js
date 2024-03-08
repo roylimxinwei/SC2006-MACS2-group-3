@@ -5,9 +5,9 @@ const API_KEY="Your_API-KEY";
 
 const config = {
     headers:{
-        'content-type':'application/json',
+        'Content-Type':'application/json',
         "X-Goog-Api-Key" : API_KEY,
-        "X-Goog-FieldMask": ['places.displayName', 'places.formattedAddress','places.location','places.photos']
+        "X-Goog-FieldMask": ['places.displayName', 'places.formattedAddress','places.location','places.photos',"places.ratings"]
     }
 }
 

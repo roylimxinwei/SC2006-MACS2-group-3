@@ -49,27 +49,29 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    currentLocation && GetNearbyLocation();
+    if (currentLocation) {
+      GetNearbyPlace();
+    }
   }, [currentLocation]);
 
-  const GetNearbyLocation = () => {
+  const GetNearbyPlace = () => {
     const data = {
-      includedTypes: ["restaurant"],
-      maxResultCount: 10,
-      locationRestriction: {
-        circle: {
-          center: {
-            latitude: currentLocation.latitude,
-            longitude: currentLocation.longitude,
+      "includedTypes": ["restaurant"],
+      "maxResultCount": 10,
+      "locationRestriction": {
+        "circle": {
+          "center": {
+            "latitude": currentLocation.latitude,
+            "longitude": currentLocation.longitude,
           },
-          radius: 500.0,
+          "radius": 1000.0,
         },
       },
-    };
+    }
 
     GlobalApi.NewNearByPlace(data).then((resp) => {
-      console.log(resp.data);
-    });
+      console.log(JSON.stringify(resp.data));
+    })
   }
 
   return (
