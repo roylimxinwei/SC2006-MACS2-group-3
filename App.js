@@ -3,7 +3,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import GeolocationPage from "./screens/GeolocationPage";
 import 'react-native-gesture-handler';
 
 import HomeScreen from "./screens/HomeScreen";
@@ -28,7 +27,6 @@ export default function App() {
         <Stack.Screen name="SignUpPage" component={SignUpScreen} />
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ReviewPage" component={ReviewPage} />
-        <Stack.Screen name="GeolocationPage" component={GeolocationPage} />
         <Stack.Screen name="ReviewLandingPage" component={ReviewLandingPage} />
         <Stack.Screen
           name="InputReferralCodePage"
