@@ -11,6 +11,10 @@ import {
 } from "react-native";
 import colors from "../config/colors";
 
+// import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
+import {createUserWithEmailAndPassword } from '@firebase/auth';
+import { auth } from '../firebase';
+
 const SignUpPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -23,10 +27,24 @@ const SignUpPage = ({ navigation }) => {
       return;
     }
 
+    if(username == null || email == null || password == null || confirmPassword == null){
+      alert("Please fill in all fields.");
+      return;
+    }
+
     // Add your sign up logic here
     // For example, you can send the data to your server
+    createUserWithEmailAndPassword(auth,email,password)
+    .then(userCredentials =>{
+      const user = userCredentials.user;
+      alert("Account Created Successfully.")
+      navigation.navigate("LogInPage"); 
 
-    navigation.navigate("HomeScreen"); // Replace 'HomePage' with your home screen route name
+    })
+    .catch(error => console.log(error.message))
+
+
+    // navigation.navigate("HomeScreen"); // Replace 'HomePage' with your home screen route name
   };
 
   return (

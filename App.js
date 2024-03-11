@@ -3,6 +3,8 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import {app, auth} from "./firebase.js";
+
 import 'react-native-gesture-handler';
 
 import DiningHistoryPage from "./screens/DiningHistoryPage";
@@ -17,6 +19,7 @@ import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
 
 const Stack = createNativeStackNavigator();
+
 
 export default function App() {
   return (
@@ -41,3 +44,4 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
