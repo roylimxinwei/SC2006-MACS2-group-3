@@ -29,6 +29,8 @@ const PreferencePage2 = () => {
               maximumValue={5}
               step={1}
               onValueChange={(value) => setRestaurantRating(value)}
+              minimumTrackTintColor="#000000"
+              maximumTrackTintColor="#DC4731"
             />
             <Text style={styles.sliderValue}>{restaurantRating}</Text>
           </View>
@@ -43,6 +45,8 @@ const PreferencePage2 = () => {
               maximumValue={250}
               step={10}
               onValueChange={(value) => setProximity(value)}
+              minimumTrackTintColor="#000000"
+              maximumTrackTintColor="#DC4731"
             />
             <Text style={styles.sliderValue}>{proximity}m</Text>
           </View>
