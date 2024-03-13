@@ -1,61 +1,115 @@
 import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import colors from "../config/colors";
+import { useNavigation } from '@react-navigation/native';
 
-const CuisineSelection = ({ cuisineOptions, onNext }) => {
-  const [selected, setSelected] = useState(new Array(cuisineOptions.length).fill(false));
-  const [selectedCount, setSelectedCount] = useState(0);
+const PreferencePage1 = () => {
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const navigation = useNavigation();
 
-  const handleSelect = (index) => {
-    const newSelected = [...selected];
-    newSelected[index] = !newSelected[index];
-    setSelected(newSelected);
+  const interestList = [
+    { name: 'French', image: require('../assets/croissant.png') },
+    { name: 'Italian', image: require('../assets/italian.png') },
+    { name: 'Japanese', image: require('../assets/ramen.png') },
+    { name: 'Chinese', image: require('../assets/chinese.png') },
+    { name: 'Fast Food', image: require('../assets/fastfood.png') },
+    { name: 'Vegetarian', image: require('../assets/salad.png') },
+  ];
 
-    const newSelectedCount = newSelected.filter(item => item).length;
-    setSelectedCount(newSelectedCount);
+  const handleSelect = (interest) => {
+    if (selectedInterests.includes(interest)) {
+      setSelectedInterests(selectedInterests.filter((item) => item !== interest));
+    } else {
+      setSelectedInterests([...selectedInterests, interest]);
+    }
   };
 
   return (
-    <div className="CuisineSelection">
-      <text><h2>Select your favourite cuisines : Choose a minimum of 3</h2></text>
-      <div className="cuisine-grid">
-        {cuisineOptions.map((item, index) => (
-          <div
-            key={index}
-            className={`cuisine-option ${selected[index] ? 'selected' : ''}`}
-            onClick={() => handleSelect(index)}
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Select your favourite cuisines</Text>
+        <Text style={styles.subtitle}>Choose a minimum of 3</Text>
+      </View>
+      <View style={styles.interestGrid}>
+        {interestList.map((cuisine, index) => (
+          <TouchableOpacity
+            key={cuisine.name}
+            style={[
+              styles.interestIcon,
+              selectedInterests.includes(cuisine.name) ? styles.selected : null,
+            ]}
+            onPress={() => handleSelect(cuisine.name)}
           >
-            <text>{item}</text>
-          </div>
+            <Image source={cuisine.image} style={styles.interestImage} />
+          </TouchableOpacity>
         ))}
-      </div>
-      <text><p>Selected: {selectedCount}</p></text>
-      <button className="next-button" disabled={selectedCount < 3} onClick={onNext}>Next</button>
-    </div>
+      </View>
+      <TouchableOpacity
+        style={styles.nextButton}
+        disabled={selectedInterests.length < 3}
+        onPress={() => navigation.navigate('PreferencePage2')}
+      >
+        <Text style={styles.nextButtonText}>Next</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
-const cuisineOptions = [
-  'French',
-  'Italian',
-  'Japanese',
-  'Chinese',
-  'Vietnamese',
-  'Vegetarian',
-];
-
-function PreferencePage1() {
-  const [step, setStep] = useState(1);
-
-  const handleNext = () => {
-    setStep(step + 1);
-  };
-
-  return (
-    <div className="App">
-      {step === 1 && <CuisineSelection cuisineOptions={cuisineOptions} onNext={handleNext} />}
-      {step === 2 && <div>Step 2</div>}
-      {step === 3 && <div>Step 3</div>}
-    </div>
-  );
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 40,
+    marginBottom: 100,
+    textAlign: 'left',
+  },
+  interestGrid: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  },
+  interestIcon: {
+    width: 100,
+    height: 100,
+    borderRadius: 5,
+    borderCurve: true,
+    backgroundColor: '#f8ceB8',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+  },
+  selected: {
+    backgroundColor: '#dc4731',
+  },
+  interestImage: {
+    width: 50,
+    height: 50,
+  },
+  nextButton: {
+    marginTop: 70,
+    marginBottom: 10,
+    padding: 10,
+    backgroundColor: '#007AFF',
+    borderRadius: 20,
+    backgroundColor: "#CD5C5C",
+    paddingVertical: 10,
+    paddingHorizontal: 90,
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    top: 10,
+  },
+  nextButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+});
 
 export default PreferencePage1;
