@@ -32,6 +32,20 @@ const NewNearByPlace = (location, radius, type) => {
     });
 };
 
+const GetNearbyPlaceDetails = (placeId) => {
+  const params = {
+    place_id: placeId,
+    key: API_KEY,
+  };
+
+  return axios.get("https://maps.googleapis.com/maps/api/place/details/json", { params })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error fetching place details:', error);
+    });
+};
+
+
 export default{
     NewNearByPlace
 }

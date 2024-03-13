@@ -2,7 +2,6 @@
 
 // Welcome screen links to sign up and log in screen
 
-
 import React, { useState, useEffect, useContext } from "react";
 import {
   Dimensions,
@@ -13,7 +12,7 @@ import {
   View,
 } from "react-native";
 import * as Location from "expo-location";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
 import colors from "../config/colors";
 import Header from "./Header";
 import { Switch } from 'react-native-switch';
@@ -86,9 +85,22 @@ const HomeScreen = ({ navigation }) => {
     const radius = 1000; // 1000 meters (1 km)
     const type = 'restaurant';
     
+    // GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
+    //   setRawPlacesData(resp); // Store raw API response
+    //   console.log("API Response:", resp); // Log the entire response
+    // }).catch((error) => {
+    //   console.error('Error fetching nearby places:', error);
+    // });
     GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
-      setRawPlacesData(resp); // Store raw API response
-      console.log("API Response:", resp); // Log the entire response
+      const processedData = resp.results.map(place => ({
+        latitude: place.geometry.location.lat,
+        longitude: place.geometry.location.lng,
+        name: place.name,
+        rating: place.rating || 'No rating',
+        cuisine: place.types?.[0] || 'Unknown',
+      }));
+      setProcessedPlaces(processedData);
+      console.log("API Response:", resp);
     }).catch((error) => {
       console.error('Error fetching nearby places:', error);
     });
@@ -123,13 +135,25 @@ const HomeScreen = ({ navigation }) => {
                 longitude: currentLocation.longitude,
               }}
               title="Your Location"
-            > 
+            >
               <Image
                 source={require('../assets/userIcon.png')}
                 style={styles.icon}
               />
+
+              <Callout>
+                <View style={styles.calloutContainer}>
+                  <Text style={styles.calloutTitle}>Your Location</Text>
+                  <Text style={styles.calloutDescription}>
+                    Latitude: {currentLocation.latitude.toFixed(6)}, Longitude:{" "}
+                    {currentLocation.longitude.toFixed(6)}
+                  </Text>
+                </View>
+              </Callout> 
+
             </Marker>
           )}
+          
           {processedPlaces.map((place, index) => (
             <Marker
               key={index}
@@ -138,11 +162,27 @@ const HomeScreen = ({ navigation }) => {
                 longitude: place.longitude,
               }}
               title={place.name}
-            />
+            >
+            <Image
+                source={require("../assets/jiakIcon.png")}
+                style={styles.restaurantIcon}
+              />
+            <Callout>
+              <View style={styles.calloutContainer}>
+                <Text style={styles.calloutTitle}>{place.name}</Text>
+                <Text style={styles.calloutDescription}>
+                  Rating: {place.rating} | Cuisine: {place.cuisine}
+                </Text>
+                <Text style={styles.calloutDescription}>
+                  Latitude: {place.latitude.toFixed(6)}, Longitude:{" "}
+                  {place.longitude.toFixed(6)}
+                </Text>
+              </View>
+            </Callout>
+            </Marker>
             ))}
         </MapView>
       )}
-
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
@@ -236,6 +276,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+  restaurantIcon: {
+    width: 30,
+    height: 30,
+    borderRadius: 15, // Half of the width and height to make it circular
+    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red color with 50% opacity
+  },
   historyButton: {
     position: "absolute", // Position the button over the screen
     right: 20, // Distance from the left
@@ -248,7 +294,23 @@ const styles = StyleSheet.create({
     width: 40, // Set the width of your image
     height: 40, // Set the height of your image to the same value to maintain aspect ratio
     borderRadius: 20, // Half the width or height to make it round
-  }
+  },
+  calloutContainer: {
+    width: 200,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+  },
+  calloutTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  calloutDescription: {
+    fontSize: 14,
+  },
 });
 
 export default HomeScreen;
