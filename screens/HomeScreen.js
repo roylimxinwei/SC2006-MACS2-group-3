@@ -18,7 +18,7 @@ import colors from "../config/colors";
 import Header from "./Header";
 import { Switch } from 'react-native-switch';
 import GlobalApi from "../config/GlobalApi";
-import haversineDistance from "../config/distanceCalculator";
+import {haversineDistance} from "../config/distanceCalculator";
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -57,13 +57,13 @@ const HomeScreen = ({ navigation }) => {
   }, [currentLocation]);
 
   const GetNearbyPlace = () => {
-    //         "latitude": currentLocation.latitude,
-    // Assuming `currentLocation` is defined and has `latitude` and `longitude` properties
     const location = `${currentLocation.latitude},${currentLocation.longitude}`;
     const radius = 1000; // 1000 meters (1 km)
     const type = 'restaurant';
     
     GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
+      setRawPlacesData(resp); // Set the rawPlacesData state here
+  
       const processedData = resp.results.map(place => ({
         latitude: place.geometry.location.lat,
         longitude: place.geometry.location.lng,
@@ -78,6 +78,7 @@ const HomeScreen = ({ navigation }) => {
       console.error('Error fetching nearby places:', error);
     });
   }
+  
 
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
@@ -91,14 +92,18 @@ const HomeScreen = ({ navigation }) => {
           place.geometry.location.lat,
           place.geometry.location.lng
         );
-    
+      
+        // Check if distance calculation is successful
+        const formattedDistance = distance !== undefined ? parseFloat(distance.toFixed(2)) : 'Unknown';
+      
         return {
           ...place,
-          distance: parseFloat(distance.toFixed(2)), // Format the distance to 2 decimal places
+          distance: formattedDistance, // Format the distance to 2 decimal places or set to 'Unknown' if calculation failed
         };
       });
-  
+      
       setProcessedPlaces(processedData);
+      
     }
   }, [rawPlacesData, currentLocation]); // This effect depends on rawPlacesData and currentLocation
    // This effect depends on rawPlacesData and currentLocation
