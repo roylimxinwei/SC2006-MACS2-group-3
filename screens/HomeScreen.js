@@ -65,21 +65,25 @@ const HomeScreen = ({ navigation }) => {
     const location = `${currentLocation.latitude},${currentLocation.longitude}`;
     const radius = 1000; // 1000 meters (1 km)
     const type = 'restaurant';
-    
-    GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
-      const processedData = resp.results.map(place => ({
-        latitude: place.geometry.location.lat,
-        longitude: place.geometry.location.lng,
-        name: place.name,
-        rating: place.rating || 'No rating',
-        cuisine: place.types?.[0] || 'Unknown',
-        address: place.vicinity
-      }));
-      setProcessedPlaces(processedData);
-      console.log("API Response:", resp);
-    }).catch((error) => {
-      console.error('Error fetching nearby places:', error);
-    });
+
+    const keywords = ["Chinese", "Japanese" , "Western"]
+
+    for (keyword of keywords) {
+      GlobalApi.NewNearByPlace(location, radius, type, keyword).then((resp) => {
+        const processedData = resp.results.map(place => ({
+          latitude: place.geometry.location.lat,
+          longitude: place.geometry.location.lng,
+          name: place.name,
+          rating: place.rating || 'No rating',
+          cuisine: keyword,
+          address: place.vicinity
+        }));
+        setProcessedPlaces(processedData);
+        console.log("API Response:", resp);
+      }).catch((error) => {
+        console.error('Error fetching nearby places:', error);
+      });
+    }
   }
 
   useEffect(() => {
