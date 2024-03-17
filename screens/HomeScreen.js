@@ -56,35 +56,44 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (currentLocation) {
+      const GetNearbyPlace = async () => {
+        const location = `${currentLocation.latitude},${currentLocation.longitude}`;
+        const radius = 1000; // 1000 meters (1 km)
+        const type = 'restaurant';
+
+        const keywords = ["Japanese", "Korean", "Bakery", "Western", "Chinese", "Indian", "Thai", "Vietnamese", "Malay", "Fast Food"];
+
+        // Prepare all promises for the API calls
+        const promises = keywords.map(keyword =>
+          GlobalApi.NewNearByPlace(location, radius, type, keyword).catch(error => {
+            console.error('Error fetching nearby places:', error);
+            return null; // Return null or an appropriate value to handle failed requests gracefully
+          })
+        );
+
+        // Wait for all promises to settle
+        const results = await Promise.all(promises);
+
+        // Process and update state once with all new data
+        const allProcessedData = results.flatMap((resp, index) => {
+          if (!resp) return []; // Skip processing if the response is null due to an error
+          return resp.results.map(place => ({
+            latitude: place.geometry.location.lat,
+            longitude: place.geometry.location.lng,
+            name: place.name,
+            rating: place.rating || 'No rating',
+            cuisine: keywords[index],
+            address: place.vicinity,
+          }));
+        });
+
+        // Update state once with all new data
+        setProcessedPlaces(prevPlaces => [...prevPlaces, ...allProcessedData]);
+      };
+
       GetNearbyPlace();
     }
-  }, [currentLocation]);
-
-  const GetNearbyPlace = () => {
-    // Assuming `currentLocation` is defined and has `latitude` and `longitude` properties
-    const location = `${currentLocation.latitude},${currentLocation.longitude}`;
-    const radius = 1000; // 1000 meters (1 km)
-    const type = 'restaurant';
-
-    const keywords = ["Chinese", "Japanese" , "Western"]
-
-    for (keyword of keywords) {
-      GlobalApi.NewNearByPlace(location, radius, type, keyword).then((resp) => {
-        const processedData = resp.results.map(place => ({
-          latitude: place.geometry.location.lat,
-          longitude: place.geometry.location.lng,
-          name: place.name,
-          rating: place.rating || 'No rating',
-          cuisine: keyword,
-          address: place.vicinity
-        }));
-        setProcessedPlaces(processedData);
-        console.log("API Response:", resp);
-      }).catch((error) => {
-        console.error('Error fetching nearby places:', error);
-      });
-    }
-  }
+  }, [currentLocation]); // Assuming `currentLocation` is stable or properly memoized
 
   useEffect(() => {
     if (rawPlacesData && rawPlacesData.results) {
