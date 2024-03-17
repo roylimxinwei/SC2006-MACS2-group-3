@@ -36,7 +36,7 @@ const LoginPage = ({ navigation }) => {
     .then(userCredentials =>{
       const user = userCredentials.user;
       alert("Log in Successfully.")
-      navigation.navigate("ReviewLandingPage"); 
+      navigation.navigate("HomeScreen"); 
 
     })
     .catch(error => {
