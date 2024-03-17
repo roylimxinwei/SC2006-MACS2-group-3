@@ -17,12 +17,17 @@ import colors from "../config/colors";
 import Header from "./Header";
 import { Switch } from 'react-native-switch';
 import GlobalApi from "../config/GlobalApi";
+import GeoCoding from "../config/GeoCoding";
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(true);
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+  const [rawPlacesData, setRawPlacesData] = useState(null);
+  const [processedPlaces, setProcessedPlaces] = useState([]);
+  const [address, setAddress] = useState(null);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -35,12 +40,6 @@ const HomeScreen = ({ navigation }) => {
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location.coords);
 
-      // setInitialRegion({
-      //   latitude: location.coords.latitude,
-      //   longitude: location.coords.longitude,
-      //   latitudeDelta: 0.005,
-      //   longitudeDelta: 0.005,
-      // });
       const newInitialRegion = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -62,35 +61,11 @@ const HomeScreen = ({ navigation }) => {
   }, [currentLocation]);
 
   const GetNearbyPlace = () => {
-    // const data = {
-    //   "includedTypes": ["restaurant"],
-    //   "maxResultCount": 10,
-    //   "locationRestriction": {
-    //     "circle": {
-    //       "center": {
-    //         "latitude": currentLocation.latitude,
-    //         "longitude": currentLocation.longitude,
-    //       },
-    //       "radius": 1000.0,
-    //     },
-    //   },
-    // }
-
-    // GlobalApi.NewNearByPlace(data).then((resp) => {
-    //   console.log(JSON.stringify(resp.data));
-    // })
-
     // Assuming `currentLocation` is defined and has `latitude` and `longitude` properties
     const location = `${currentLocation.latitude},${currentLocation.longitude}`;
     const radius = 1000; // 1000 meters (1 km)
     const type = 'restaurant';
     
-    // GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
-    //   setRawPlacesData(resp); // Store raw API response
-    //   console.log("API Response:", resp); // Log the entire response
-    // }).catch((error) => {
-    //   console.error('Error fetching nearby places:', error);
-    // });
     GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
       const processedData = resp.results.map(place => ({
         latitude: place.geometry.location.lat,
@@ -98,6 +73,7 @@ const HomeScreen = ({ navigation }) => {
         name: place.name,
         rating: place.rating || 'No rating',
         cuisine: place.types?.[0] || 'Unknown',
+        address: place.vicinity
       }));
       setProcessedPlaces(processedData);
       console.log("API Response:", resp);
@@ -106,20 +82,29 @@ const HomeScreen = ({ navigation }) => {
     });
   }
 
-  const [rawPlacesData, setRawPlacesData] = useState(null);
-  const [processedPlaces, setProcessedPlaces] = useState([]);
-
   useEffect(() => {
     if (rawPlacesData && rawPlacesData.results) {
       const processedData = rawPlacesData.results.map(place => ({
         latitude: place.geometry.location.lat,
         longitude: place.geometry.location.lng,
-        name: place.name
+        name: place.name,
+        address: place.vicinity
       }));
       
       setProcessedPlaces(processedData); // Update state with processed data
     }
   }, [rawPlacesData]); // This effect depends on rawPlacesData
+
+  useEffect(() => { 
+    if (currentLocation) {
+      GeoCoding.getAddress(currentLocation.latitude, currentLocation.longitude)
+        .then(data => {
+          const address = data.results[0].formatted_address;
+          setAddress(address);
+        })
+        .catch(error => console.error('Error fetching address:', error));
+    }
+  }, [currentLocation]);
 
   return (
     <View style={styles.headerContainer}>
@@ -144,9 +129,8 @@ const HomeScreen = ({ navigation }) => {
               <Callout>
                 <View style={styles.calloutContainer}>
                   <Text style={styles.calloutTitle}>Your Location</Text>
-                  <Text style={styles.calloutDescription}>
-                    Latitude: {currentLocation.latitude.toFixed(6)}, Longitude:{" "}
-                    {currentLocation.longitude.toFixed(6)}
+                  <Text style={styles.calloutDescription}> 
+                    {address}
                   </Text>
                 </View>
               </Callout> 
@@ -169,13 +153,17 @@ const HomeScreen = ({ navigation }) => {
               />
             <Callout>
               <View style={styles.calloutContainer}>
-                <Text style={styles.calloutTitle}>{place.name}</Text>
-                <Text style={styles.calloutDescription}>
-                  Rating: {place.rating} | Cuisine: {place.cuisine}
+                <Text style={styles.calloutTitle}>
+                  {place.name}
                 </Text>
                 <Text style={styles.calloutDescription}>
-                  Latitude: {place.latitude.toFixed(6)}, Longitude:{" "}
-                  {place.longitude.toFixed(6)}
+                  Rating: {place.rating}
+                </Text>
+                <Text style={styles.calloutDescription}>
+                  Cuisine: {place.cuisine}
+                </Text>
+                <Text style={styles.calloutDescription}> 
+                  Address: {place.address}
                 </Text>
               </View>
             </Callout>

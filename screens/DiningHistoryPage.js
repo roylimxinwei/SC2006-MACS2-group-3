@@ -89,7 +89,7 @@ const DiningHistoryPage = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>History</Text>
+      <Text style={styles.title}>Your Dining History</Text>
       <FlatList
         data={diningHistoryData}
         renderItem={renderHistoryItem}
