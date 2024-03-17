@@ -1,3 +1,5 @@
+//GlobalAPI.js file
+
 import axios from "axios";
 
 const BASE_URL="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
@@ -10,9 +12,6 @@ const config = {
         "X-Goog-FieldMask": ['places.displayName', 'places.formattedAddress','places.location','places.photos',"places.ratings"]
     }
 }
-
-// const NewNearByPlace =(data) => axios.post(BASE_URL,data,config)
-//   .catch(error => console.error('Error fetching nearby places:', error));
 
 // Typically, the Google API Key is passed as a query parameter, not in the header.
 const NewNearByPlace = (location, radius, type) => {
