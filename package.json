@@ -20,6 +20,7 @@
     "axios": "^1.6.7",
     "expo": "~50.0.6",
     "expo-dev-client": "~3.3.9",
+    "expo-location": "^16.5.5",
     "expo-status-bar": "~1.11.1",
     "firebase": "^10.8.1",
     "react": "18.2.0",
