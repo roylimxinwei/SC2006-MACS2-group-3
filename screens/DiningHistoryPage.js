@@ -15,7 +15,7 @@ const diningHistoryData = [
     id: '1',
     name: 'ARestaurantName',
     image: require('../assets/restaurant1_placeholder.jpg'), // replace with actual image path
-    review: 'Food was alright. But its free so cannot complain much',
+    review: 'Best food I had in a century',
     date: '8/2/2024',
     rating: 3.5,
   },
