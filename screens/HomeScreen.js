@@ -10,6 +10,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView
 } from "react-native";
 import * as Location from "expo-location";
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from "react-native-maps";
@@ -18,6 +19,8 @@ import Header from "./Header";
 import { Switch } from 'react-native-switch';
 import GlobalApi from "../config/GlobalApi";
 import GeoCoding from "../config/GeoCoding";
+
+const screenHeight = Dimensions.get('window').height; 
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -28,6 +31,8 @@ const HomeScreen = ({ navigation }) => {
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
   const [address, setAddress] = useState(null);
+
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
   useEffect(() => {
     const getLocation = async () => {
@@ -77,6 +82,7 @@ const HomeScreen = ({ navigation }) => {
         // Process and update state once with all new data
         const allProcessedData = results.flatMap((resp, index) => {
           if (!resp) return []; // Skip processing if the response is null due to an error
+          console.log('Response:', resp);
           return resp.results.map(place => ({
             latitude: place.geometry.location.lat,
             longitude: place.geometry.location.lng,
@@ -84,6 +90,7 @@ const HomeScreen = ({ navigation }) => {
             rating: place.rating || 'No rating',
             cuisine: keywords[index],
             address: place.vicinity,
+            imageUrl: place.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAOuEs_zxFDQXynk8YZx35_nNWwzpsQy78` : null
           }));
         });
 
@@ -118,6 +125,40 @@ const HomeScreen = ({ navigation }) => {
         .catch(error => console.error('Error fetching address:', error));
     }
   }, [currentLocation]);
+
+  const RestaurantDetailsScreen = ({ place, onDismiss }) => (
+    <ScrollView 
+      style={styles.restaurantPopUp} 
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
+      <View style={styles.contentContainer}>
+        <Image source={{ uri: place.imageUrl }} style={styles.ImageDesign} />
+
+        <View style={styles.textContainer}>
+          <Text style={styles.calloutTitle}>
+            {place.name}
+          </Text>
+          <Text style={styles.calloutDescription}>
+            Rating: {place.rating}
+          </Text>
+          <Text style={styles.calloutDescription}>
+            Cuisine: {place.cuisine}
+          </Text>
+          <Text style={styles.calloutDescription}> 
+            Address: {place.address}
+          </Text>
+        </View>
+      </View>
+
+      <TouchableOpacity onPress={() => navigation.navigate("ReviewLandingPage")} style={styles.dismissButton}> 
+        <Text>Jiak!</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={onDismiss} style={styles.dismissButton}>
+        <Text>Close</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
 
   return (
     <View style={styles.headerContainer}>
@@ -159,30 +200,22 @@ const HomeScreen = ({ navigation }) => {
                 longitude: place.longitude,
               }}
               title={place.name}
+              onPress={() => setSelectedPlace(place)} // Set the selected place on press
             >
             <Image
                 source={require("../assets/jiakIcon.png")}
                 style={styles.restaurantIcon}
               />
-            <Callout>
-              <View style={styles.calloutContainer}>
-                <Text style={styles.calloutTitle}>
-                  {place.name}
-                </Text>
-                <Text style={styles.calloutDescription}>
-                  Rating: {place.rating}
-                </Text>
-                <Text style={styles.calloutDescription}>
-                  Cuisine: {place.cuisine}
-                </Text>
-                <Text style={styles.calloutDescription}> 
-                  Address: {place.address}
-                </Text>
-              </View>
-            </Callout>
             </Marker>
             ))}
         </MapView>
+      )}
+
+      {selectedPlace && (
+        <RestaurantDetailsScreen
+          place={selectedPlace}
+          onDismiss={() => setSelectedPlace(null)}
+        />
       )}
 
       <TouchableOpacity
@@ -206,27 +239,26 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <View style={styles.switch}>
-
-      <Switch
-        value={isEnabled}
-        onValueChange={toggleSwitch}
-        activeText={'Notification On'}
-        inActiveText={'Notification Off'}
-        circleSize={30}
-        barHeight={30}
-        circleBorderWidth={2}
-        backgroundActive={'green'}
-        backgroundInactive={'#DC4731'}
-        circleActiveColor={'#30a566'}
-        circleInActiveColor={'#DC4731'}
-        changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-        outerCircleStyle={{}} // style for outer animated circle
-        switchLeftPx={1} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-        switchRightPx={1} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-        switchWidthMultiplier={7} // multiplied by the `circleSize` prop to calculate total width of the Switch
-        switchBorderRadius={25}
-      />
-    </View>
+        <Switch
+          value={isEnabled}
+          onValueChange={toggleSwitch}
+          activeText={'Notification On'}
+          inActiveText={'Notification Off'}
+          circleSize={30}
+          barHeight={30}
+          circleBorderWidth={2}
+          backgroundActive={'green'}
+          backgroundInactive={'#DC4731'}
+          circleActiveColor={'#30a566'}
+          circleInActiveColor={'#DC4731'}
+          changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+          outerCircleStyle={{}} // style for outer animated circle
+          switchLeftPx={1} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+          switchRightPx={1} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+          switchWidthMultiplier={7} // multiplied by the `circleSize` prop to calculate total width of the Switch
+          switchBorderRadius={25}
+        />
+      </View>
     </View>
   );
 };
@@ -243,9 +275,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary, // primary colour
   },
   ImageDesign: {
-    borderRadius: "130%",
-    width: 250,
-    height: 250,
+    width: 100,
+    height: 100,
+    marginRight: 10, // Add some space between the image and the text
   },
   button: {
     position: "absolute",
@@ -311,6 +343,23 @@ const styles = StyleSheet.create({
   },
   calloutDescription: {
     fontSize: 14,
+  },
+  restaurantPopUp: {
+    position: 'absolute',
+    top: screenHeight * 2 / 3, // Set top to 2/3 of the screen height
+    left: 0,
+    right: 0,
+    height: screenHeight / 3,
+    backgroundColor: colors.primary,
+    zIndex: 2,
+  } ,
+  contentContainer: {
+    flexDirection: 'row', // Align children horizontally
+    padding: 10, // Add some padding around the content
+  },
+  textContainer: {
+    flex: 1, // Take up remaining space
+    justifyContent: 'center', // Center text vertically
   },
 });
 

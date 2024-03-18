@@ -32,7 +32,7 @@ const ReviewPage = ({ navigation }) => {
     // Add your logic to submit the review
     // For example, you can send the review and rating to your server or save it in the device storage
     console.log("Review submitted:", review, rating);
-    navigation.goBack(); // Go back to the previous screen
+    navigation.navigate("HomeScreen"); // Go back to the previous screen
   };
 
   return (
