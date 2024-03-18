@@ -2,6 +2,7 @@
 
 // Welcome screen links to sign up and log in screen
 
+
 import React, { useState, useEffect, useContext } from "react";
 import {
   Dimensions,
@@ -17,6 +18,7 @@ import colors from "../config/colors";
 import Header from "./Header";
 import { Switch } from 'react-native-switch';
 import GlobalApi from "../config/GlobalApi";
+import {haversineDistance} from "../config/distanceCalculator";
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -34,13 +36,6 @@ const HomeScreen = ({ navigation }) => {
 
       let location = await Location.getCurrentPositionAsync({});
       setCurrentLocation(location.coords);
-
-      // setInitialRegion({
-      //   latitude: location.coords.latitude,
-      //   longitude: location.coords.longitude,
-      //   latitudeDelta: 0.005,
-      //   longitudeDelta: 0.005,
-      // });
       const newInitialRegion = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -62,36 +57,13 @@ const HomeScreen = ({ navigation }) => {
   }, [currentLocation]);
 
   const GetNearbyPlace = () => {
-    // const data = {
-    //   "includedTypes": ["restaurant"],
-    //   "maxResultCount": 10,
-    //   "locationRestriction": {
-    //     "circle": {
-    //       "center": {
-    //         "latitude": currentLocation.latitude,
-    //         "longitude": currentLocation.longitude,
-    //       },
-    //       "radius": 1000.0,
-    //     },
-    //   },
-    // }
-
-    // GlobalApi.NewNearByPlace(data).then((resp) => {
-    //   console.log(JSON.stringify(resp.data));
-    // })
-
-    // Assuming `currentLocation` is defined and has `latitude` and `longitude` properties
     const location = `${currentLocation.latitude},${currentLocation.longitude}`;
     const radius = 1000; // 1000 meters (1 km)
     const type = 'restaurant';
     
-    // GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
-    //   setRawPlacesData(resp); // Store raw API response
-    //   console.log("API Response:", resp); // Log the entire response
-    // }).catch((error) => {
-    //   console.error('Error fetching nearby places:', error);
-    // });
     GlobalApi.NewNearByPlace(location, radius, type).then((resp) => {
+      setRawPlacesData(resp); // Set the rawPlacesData state here
+  
       const processedData = resp.results.map(place => ({
         latitude: place.geometry.location.lat,
         longitude: place.geometry.location.lng,
@@ -99,27 +71,42 @@ const HomeScreen = ({ navigation }) => {
         rating: place.rating || 'No rating',
         cuisine: place.types?.[0] || 'Unknown',
       }));
+  
       setProcessedPlaces(processedData);
       console.log("API Response:", resp);
     }).catch((error) => {
       console.error('Error fetching nearby places:', error);
     });
   }
+  
 
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
 
   useEffect(() => {
-    if (rawPlacesData && rawPlacesData.results) {
-      const processedData = rawPlacesData.results.map(place => ({
-        latitude: place.geometry.location.lat,
-        longitude: place.geometry.location.lng,
-        name: place.name
-      }));
+    if (rawPlacesData && rawPlacesData.results && currentLocation) {
+      const processedData = rawPlacesData.results.map((place, index) => {
+        const distance = haversineDistance(
+          currentLocation.latitude,
+          currentLocation.longitude,
+          place.geometry.location.lat,
+          place.geometry.location.lng
+        );
       
-      setProcessedPlaces(processedData); // Update state with processed data
+        // Check if distance calculation is successful
+        const formattedDistance = distance !== undefined ? parseFloat(distance.toFixed(2)) : 'Unknown';
+      
+        return {
+          ...place,
+          distance: formattedDistance, // Format the distance to 2 decimal places or set to 'Unknown' if calculation failed
+        };
+      });
+      
+      setProcessedPlaces(processedData);
+      
     }
-  }, [rawPlacesData]); // This effect depends on rawPlacesData
+  }, [rawPlacesData, currentLocation]); // This effect depends on rawPlacesData and currentLocation
+   // This effect depends on rawPlacesData and currentLocation
 
   return (
     <View style={styles.headerContainer}>
@@ -135,13 +122,12 @@ const HomeScreen = ({ navigation }) => {
                 longitude: currentLocation.longitude,
               }}
               title="Your Location"
-            >
+            > 
               <Image
                 source={require('../assets/userIcon.png')}
                 style={styles.icon}
               />
-
-              <Callout>
+                            <Callout>
                 <View style={styles.calloutContainer}>
                   <Text style={styles.calloutTitle}>Your Location</Text>
                   <Text style={styles.calloutDescription}>
@@ -150,10 +136,8 @@ const HomeScreen = ({ navigation }) => {
                   </Text>
                 </View>
               </Callout> 
-
             </Marker>
           )}
-          
           {processedPlaces.map((place, index) => (
             <Marker
               key={index}
@@ -161,28 +145,34 @@ const HomeScreen = ({ navigation }) => {
                 latitude: place.latitude,
                 longitude: place.longitude,
               }}
-              title={place.name}
+              title={`${place.name} - ${place.distance} km`} // Include the distance in the title
             >
-            <Image
+              <Image
                 source={require("../assets/jiakIcon.png")}
                 style={styles.restaurantIcon}
               />
-            <Callout>
-              <View style={styles.calloutContainer}>
-                <Text style={styles.calloutTitle}>{place.name}</Text>
-                <Text style={styles.calloutDescription}>
-                  Rating: {place.rating} | Cuisine: {place.cuisine}
-                </Text>
-                <Text style={styles.calloutDescription}>
-                  Latitude: {place.latitude.toFixed(6)}, Longitude:{" "}
-                  {place.longitude.toFixed(6)}
-                </Text>
-              </View>
-            </Callout>
+              <Callout>
+                <View style={styles.calloutContainer}>
+                  <Text style={styles.calloutTitle}>{place.name}</Text>
+                  <Text style={styles.calloutDescription}>
+                    Rating: {place.rating} | Cuisine:{place.cuisine}
+                  </Text>
+                  <Text style={styles.calloutDescription}>
+                    Distance: {place.distance} km
+                  </Text>
+                  <Text style={styles.calloutDescription}>
+                    Latitude: {place.latitude.toFixed(6)}, Longitude:{" "}
+                    {place.longitude.toFixed(6)}
+                  </Text>
+                </View>
+              </Callout>
             </Marker>
-            ))}
+))}
+
+
         </MapView>
       )}
+
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
@@ -246,6 +236,13 @@ const styles = StyleSheet.create({
     width: 250,
     height: 250,
   },
+
+  restaurantIcon: {
+    width: 30,
+    height: 30,
+    borderRadius: 15, // Half of the width and height to make it circular
+    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red color with 50% opacity
+  },
   button: {
     position: "absolute",
     top:60,
@@ -257,6 +254,22 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+  },
+  calloutContainer: {
+    width: 200,
+    padding: 10,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+  },
+  calloutTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  calloutDescription: {
+    fontSize: 14,
   },
   buttonImage: {
     width: 70, // Set the width of your button image
@@ -276,12 +289,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
-  restaurantIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15, // Half of the width and height to make it circular
-    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red color with 50% opacity
-  },
   historyButton: {
     position: "absolute", // Position the button over the screen
     right: 20, // Distance from the left
@@ -294,23 +301,7 @@ const styles = StyleSheet.create({
     width: 40, // Set the width of your image
     height: 40, // Set the height of your image to the same value to maintain aspect ratio
     borderRadius: 20, // Half the width or height to make it round
-  },
-  calloutContainer: {
-    width: 200,
-    padding: 10,
-    backgroundColor: "#FFFFFF",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#CCCCCC",
-  },
-  calloutTitle: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  calloutDescription: {
-    fontSize: 14,
-  },
-});
+  }
+    });
 
 export default HomeScreen;

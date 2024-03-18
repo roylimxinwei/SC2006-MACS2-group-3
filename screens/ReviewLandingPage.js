@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   smallText: {
     color: "#7F2B0F",
-    fontSize: 40,
+    fontSize: 36,
     marginBottom: 80,
     marginTop: -80,
     textAlign: "left",
