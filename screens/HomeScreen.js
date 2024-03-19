@@ -91,7 +91,7 @@ const HomeScreen = ({ navigation }) => {
             rating: place.rating || 'No rating',
             cuisine: keywords[index],
             address: place.vicinity,
-            imageUrl: place.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAOuEs_zxFDQXynk8YZx35_nNWwzpsQy78` : null
+            imageUrl: place.photos ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAOuEs_zxFDQXynk8YZx35_nNWwzpsQy78` : null ,
           }));
         });
 
@@ -141,7 +141,7 @@ const HomeScreen = ({ navigation }) => {
         contentContainerStyle={{ flexGrow: 1 }}
       >
         <View style={styles.contentContainer}>
-          <Image source={{ uri: place.imageUrl }} style={styles.ImageDesign} />
+          <Image source={{ uri: place.imageUrl}} style={styles.ImageDesign} />
   
           <View style={styles.textContainer}>
             <Text style={styles.calloutTitle}>
