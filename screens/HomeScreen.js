@@ -19,6 +19,7 @@ import Header from "./Header";
 import { Switch } from 'react-native-switch';
 import GlobalApi from "../config/GlobalApi";
 import GeoCoding from "../config/GeoCoding";
+import {haversineDistance} from "../config/distanceCalculator";
 
 const screenHeight = Dimensions.get('window').height; 
 
@@ -126,39 +127,51 @@ const HomeScreen = ({ navigation }) => {
     }
   }, [currentLocation]);
 
-  const RestaurantDetailsScreen = ({ place, onDismiss }) => (
-    <ScrollView 
-      style={styles.restaurantPopUp} 
-      contentContainerStyle={{ flexGrow: 1 }}
-    >
-      <View style={styles.contentContainer}>
-        <Image source={{ uri: place.imageUrl }} style={styles.ImageDesign} />
-
-        <View style={styles.textContainer}>
-          <Text style={styles.calloutTitle}>
-            {place.name}
-          </Text>
-          <Text style={styles.calloutDescription}>
-            Rating: {place.rating}
-          </Text>
-          <Text style={styles.calloutDescription}>
-            Cuisine: {place.cuisine}
-          </Text>
-          <Text style={styles.calloutDescription}> 
-            Address: {place.address}
-          </Text>
+  const RestaurantDetailsScreen = ({ place, userLocation, onDismiss }) => {
+    const distance = haversineDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      place.latitude,
+      place.longitude
+    ).toFixed(2); // Round the distance to 2 decimal places
+  
+    return (
+      <ScrollView 
+        style={styles.restaurantPopUp} 
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View style={styles.contentContainer}>
+          <Image source={{ uri: place.imageUrl }} style={styles.ImageDesign} />
+  
+          <View style={styles.textContainer}>
+            <Text style={styles.calloutTitle}>
+              {place.name}
+            </Text>
+            <Text style={styles.calloutDescription}>
+              Rating: {place.rating}
+            </Text>
+            <Text style={styles.calloutDescription}>
+              Cuisine: {place.cuisine}
+            </Text>
+            <Text style={styles.calloutDescription}> 
+              Address: {place.address}
+            </Text>
+            <Text style={styles.calloutDescription}>
+              Distance: {distance} km
+            </Text>
+          </View>
         </View>
-      </View>
-
-      <TouchableOpacity onPress={() => navigation.navigate("ReviewLandingPage")} style={styles.dismissButton}> 
-        <Text>Jiak!</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={onDismiss} style={styles.dismissButton}>
-        <Text>Close</Text>
-      </TouchableOpacity>
-    </ScrollView>
-  );
+  
+        <TouchableOpacity onPress={() => navigation.navigate("ReviewLandingPage")} style={styles.dismissButtonJiak}> 
+          <Text style={styles.JiakText}>Jiak!</Text>
+        </TouchableOpacity>
+  
+        <TouchableOpacity onPress={onDismiss} style={styles.dismissButtonClose}>
+          <Text style={styles.CloseText}>X</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    );
+  };
 
   return (
     <View style={styles.headerContainer}>
@@ -214,6 +227,7 @@ const HomeScreen = ({ navigation }) => {
       {selectedPlace && (
         <RestaurantDetailsScreen
           place={selectedPlace}
+          userLocation={currentLocation} // Pass the currentLocation as userLocation
           onDismiss={() => setSelectedPlace(null)}
         />
       )}
@@ -267,6 +281,34 @@ const styles = StyleSheet.create({
   headerContainer:{
     position:"absolute",
     width:"100%",
+  },
+
+  dismissButtonJiak:{
+    backgroundColor: colors.tertiary,
+    position: "absolute",
+    top:125,
+    right:145,
+    paddingBottom: 10,
+    paddingTop: 10,
+    paddingRight: 35,
+    paddingLeft: 35,
+    borderRadius: 15,
+  },
+  JiakText:{
+    fontSize:16,
+  },
+  CloseText:{
+    fontSize:16,
+  },
+  dismissButtonClose:{
+    position: "absolute",
+    top:3,
+    right:-15,
+    paddingBottom: 10,
+    paddingTop: 10,
+    paddingRight: 35,
+    paddingLeft: 35,
+    borderRadius: 15,
   },
   container: {
     flex: 1,
