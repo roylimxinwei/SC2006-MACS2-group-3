@@ -28,10 +28,7 @@ const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
-  const [distance, setDistance] = useState(null);
-  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
-
-  const NOTIFY_RADIUS_METERS = 500;
+  const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => {
@@ -204,6 +201,34 @@ const HomeScreen = ({ navigation }) => {
     );
   };
 
+  const displayRestaurantDetails = (
+    processedPlaces,
+    currentLocation,
+    radius
+  ) => {
+    const nearbyPlaces = processedPlaces.filter((place) => {
+      const distance = calculateDistance(place, currentLocation);
+      return distance <= radius;
+    });
+
+    if (nearbyPlaces.length > 0) {
+      return (
+        <ScrollView>
+          {nearbyPlaces.map((place, index) => (
+            <RestaurantDetailsScreen
+              key={index}
+              place={place}
+              userLocation={currentLocation}
+              onDismiss={() => setSelectedPlace(null)}
+            />
+          ))}
+        </ScrollView>
+      );
+    } else {
+      return <Text>No nearby restaurants found.</Text>;
+    }
+  };
+
   return (
     <View style={styles.headerContainer}>
       <View style>
@@ -259,6 +284,8 @@ const HomeScreen = ({ navigation }) => {
           onDismiss={() => setSelectedPlace(null)}
         />
       )}
+
+      {displayRestaurantDetails(processedPlaces, currentLocation, 0.5)}
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
@@ -320,6 +347,16 @@ const SwitchPopup = ({ isEnabled, toggleSwitch }) => {
       )}
     </View>
   );
+};
+
+const calculateDistance = (place, userLocation) => {
+  const distance = haversineDistance(
+    userLocation.latitude,
+    userLocation.longitude,
+    place.latitude,
+    place.longitude
+  ).toFixed(2);
+  return distance;
 };
 
 const styles = StyleSheet.create({
