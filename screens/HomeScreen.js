@@ -213,14 +213,26 @@ const HomeScreen = ({ navigation }) => {
 
     if (nearbyPlaces.length > 0) {
       return (
-        <ScrollView>
+        <ScrollView style={styles.scollContainer}>
           {nearbyPlaces.map((place, index) => (
-            <RestaurantDetailsScreen
-              key={index}
-              place={place}
-              userLocation={currentLocation}
-              onDismiss={() => setSelectedPlace(null)}
-            />
+            <View style={styles.contentContainer}>
+              <Image
+                source={{ uri: place.imageUrl }}
+                style={styles.ImageDesign}
+              />
+              <View style={styles.textContainer}>
+                <Text style={styles.calloutTitle}>{place.name}</Text>
+                <Text style={styles.calloutDescription}>
+                  Rating: {place.rating}
+                </Text>
+                <Text style={styles.calloutDescription}>
+                  Cuisine: {place.cuisine}
+                </Text>
+                <Text style={styles.calloutDescription}>
+                  Address: {place.address}
+                </Text>
+              </View>
+            </View>
           ))}
         </ScrollView>
       );
@@ -285,7 +297,8 @@ const HomeScreen = ({ navigation }) => {
         />
       )}
 
-      {displayRestaurantDetails(processedPlaces, currentLocation, 0.5)}
+      {isEnabled &&
+        displayRestaurantDetails(processedPlaces, currentLocation, 0.5)}
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
@@ -497,6 +510,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
+  },
+  scollContainer: {
+    position: "absolute",
+    top: 250, // You can adjust the top value to your preference
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  restaurantContainer: {
+    position: "relative",
+    margin: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // For Android
   },
 });
 
