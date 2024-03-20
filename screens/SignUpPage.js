@@ -44,7 +44,7 @@ const SignUpPage = ({ navigation }) => {
     .catch(error => console.log(error.message))
 
 
-    // navigation.navigate("HomeScreen"); // Replace 'HomePage' with your home screen route name
+    navigation.navigate("PreferencePage1"); // Replace 'HomePage' with your home screen route name
   };
 
   return (

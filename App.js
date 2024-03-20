@@ -17,6 +17,8 @@ import ReviewPage from "./screens/ReviewPage";
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import PreferencePage1 from "./screens/PreferencePage1"
+import PreferencePage2 from "./screens/PreferencePage2"
 
 const Stack = createNativeStackNavigator();
 
@@ -32,6 +34,8 @@ export default function App() {
         <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="ReviewPage" component={ReviewPage} />
         <Stack.Screen name="ReviewLandingPage" component={ReviewLandingPage} />
+        <Stack.Screen name="PreferencePage1" component={PreferencePage1} />
+        <Stack.Screen name="PreferencePage2" component={PreferencePage2} />
         <Stack.Screen
           name="InputReferralCodePage"
           component={InputReferralCodePage}
