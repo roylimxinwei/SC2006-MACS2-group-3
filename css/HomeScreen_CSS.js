@@ -131,6 +131,19 @@ export const styles = StyleSheet.create({
     flex: 1, // Take up remaining space
     justifyContent: 'center', // Center text vertically
   },
+  popupContainer: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#CCCCCC",
+    padding: 10,
+    zIndex: 1,
+  },
+  popupText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
   scollContainer: {
     position: "absolute",
     top: 250, // You can adjust the top value to your preference
