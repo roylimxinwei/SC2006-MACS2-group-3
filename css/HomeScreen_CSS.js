@@ -131,4 +131,23 @@ export const styles = StyleSheet.create({
     flex: 1, // Take up remaining space
     justifyContent: 'center', // Center text vertically
   },
+  scollContainer: {
+    position: "absolute",
+    top: 250, // You can adjust the top value to your preference
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  restaurantContainer: {
+    position: "relative",
+    margin: 10,
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 5, // For Android
+  },
 });
