@@ -285,14 +285,15 @@ const styles = StyleSheet.create({
 
   dismissButtonJiak:{
     backgroundColor: colors.tertiary,
-    position: "absolute",
-    top:125,
-    right:145,
+    position: "relative",
+    justifyContent:"center",
+    width:120,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 35,
-    paddingLeft: 35,
+    paddingLeft: 42,
     borderRadius: 15,
+    marginLeft:130,
   },
   JiakText:{
     fontSize:16,
@@ -391,6 +392,7 @@ const styles = StyleSheet.create({
     top: screenHeight * 2 / 3, // Set top to 2/3 of the screen height
     left: 0,
     right: 0,
+    marginBottom:200,
     height: screenHeight / 3,
     backgroundColor: colors.primary,
     zIndex: 2,
