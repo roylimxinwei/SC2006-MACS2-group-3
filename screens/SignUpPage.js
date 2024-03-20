@@ -13,7 +13,8 @@ import colors from "../config/colors";
 
 // import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
 import {createUserWithEmailAndPassword } from '@firebase/auth';
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+import { doc, setDoc, getDoc, updateDoc} from "firebase/firestore"; 
 
 const SignUpPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -42,10 +43,54 @@ const SignUpPage = ({ navigation }) => {
 
     })
     .catch(error => console.log(error.message))
-
-
     // navigation.navigate("HomeScreen"); // Replace 'HomePage' with your home screen route name
   };
+
+  const handleInsert = async () =>{
+    await setDoc(doc(db, "cities", "ayy"), {
+      name: "Los Angeles",
+      state: "CA",
+      country: "USA"
+    }).catch(error => console.log(error.message))
+    ;
+
+    const docRef = doc(db, "cities", "ayy");
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
+
+  const handleGet = async () =>{
+
+    const docRef = doc(db, "cities", "ayy");
+    const docSnap = await getDoc(docRef);
+  
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+    } else {
+      // docSnap.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
+
+  const handleUpdate = async () =>{
+  
+  const ref = doc(db, "cities", "ayy");
+
+    await updateDoc(ref, {
+      state: "singapore"
+    }).then(message =>{
+      alert("Success")
+
+    }).catch(message =>{
+      console.log(message)
+    });
+  }
 
   return (
     <View style={styles.container}>
@@ -82,6 +127,18 @@ const SignUpPage = ({ navigation }) => {
       />
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleInsert}>
+        <Text style={styles.buttonText}>Insert Data</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleGet}>
+        <Text style={styles.buttonText}>Get Data</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleUpdate}>
+        <Text style={styles.buttonText}>Update Data</Text>
       </TouchableOpacity>
     </View>
   );
