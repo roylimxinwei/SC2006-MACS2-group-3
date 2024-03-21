@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {
-  Dimensions,
-  Image,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
-import colors from "../config/colors";
+import {styles} from "../css/Header_CSS";
 
 export default function Header(){
     return(
@@ -18,23 +14,3 @@ export default function Header(){
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: colors.primary, // primary colour
-      },
-    
-    text1:{
-        fontSize:26,
-        paddingBottom:10,
-        paddingTop:20,
-        paddingLeft:5,
-    },
-    text2:{
-        fontSize:20,
-        paddingBottom:5,
-        paddingLeft:12,
-        marginBottom: 50,
-    }
-
-})
