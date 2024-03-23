@@ -109,9 +109,14 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
+    fontFamily: "Georgia",
+
   },
   calloutDescription: {
     fontSize: 14,
+    fontFamily: "Georgia",
+
+    padding:1,
   },
   restaurantPopUp: {
     position: 'absolute',

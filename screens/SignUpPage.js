@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
 } from "react-native";
 import { styles } from "../css/SignUpPage_CSS"; 
 
@@ -94,54 +95,56 @@ const SignUpPage = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/jiakIcon.png")}
-        style={styles.ImageDesign}
-      />
-      <Text style={styles.title}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={setUsername}
-        value={username}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={setEmail}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        onChangeText={setPassword}
-        value={password}
-        secureTextEntry
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirm Password"
-        onChangeText={setConfirmPassword}
-        value={confirmPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Image
+          source={require("../assets/jiakIcon.png")}
+          style={styles.ImageDesign}
+        />
+        <Text style={styles.title}>Sign Up</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          onChangeText={setUsername}
+          value={username}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={setEmail}
+          value={email}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Confirm Password"
+          onChangeText={setConfirmPassword}
+          value={confirmPassword}
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleInsert}>
-        <Text style={styles.buttonText}>Insert Data</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleInsert}>
+          <Text style={styles.buttonText}>Insert Data</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleGet}>
-        <Text style={styles.buttonText}>Get Data</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={handleGet}>
+          <Text style={styles.buttonText}>Get Data</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-        <Text style={styles.buttonText}>Update Data</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity style={styles.button} onPress={handleUpdate}>
+          <Text style={styles.buttonText}>Update Data</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
