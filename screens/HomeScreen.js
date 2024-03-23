@@ -13,13 +13,14 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Callout, Marker, PROVIDER_GOOGLE}  from "react-native-maps";
 import { Switch } from "react-native-switch";
 import GeoCoding from "../config/GeoCoding";
 import GlobalApi from "../config/GlobalApi";
 import { haversineDistance } from "../config/distanceCalculator";
 import Header from "./Header";
 import {styles} from "../css/HomeScreen_CSS";
+import MapViewStyle from "../config/MapViewStyle.json";
 
 const HomeScreen = ({ navigation }) => {
   const [currentLocation, setCurrentLocation] = useState(null);
@@ -34,6 +35,7 @@ const HomeScreen = ({ navigation }) => {
       return newState;
     });
   };
+
 
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
@@ -244,7 +246,7 @@ const HomeScreen = ({ navigation }) => {
         <Header />
       </View>
       {initialRegion && (
-        <MapView style={styles.map} initialRegion={initialRegion}>
+        <MapView style={styles.map} provider= {PROVIDER_GOOGLE} initialRegion={initialRegion} customMapStyle={MapViewStyle}>
           {currentLocation && (
             <Marker
               coordinate={{
