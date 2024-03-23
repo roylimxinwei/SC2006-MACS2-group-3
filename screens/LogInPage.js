@@ -54,7 +54,7 @@ const LoginPage = ({ navigation }) => {
 
         if (error.code === "auth/too-many-requests") {
           alert(
-            "Access tothis account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
+            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
           );
         }
 

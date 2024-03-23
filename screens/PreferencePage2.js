@@ -77,7 +77,7 @@ const PreferencePage2 = () => {
         />
         </View>
         <TouchableOpacity style={styles.nextButton} onPress={() => navigation.navigate('HomeScreen')}>
-          <Text style={styles.nextButtonText}>Next</Text>
+          <Text style={styles.nextButtonText}>Save</Text>
         </TouchableOpacity>
       </View>
     );

@@ -59,5 +59,24 @@ export const styles = StyleSheet.create({
     switch:{
         marginLeft:50,
         marginTop:10
-    }
+    },
+    button: {
+        backgroundColor: "#CD5C5C",
+        paddingVertical: 10,
+        paddingHorizontal: 70,
+        borderRadius: 5,
+        marginBottom: 10,
+        borderRadius: 20,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        marginTop: 30,
+        marginLeft: 60,
+        marginRight: 60
+    },
+    buttonText: {
+        color: "#FFFFFF",
+        fontSize: 18,
+    },
 });
