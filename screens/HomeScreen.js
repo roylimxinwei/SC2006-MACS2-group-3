@@ -204,7 +204,7 @@ const HomeScreen = ({ navigation }) => {
 
     if (nearbyPlaces.length > 0) {
       // Slice the nearest 3 restaurants
-      const limitedNearbyPlaces = nearbyPlaces.slice(0, 3);
+      const limitedNearbyPlaces = nearbyPlaces.slice(0, 1); //change the number to show how many u want to see
 
       if (limitedNearbyPlaces.length > 0) {
         // Display the limited list of restaurants

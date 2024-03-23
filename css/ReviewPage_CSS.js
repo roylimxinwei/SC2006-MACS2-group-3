@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     position: "absolute",
-    top: 45,
+    top: 20,
     left: 30,
   },
   input: {
@@ -20,13 +20,13 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 8,
     width: 350,
-    height: 150,
+    height: 75,
     marginBottom: 10,
   },
   ImageDesign: {
     width: 300,
     height: 300,
-    marginRight: 10, // Add some space between the image and the text
+    bottom: 50,
   },
   button: {
     backgroundColor: "#CD5C5C",
@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
   },
   stars: {
     flexDirection: "row",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   starContainer: {
     padding: 5,
