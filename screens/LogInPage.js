@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import {
   Dimensions,
   Image,
-  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
   ScrollView,
-  Dimensions,
   Alert,
 } from "react-native";
 

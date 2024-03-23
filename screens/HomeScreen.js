@@ -24,7 +24,7 @@ import Header from "./Header";
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const proximity = 0.4; // proximity in user preference (500 meters here)
+  const proximity = 1; // proximity in user preference (500 meters here)
 
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
