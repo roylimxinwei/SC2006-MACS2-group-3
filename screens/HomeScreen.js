@@ -3,6 +3,7 @@
 // Welcome screen links to sign up and log in screen
 
 import * as Location from "expo-location";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -21,13 +22,30 @@ import { cuisines } from "../config/supportedCuisine";
 import { styles } from "../css/HomeScreen_CSS";
 import Header from "./Header";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  const [currentUser, setCurrentUser] = useState(null);
   const proximity = 0.4; // proximity in user preference (500 meters here)
 
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setCurrentUser(user);
+      } else {
+        // User is signed out
+        setCurrentUser(null);
+      }
+    });
+
+    // Clean up the subscription
+    return unsubscribe;
+  }, []);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => {
@@ -249,9 +267,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.headerContainer}>
-      <View style>
-        <Header />
-      </View>
+      {currentUser && <Header user={currentUser} />}
       {initialRegion && (
         <MapView style={styles.map} initialRegion={initialRegion}>
           {currentLocation && (

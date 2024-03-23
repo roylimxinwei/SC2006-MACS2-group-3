@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import {
+  Dimensions,
   Image,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  ScrollView,
-  Dimensions,
 } from "react-native";
 
-import { styles } from "../css/LogInPage_CSS";
 import { signInWithEmailAndPassword } from "@firebase/auth";
+import { styles } from "../css/LogInPage_CSS";
 import { auth } from "../firebase";
 
 const LoginPage = ({ navigation }) => {
@@ -37,7 +37,7 @@ const LoginPage = ({ navigation }) => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         alert("Log in Successfully.");
-        navigation.navigate("HomeScreen");
+        navigation.navigate("HomeScreen", { user: user });
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {
@@ -86,13 +86,12 @@ const LoginPage = ({ navigation }) => {
         <TouchableOpacity onPress={handleLogIn} style={styles.button}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("SignUpPage")}>
+        <TouchableOpacity onPress={() => navigation.navigate("SignUpPage")}>
           <Text style={styles.signUpText}>New to Jiak? Sign up here.</Text>
-        </TouchableOpacity>          
-        </View>
-        <Text style={styles.padpad}> FOR PADDING </Text>
-      </ScrollView>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.padpad}> FOR PADDING </Text>
+    </ScrollView>
   );
 };
 
