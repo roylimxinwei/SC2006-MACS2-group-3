@@ -316,7 +316,7 @@ const HomeScreen = ({ navigation }) => {
 			>
 				<Image
 					style={styles.buttonImage}
-					source={require("../assets/jiakIcon.png")} // replace with your button image path
+					source={require("../assets/diningHistory.png")} // replace with your button image path
 				/>
 			</TouchableOpacity>
 
