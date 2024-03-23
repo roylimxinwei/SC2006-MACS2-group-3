@@ -7,6 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  ScrollView,
+  Dimensions,
+  Alert,
 } from "react-native";
 
 import { signInWithEmailAndPassword } from "@firebase/auth";
@@ -27,7 +30,7 @@ const LoginPage = ({ navigation }) => {
 
   const handleLogIn = () => {
     if (email == null || password == null) {
-      alert("Please fill in all fields.");
+      Alert.alert("Please fill in all fields.");
       return;
     }
 
@@ -41,19 +44,19 @@ const LoginPage = ({ navigation }) => {
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {
-          alert("There no user exist with that email");
+          Alert.alert("There no user exist with that email");
         }
 
         if (error.code === "auth/invalid-email") {
-          alert("The email address is invalid.");
+          Alert.alert("The email address is invalid.");
         }
 
         if (error.code === "auth/invalid-credential") {
-          alert("The password is invalid.");
+          Alert.alert("The password is invalid.");
         }
 
         if (error.code === "auth/too-many-requests") {
-          alert(
+          Alert.alert(
             "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
           );
         }

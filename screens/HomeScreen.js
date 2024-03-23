@@ -344,15 +344,15 @@ const HomeScreen = ({ navigation, route }) => {
         />
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.historyButton}
-        onPress={() => navigation.navigate("DiningHistoryPage")}
-      >
-        <Image
-          style={styles.buttonImage}
-          source={require("../assets/jiakIcon.png")} // replace with your button image path
-        />
-      </TouchableOpacity>
+			<TouchableOpacity
+				style={styles.historyButton}
+				onPress={() => navigation.navigate("DiningHistoryPage")}
+			>
+				<Image
+					style={styles.buttonImage}
+					source={require("../assets/diningHistory.png")} // replace with your button image path
+				/>
+			</TouchableOpacity>
 
       <View style={styles.switch}>
         <Switch

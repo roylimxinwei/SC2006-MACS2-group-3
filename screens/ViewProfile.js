@@ -26,10 +26,6 @@ const ViewProfile = ({ navigation }) => {
 	const [toRestaurantValue, setToRestaurantValue] = useState(0);
 	const [Restaurantvalue, setRestaurantValue] = useState(0);
 
-	const editProfile = () => {
-		navigation.navigate("editProfile"); // Replace 'HomePage' with your home screen route name
-	};
-
 	return (
 		<View style={styles.viewProfile}>
 			<View style={styles.detailContainer}>
@@ -39,7 +35,9 @@ const ViewProfile = ({ navigation }) => {
 				/>
 				<View style={styles.profileDetails}>
 					<Text style={styles.username}>Wei Yang</Text>
-					<TouchableOpacity >
+					<TouchableOpacity 
+						onPress={() => navigation.navigate("PreferencePage1")}
+					>
 						<Text style={styles.editProfile}>Edit Profile</Text>
 					</TouchableOpacity>
 				</View>
@@ -137,13 +135,6 @@ const ViewProfile = ({ navigation }) => {
 					switchBorderRadius={25}
 				/>
 			</View>
-
-			<TouchableOpacity 
-				style={styles.button} 
-				onPress={() => navigation.navigate("PreferencePage1")}
-			>
-				<Text style={styles.buttonText}>Edit Preference</Text>
-			</TouchableOpacity>
 		</View>
   	);
 };
