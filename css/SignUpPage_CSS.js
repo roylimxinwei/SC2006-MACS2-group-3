@@ -3,10 +3,12 @@ import {StyleSheet} from "react-native";
 
 export const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 5,
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: colors.primary,
+        paddingTop:120,
+        paddingBottom: 150,
     },
     ImageDesign: {
         borderRadius: 130,
@@ -26,6 +28,14 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         marginBottom: 10,
+        borderRadius: 5,
+    },
+    input2:{
+        width: "80%",
+        borderColor: "gray",
+        borderWidth: 1,
+        padding: 1,
+        marginBottom: 1000,
         borderRadius: 5,
     },
     button: {

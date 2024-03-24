@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
         borderRadius: 130,
         width: 300,
         height: 300,
-        marginBottom: -50,
+        marginBottom: -40,
     },
     welcomeText: {
         color: "#7F2B0F",
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     },
     smallText: {
         color: "#7F2B0F",
-        fontSize: 40,
+        fontSize: 30,
         marginBottom: 80,
         marginTop: -80,
         textAlign: "left",
@@ -39,6 +39,7 @@ export const styles = StyleSheet.create({
         color: "#9e8f8d",
         fontSize: 14,
         textDecorationLine: "underline",
+        marginTop:-20,
     },
     button: {
         backgroundColor: "#CD5C5C",

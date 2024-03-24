@@ -37,6 +37,21 @@ export const styles = StyleSheet.create({
     paddingLeft: 35,
     borderRadius: 15,
   },
+  ReviewText:{
+    fontSize:14,
+    color:"#7F2B0F",
+    textDecorationLine:"underline",
+  },
+  UserReviewButton:{
+    position: "absolute",
+    top:25,
+    right:20,
+    paddingBottom: 10,
+    paddingTop: 10,
+    paddingRight: 35,
+    paddingLeft: 35,
+    borderRadius: 15,
+  },
   container: {
     flex: 1,
     alignItems: "center", // Centers objects according to the secondary axis
@@ -50,9 +65,9 @@ export const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    top:60,
+    top:50,
     right:20,
-    backgroundColor: "#CD5C5C",
+    backgroundColor: colors.primary,
     marginBottom: 10,
     borderRadius: 100,
     shadowColor: "#000",
@@ -71,8 +86,8 @@ export const styles = StyleSheet.create({
   },
   switch:{
     position:"absolute",
-    top:100,
-    left:20,
+    top:90,
+    left:15,
   },
   map: {
     width: Dimensions.get('window').width,
@@ -108,10 +123,14 @@ export const styles = StyleSheet.create({
   calloutTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color:"#7F2B0F",
     marginBottom: 5,
+
   },
   calloutDescription: {
     fontSize: 14,
+    padding:1,
+    color:"#7F2B0F",
   },
   restaurantPopUp: {
     position: 'absolute',
@@ -144,12 +163,13 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  scollContainer: {
+  scrollContainer: {
     position: "absolute",
-    top: 250, // You can adjust the top value to your preference
-    left: 0,
-    right: 0,
-    bottom: 0,
+    top: 290, // You can adjust the top value to your preference
+    left: 10,
+    right: 10,
+    bottom:20,
+    backgroundColor: colors.primary,
   },
   restaurantContainer: {
     position: "relative",

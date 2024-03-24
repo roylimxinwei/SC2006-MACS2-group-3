@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import {
-    Image,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Image,
+  Keyboard,
+  Text,
+  TextInput,
+  ScrollView,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
 } from "react-native";
-import {styles} from '../css/ReviewPage_CSS';
+import { styles } from "../css/ReviewPage_CSS";
 
 const Star = ({ selected, onPress, index }) => {
   return (
@@ -16,7 +19,8 @@ const Star = ({ selected, onPress, index }) => {
   );
 };
 
-const ReviewPage = ({ navigation }) => {
+const ReviewPage = ({ navigation, route }) => {
+  const { place } = route.params;
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
 
@@ -36,34 +40,38 @@ const ReviewPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Write a review!</Text>
-      <Image
-        style={styles.image}
-        source={require("../assets/restaurant.png")}
-      />
-      <View style={styles.stars}>
-        {Array.from({ length: 5 }, (_, i) => (
-          <Star
-            key={i}
-            selected={i < rating}
-            onPress={() => handleStarPress(i)}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <ScrollView
+        style={styles.scrollViewContainer}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={styles.container} behavior="padding" enabled>
+          <Text style={styles.text}>How was...</Text>
+          <Image source={place.imageUrl} style={styles.ImageDesign} />
+          <View style={styles.stars}>
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star
+                key={i}
+                selected={i < rating}
+                onPress={() => handleStarPress(i)}
+              />
+            ))}
+          </View>
+          <TextInput
+            style={styles.input}
+            value={review}
+            onChangeText={handleReviewChange}
+            placeholder="Write your review here..."
+            multiline={true}
+            numberOfLines={4}
           />
-        ))}
-      </View>
-      <TextInput
-        style={styles.input}
-        value={review}
-        onChangeText={handleReviewChange}
-        placeholder="Write your review here..."
-        multiline={true}
-        numberOfLines={4}
-      />
-      <TouchableOpacity onPress={handleSubmitReview} style={styles.button}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-    </View>
+          <TouchableOpacity onPress={handleSubmitReview} style={styles.button}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </TouchableWithoutFeedback>
   );
 };
 
-export default ReviewPage;
+export default ReviewPage

@@ -1,12 +1,15 @@
 import { StyleSheet } from "react-native";  
+import colors from '../config/colors';
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FFF0D9", // Replace with your desired background color
-  },
+    backgroundColor: colors.primary,
+    paddingTop:120,
+    paddingBottom:300,
+},
   ImageDesign: {
     borderRadius: 130,
     width: 250,
@@ -49,4 +52,8 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     top: 10,
   },
+  padpad:{
+    color: "transparent",
+    backgroundColor: colors.primary,
+  }
 });
