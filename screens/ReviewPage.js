@@ -8,6 +8,9 @@ import {
 } from "react-native";
 import {styles} from '../css/ReviewPage_CSS';
 
+import { auth, db } from '../firebase';
+import { doc, setDoc, getDocs, getDoc,addDoc, updateDoc, serverTimestamp ,Timestamp, collection} from "firebase/firestore"; 
+
 const Star = ({ selected, onPress, index }) => {
   return (
     <TouchableOpacity onPress={onPress} style={styles.starContainer}>
@@ -16,7 +19,13 @@ const Star = ({ selected, onPress, index }) => {
   );
 };
 
-const ReviewPage = ({ navigation }) => {
+const ReviewPage = ({ route, navigation }) => {
+
+  const selectedRestaurant = route.params;
+  console.log(selectedRestaurant.name)
+
+  let user = auth.currentUser;
+
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
 
@@ -28,10 +37,34 @@ const ReviewPage = ({ navigation }) => {
     setRating(index + 1);
   };
 
-  const handleSubmitReview = () => {
+  const handleSubmitReview = async () => {
     // Add your logic to submit the review
     // For example, you can send the review and rating to your server or save it in the device storage
-    console.log("Review submitted:", review, rating);
+
+    const restaurantReviewed = false;
+    const documentID = null;
+
+    const querySnapshot = await getDocs(collection(db, "users", user.uid, "diningHistory"));
+    querySnapshot.forEach((doc) => {
+      // doc.data() is never undefined for query doc snapshots
+      console.log(doc.id, " => ", doc.data());
+      if(doc.data().name == selectedRestaurant.name)
+      {
+        // documentID = doc.id;
+        // restaurantReviewed = true;
+      }
+    });
+
+      const docRef = await addDoc(collection(db, "users", user.uid, "diningHistory"), {
+        date: Timestamp.now(),
+        imageUrl: selectedRestaurant.imageUrl,
+        name: selectedRestaurant.name,
+        rating: rating,
+        review: review
+      });
+
+
+    alert("Review submitted.");
     navigation.navigate("HomeScreen"); // Go back to the previous screen
   };
 

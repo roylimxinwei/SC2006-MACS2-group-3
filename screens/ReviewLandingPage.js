@@ -7,9 +7,14 @@ import {
 } from "react-native";
 import {styles} from '../css/ReviewLandingPage_CSS';
 
-const ReviewLandingPage = ({ navigation }) => {
+const ReviewLandingPage = ({ route, navigation }) => {
+  //route will contain the params
+  // const {name, rating, cuisine, address, imageURL} = route.params;
+  const selectedRestaurant = route.params;
+
   const handleReviewsPress = () => {
-    navigation.navigate("ReviewPage");
+    
+    navigation.navigate("ReviewPage",selectedRestaurant);
   };
   const handleReviewsPressReferral = () => {
     navigation.navigate("InputReferralCodePage");
