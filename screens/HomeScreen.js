@@ -27,6 +27,7 @@ const HomeScreen = ({ navigation }) => {
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
+  const [selectedPlaceId, setSelectedPlaceId] = useState(null);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => {
@@ -109,6 +110,8 @@ const HomeScreen = ({ navigation }) => {
             latitude: place.geometry.location.lat,
             longitude: place.geometry.location.lng,
             name: place.name,
+            price_level: place.price_level,
+            place_id:place.place_id,
             rating: place.rating || "No rating",
             cuisine: keywords[index],
             address: place.vicinity,
@@ -185,7 +188,7 @@ const HomeScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-
+        
         <TouchableOpacity
           onPress={() => navigation.navigate("ReviewLandingPage")}
           style={styles.dismissButtonJiak}
@@ -195,6 +198,18 @@ const HomeScreen = ({ navigation }) => {
 
         <TouchableOpacity onPress={onDismiss} style={styles.dismissButtonClose}>
           <Text style={styles.CloseText}>X</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {
+          if (place) {
+            console.log('Pdsd2',place.place_id );
+            navigation.navigate('UserReviewScreen', { placeId: place.place_id });
+            console.log('Pdsd6',place.place_id );
+          } else {
+            console.log('Error',place.id );
+          }
+        }} style={styles.UserReviewButton}>
+          <Text style={styles.JiakText}>User Reviews</Text>
         </TouchableOpacity>
       </ScrollView>
     );
@@ -277,7 +292,7 @@ const HomeScreen = ({ navigation }) => {
                 longitude: place.longitude,
               }}
               title={place.name}
-              onPress={() => setSelectedPlace(place)} // Set the selected place on press
+              onPress={() => setSelectedPlace({...place, place_id: place.id}, place.id)}
             >
               <Image
                 source={require("../assets/jiakIcon.png")}
@@ -291,6 +306,7 @@ const HomeScreen = ({ navigation }) => {
       {selectedPlace && (
         <RestaurantDetailsScreen
           place={selectedPlace}
+          place_id={selectedPlace?.place_id} // Pass the place_id as a prop
           userLocation={currentLocation} // Pass the currentLocation as userLocation
           onDismiss={() => setSelectedPlace(null)}
         />

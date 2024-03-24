@@ -33,6 +33,14 @@ const NewNearByPlace = (location, radius, type, keyword) => {
     });
 };
 
+const GetReviews = (params) => {
+  return axios.get("https://maps.googleapis.com/maps/api/place/details/json", { params })
+    .then(response => response.data)
+    .catch(error => {
+      console.error('Error fetching reviews:', error);
+    });
+};
+
 // const GetNearbyPlaceDetails = (placeId) => {
 //   const params = {
 //     place_id: placeId,
@@ -48,5 +56,6 @@ const NewNearByPlace = (location, radius, type, keyword) => {
 
 
 export default{
-    NewNearByPlace
+    NewNearByPlace,
+    GetReviews
 }

@@ -37,6 +37,17 @@ export const styles = StyleSheet.create({
     paddingLeft: 35,
     borderRadius: 15,
   },
+
+  UserReviewButton:{
+    position: "absolute",
+    top:10,
+    right:-15,
+    paddingBottom: 10,
+    paddingTop: 10,
+    paddingRight: 35,
+    paddingLeft: 35,
+    borderRadius: 15,
+  },
   container: {
     flex: 1,
     alignItems: "center", // Centers objects according to the secondary axis
