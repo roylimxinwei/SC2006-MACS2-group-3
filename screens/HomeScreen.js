@@ -64,6 +64,11 @@ const HomeScreen = ({ navigation, route }) => {
 
   const [selectedPlace, setSelectedPlace] = useState(null);
 
+  const jiakButtonPressed = () =>{
+    // console.log(selectedPlace)    
+    navigation.navigate("ReviewLandingPage",selectedPlace)
+  }
+
   useEffect(() => {
     const getLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -201,7 +206,7 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
         
         <TouchableOpacity
-          onPress={() => navigation.navigate("ReviewLandingPage", { place })}
+          onPress={jiakButtonPressed}
           style={styles.dismissButtonJiak}
         >
           <Text style={styles.JiakText}>Jiak!</Text>

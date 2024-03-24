@@ -9,10 +9,8 @@ import {
 import {styles} from "../css/DiningHistoryPage_CSS";
 
 import { auth, db, storage} from '../firebase';
-import { doc, setDoc, getDoc, updateDoc} from "firebase/firestore"; 
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 
-
-// Mock data for the history of dining
 // const diningHistoryData = [
 //   {
 //     id: '1',
@@ -37,22 +35,30 @@ const DiningHistoryPage = ({navigation}) => {
 
   const [diningHistoryData, setDiningHistoryData] = useState([]);
 
-  let user = auth.currentUser;
 
   const fetchData = async () =>{
-  const docRef = doc(db, "diningHistory", user.uid);
-  const docSnap = await getDoc(docRef);
+    
+    let user = auth.currentUser;
+    const updatedData = [];
+    const querySnapshot = await getDocs(collection(db, "users", user.uid, "diningHistory"));
+      querySnapshot.forEach((doc) => {
 
-  if (docSnap.exists()) {
-    console.log("Document data:", docSnap.data());
-    console.log(docSnap.data().restaurants.length)
+        console.log("date:")
+        let date = doc.data().date.toDate();
+        let dateFormat = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
 
+        updatedData.push({
+          id : doc.id,
+          name: doc.data().name,
+          image: doc.data().imageUrl, // replace with actual image path
+          review: doc.data().review,
+          date: dateFormat.toString(),
+          rating: doc.data().rating,
+    })
 
-  } else {
-    // docSnap.data() will be undefined in this case
-    console.log("No such document!");
-  }
-
+      }); 
+      console.log(updatedData)
+      setDiningHistoryData(updatedData)
 }
 
 useEffect(() => {
@@ -75,7 +81,9 @@ useEffect(() => {
   // Render each item in the history list
   const renderHistoryItem = ({ item }) => (
     <View style={styles.card}>
-      <Image style={styles.image} source={item.image} />
+      <Image style={styles.image} source={{ uri: item.image }} 
+      resizeMode="cover"
+      />
       <View style={styles.detailsContainer}>
         <Text style={styles.name}>{item.name}</Text>
         <View style={styles.ratingContainer}>

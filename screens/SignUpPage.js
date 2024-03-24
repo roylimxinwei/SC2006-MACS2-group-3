@@ -36,9 +36,12 @@ const SignUpPage = ({ navigation }) => {
     // Add your sign up logic here
     // For example, you can send the data to your server
     createUserWithEmailAndPassword(auth,email,password)
-    .then(userCredentials =>{
+    .then(async userCredentials =>{
       const user = userCredentials.user;
       alert("Account Created Successfully.")
+
+      await setDoc(doc(db, "users", user.uid), {});
+
       navigation.navigate("LogInPage"); 
 
     })
@@ -55,16 +58,6 @@ const SignUpPage = ({ navigation }) => {
       country: "USA"
     }).catch(error => console.log(error.message))
     ;
-
-    const docRef = doc(db, "cities", "ayy");
-    const docSnap = await getDoc(docRef);
-  
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-    } else {
-      // docSnap.data() will be undefined in this case
-      console.log("No such document!");
-    }
   }
 
   const handleGet = async () =>{

@@ -2,10 +2,14 @@ import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "../css/ReviewLandingPage_CSS";
 
-const ReviewLandingPage = ({ navigation, route }) => {
-  const { place } = route.params;
+const ReviewLandingPage = ({ route, navigation }) => {
+  //route will contain the params
+  // const {name, rating, cuisine, address, imageURL} = route.params;
+  const selectedRestaurant = route.params;
+
   const handleReviewsPress = () => {
-    navigation.navigate("ReviewPage", { place });
+    
+    navigation.navigate("ReviewPage",selectedRestaurant);
   };
   const handleReviewsPressReferral = () => {
     navigation.navigate("InputReferralCodePage");
