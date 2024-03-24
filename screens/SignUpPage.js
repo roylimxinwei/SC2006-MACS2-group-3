@@ -39,7 +39,7 @@ const SignUpPage = ({ navigation }) => {
       const user = userCredentials.user;
       alert("Account Created Successfully.")
 
-      // await setDoc(doc(db, "users", user.uid), {});
+      await setDoc(doc(db, "users", user.uid), {});
 
       navigation.navigate("LogInPage"); 
 
