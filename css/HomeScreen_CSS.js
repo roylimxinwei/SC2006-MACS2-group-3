@@ -163,7 +163,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  scollContainer: {
+  scrollContainer: {
     position: "absolute",
     top: 290, // You can adjust the top value to your preference
     left: 10,
