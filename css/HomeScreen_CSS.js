@@ -1,36 +1,47 @@
-import { Dimensions, StyleSheet } from "react-native";
 import colors from "../config/colors";
+import { StyleSheet, Dimensions } from "react-native";
 
-const screenHeight = Dimensions.get("window").height;
+const screenHeight = Dimensions.get('window').height; 
 
 export const styles = StyleSheet.create({
-  headerContainer: {
-    position: "absolute",
-    width: "100%",
+  headerContainer:{
+    position:"absolute",
+    width:"100%",
   },
 
-  dismissButtonJiak: {
+  dismissButtonJiak:{
     backgroundColor: colors.tertiary,
     position: "relative",
-    justifyContent: "center",
-    width: 120,
+    justifyContent:"center",
+    width:120,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 35,
     paddingLeft: 42,
     borderRadius: 15,
-    marginLeft: 130,
+    marginLeft:130,
   },
-  JiakText: {
-    fontSize: 16,
+  JiakText:{
+    fontSize:16,
   },
-  CloseText: {
-    fontSize: 16,
+  CloseText:{
+    fontSize:16,
   },
-  dismissButtonClose: {
+  dismissButtonClose:{
     position: "absolute",
-    top: 3,
-    right: -15,
+    top:3,
+    right:-15,
+    paddingBottom: 10,
+    paddingTop: 10,
+    paddingRight: 35,
+    paddingLeft: 35,
+    borderRadius: 15,
+  },
+
+  UserReviewButton:{
+    position: "absolute",
+    top:10,
+    right:-15,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 35,
@@ -50,8 +61,8 @@ export const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    top: 60,
-    right: 20,
+    top:60,
+    right:20,
     backgroundColor: "#CD5C5C",
     marginBottom: 10,
     borderRadius: 100,
@@ -69,20 +80,20 @@ export const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
-  switch: {
-    position: "absolute",
-    top: 100,
-    left: 20,
+  switch:{
+    position:"absolute",
+    top:100,
+    left:20,
   },
   map: {
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
   restaurantIcon: {
     width: 30,
     height: 30,
     borderRadius: 15, // Half of the width and height to make it circular
-    backgroundColor: "rgba(255, 0, 0, 0.5)", // Red color with 50% opacity
+    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red color with 50% opacity
   },
   historyButton: {
     position: "absolute", // Position the button over the screen
@@ -92,7 +103,7 @@ export const styles = StyleSheet.create({
     borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
   },
-  icon: {
+  icon :{
     width: 40, // Set the width of your image
     height: 40, // Set the height of your image to the same value to maintain aspect ratio
     borderRadius: 20, // Half the width or height to make it round
@@ -108,31 +119,32 @@ export const styles = StyleSheet.create({
   calloutTitle: {
     fontSize: 16,
     fontWeight: "bold",
+    color:"#7F2B0F",
     marginBottom: 5,
-    // fontFamily: "Georgia",
+
   },
   calloutDescription: {
     fontSize: 14,
-    // fontFamily: "Georgia",
-    padding: 1,
+    padding:1,
+    color:"#7F2B0F",
   },
   restaurantPopUp: {
-    position: "absolute",
-    top: (screenHeight * 2) / 3, // Set top to 2/3 of the screen height
+    position: 'absolute',
+    top: screenHeight * 2 / 3, // Set top to 2/3 of the screen height
     left: 0,
     right: 0,
-    marginBottom: 200,
+    marginBottom:200,
     height: screenHeight / 3,
     backgroundColor: colors.primary,
     zIndex: 2,
-  },
+  } ,
   contentContainer: {
-    flexDirection: "row", // Align children horizontally
+    flexDirection: 'row', // Align children horizontally
     padding: 10, // Add some padding around the content
   },
   textContainer: {
     flex: 1, // Take up remaining space
-    justifyContent: "center", // Center text vertically
+    justifyContent: 'center', // Center text vertically
   },
   popupContainer: {
     backgroundColor: "#FFFFFF",
@@ -147,7 +159,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  scrollContainer: {
+  scollContainer: {
     position: "absolute",
     top: 250, // You can adjust the top value to your preference
     left: 10,

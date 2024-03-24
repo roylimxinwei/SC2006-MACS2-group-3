@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import MapView, { Callout, Circle, Marker } from "react-native-maps";
+import MapView, { Callout, Circle, Marker, PROVIDER_GOOGLE}  from "react-native-maps";
 import { Switch } from "react-native-switch";
 import GeoCoding from "../config/GeoCoding";
 import GlobalApi from "../config/GlobalApi";
@@ -25,11 +25,13 @@ import Header from "./Header";
 const HomeScreen = ({ navigation, route }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const proximity = 1; // proximity in user preference (500 meters here)
+import MapViewStyle from "../config/MapViewStyle.json";
 
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
+  const [selectedPlaceId, setSelectedPlaceId] = useState(null);
 
   useEffect(() => {
     const auth = getAuth();
@@ -54,6 +56,7 @@ const HomeScreen = ({ navigation, route }) => {
       return newState;
     });
   };
+
 
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
@@ -115,6 +118,8 @@ const HomeScreen = ({ navigation, route }) => {
             latitude: place.geometry.location.lat,
             longitude: place.geometry.location.lng,
             name: place.name,
+            price_level: place.price_level,
+            place_id:place.place_id,
             rating: place.rating || "No rating",
             cuisine: keywords[index],
             address: place.vicinity,
@@ -194,7 +199,7 @@ const HomeScreen = ({ navigation, route }) => {
             </Text>
           </View>
         </View>
-
+        
         <TouchableOpacity
           onPress={() => navigation.navigate("ReviewLandingPage", { place })}
           style={styles.dismissButtonJiak}
@@ -204,6 +209,18 @@ const HomeScreen = ({ navigation, route }) => {
 
         <TouchableOpacity onPress={onDismiss} style={styles.dismissButtonClose}>
           <Text style={styles.CloseText}>X</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => {
+          if (place) {
+            console.log('Pdsd2',place.place_id );
+            navigation.navigate('UserReviewScreen', { placeId: place.place_id });
+            console.log('Pdsd6',place.place_id );
+          } else {
+            console.log('Error',place.id );
+          }
+        }} style={styles.UserReviewButton}>
+          <Text style={styles.JiakText}>User Reviews</Text>
         </TouchableOpacity>
       </ScrollView>
     );
@@ -272,7 +289,12 @@ const HomeScreen = ({ navigation, route }) => {
 		<View style={styles.headerContainer}>
 		{currentUser && <Header user={currentUser} />}
 		{initialRegion && (
-			<MapView style={styles.map} initialRegion={initialRegion}>
+			<MapView 
+        style={styles.map} 
+        initialRegion={initialRegion}
+        provider= {PROVIDER_GOOGLE}
+        customMapStyle={MapViewStyle}
+      >
 			{currentLocation && (
 				<>
 				<Marker
@@ -307,32 +329,33 @@ const HomeScreen = ({ navigation, route }) => {
 				</>
 			)}
 
-			{processedPlaces.map((place, index) => (
-				<Marker
-				key={index}
-				coordinate={{
-					latitude: place.latitude,
-					longitude: place.longitude,
-				}}
-				title={place.name}
-				onPress={() => setSelectedPlace(place)} // Set the selected place on press
-				>
-				<Image
-					source={require("../assets/jiakIcon.png")}
-					style={styles.restaurantIcon}
-				/>
-				</Marker>
-			))}
-			</MapView>
-		)}
+          {processedPlaces.map((place, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: place.latitude,
+                longitude: place.longitude,
+              }}
+              title={place.name}
+              onPress={() => setSelectedPlace({...place, place_id: place.id}, place.id)}
+            >
+              <Image
+                source={require("../assets/jiakIcon.png")}
+                style={styles.restaurantIcon}
+              />
+            </Marker>
+          ))}
+        </MapView>
+      )}
 
-		{selectedPlace && (
-			<RestaurantDetailsScreen
-			place={selectedPlace}
-			userLocation={currentLocation} // Pass the currentLocation as userLocation
-			onDismiss={() => setSelectedPlace(null)}
-			/>
-		)}
+      {selectedPlace && (
+        <RestaurantDetailsScreen
+          place={selectedPlace}
+          place_id={selectedPlace?.place_id} // Pass the place_id as a prop
+          userLocation={currentLocation} // Pass the currentLocation as userLocation
+          onDismiss={() => setSelectedPlace(null)}
+        />
+      )}
 
 		{isEnabled &&
 			displayRestaurantDetails(processedPlaces, currentLocation, proximity)}
