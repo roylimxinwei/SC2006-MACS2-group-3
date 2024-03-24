@@ -30,6 +30,7 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     borderRadius: 20,
+    color: colors.primary,
   },
   buttonText: {
     color: '#FFFFFF',

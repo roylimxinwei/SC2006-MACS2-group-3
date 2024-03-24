@@ -9,11 +9,6 @@ export const styles = StyleSheet.create({
     // justifyContent: 'center',
     padding: 10,
   },
-  title: {
-    fontSize: 40,
-    marginBottom: 100,
-    textAlign: 'left',
-  },
   interestGrid: {
     display: 'flex',
     flexDirection: 'row',

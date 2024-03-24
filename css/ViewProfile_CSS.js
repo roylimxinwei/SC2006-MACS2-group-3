@@ -58,7 +58,8 @@ export const styles = StyleSheet.create({
     },
     switch:{
         marginLeft:50,
-        marginTop:10
+        marginTop:10,
+        marginBottom: 20
     },
     button: {
         backgroundColor: "#CD5C5C",
@@ -78,5 +79,33 @@ export const styles = StyleSheet.create({
     buttonText: {
         color: "#FFFFFF",
         fontSize: 18,
+    },
+    interestGrid: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+    },
+    interestIcon: {
+        width: 80,
+        height: 80,
+        borderRadius: 5,
+        borderCurve: true,
+        backgroundColor: '#f8ceB8',
+        alignItems: 'center',
+        justifyContent: 'center',
+        margin: 10,
+    },
+    selected: {
+        backgroundColor: '#dc4731',
+    },
+    interestImage: {
+        width: 30,
+        height: 30,
+    },
+    interestText: {
+        color: '#000',
+        fontSize: 13,
+        marginTop: 5,
     },
 });

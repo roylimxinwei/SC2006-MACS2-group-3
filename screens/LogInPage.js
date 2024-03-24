@@ -38,7 +38,7 @@ const LoginPage = ({ navigation }) => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         alert("Log in Successfully.");
-        navigation.navigate("HomeScreen", { user: user });
+        navigation.navigate("HomeScreen", { userId: user.displayName });
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {

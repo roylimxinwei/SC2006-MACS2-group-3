@@ -229,181 +229,184 @@ const HomeScreen = ({ navigation, route }) => {
         return (
           <ScrollView style={styles.scrollContainer}>
             {limitedNearbyPlaces.map((place, index) => (
-              <View style={styles.contentContainer}>
-                <Image source={place.imageUrl} style={styles.ImageDesign} />
-                <View style={styles.textContainer}>
-                  <Text style={styles.calloutTitle}>{place.name}</Text>
-                  <Text style={styles.calloutDescription}>
-                    Rating: {place.rating}
-                  </Text>
-                  <Text style={styles.calloutDescription}>
-                    Cuisine: {place.cuisine}
-                  </Text>
-                  <Text style={styles.calloutDescription}>
-                    Address: {place.address}
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate("ReviewLandingPage", { place })
-                    }
-                    style={styles.dismissButtonJiak}
-                  >
-                    <Text style={styles.JiakText}>Jiak!</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
-        );
-      } else {
-        // Display a message if there are no nearby restaurants in the limited list
-        return <Text>No nearby restaurants found (limited to 3 results).</Text>;
-      }
-    } else {
-      // Display the original message if no nearby restaurants were found
-      return <Text>No nearby restaurants found.</Text>;
-    }
-  };
+				<View 
+					style={styles.contentContainer}
+					key = {index} 
+				>
+					<Image source={place.imageUrl} style={styles.ImageDesign} />
+					<View style={styles.textContainer}>
+					<Text style={styles.calloutTitle}>{place.name}</Text>
+					<Text style={styles.calloutDescription}>
+						Rating: {place.rating}
+					</Text>
+					<Text style={styles.calloutDescription}>
+						Cuisine: {place.cuisine}
+					</Text>
+					<Text style={styles.calloutDescription}>
+						Address: {place.address}
+					</Text>
+					<TouchableOpacity
+						onPress={() =>
+						navigation.navigate("ReviewLandingPage", { place })
+						}
+						style={styles.dismissButtonJiak}
+					>
+						<Text style={styles.JiakText}>Jiak!</Text>
+					</TouchableOpacity>
+					</View>
+				</View>
+				))}
+			</ScrollView>
+			);
+		} else {
+			// Display a message if there are no nearby restaurants in the limited list
+			return <Text>No nearby restaurants found (limited to 3 results).</Text>;
+		}
+		} else {
+		// Display the original message if no nearby restaurants were found
+		return <Text>No nearby restaurants found.</Text>;
+		}
+	};
 
-  return (
-    <View style={styles.headerContainer}>
-      {currentUser && <Header user={currentUser} />}
-      {initialRegion && (
-        <MapView style={styles.map} initialRegion={initialRegion}>
-          {currentLocation && (
-            <>
-              <Marker
-                coordinate={{
-                  latitude: currentLocation.latitude,
-                  longitude: currentLocation.longitude,
-                }}
-                title="Your Location"
-              >
-                <Image
-                  source={require("../assets/userIcon.png")}
-                  style={styles.icon}
-                />
+	return (
+		<View style={styles.headerContainer}>
+		{currentUser && <Header user={currentUser} />}
+		{initialRegion && (
+			<MapView style={styles.map} initialRegion={initialRegion}>
+			{currentLocation && (
+				<>
+				<Marker
+					coordinate={{
+					latitude: currentLocation.latitude,
+					longitude: currentLocation.longitude,
+					}}
+					title="Your Location"
+				>
+					<Image
+					source={require("../assets/userIcon.png")}
+					style={styles.icon}
+					/>
 
-                <Callout>
-                  <View style={styles.calloutContainer}>
-                    <Text style={styles.calloutTitle}>Your Location</Text>
-                    <Text style={styles.calloutDescription}>{address}</Text>
-                  </View>
-                </Callout>
-              </Marker>
-              <Circle
-                center={{
-                  latitude: currentLocation.latitude,
-                  longitude: currentLocation.longitude,
-                }}
-                radius={proximity * 1000} // radius in meters (1 km in this example)
-                strokeColor="rgba(0, 136, 255, 0.8)" // The border color of the circle
-                fillColor="rgba(0, 136, 255, 0.3)" // The fill color of the circle
-                strokeWidth={2} // The width of the circle border
-              />
-            </>
-          )}
-
-          {processedPlaces.map((place, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: place.latitude,
-                longitude: place.longitude,
-              }}
-              title={place.name}
-              onPress={() => setSelectedPlace(place)} // Set the selected place on press
-            >
-              <Image
-                source={require("../assets/jiakIcon.png")}
-                style={styles.restaurantIcon}
-              />
-            </Marker>
-          ))}
-        </MapView>
-      )}
-
-      {selectedPlace && (
-        <RestaurantDetailsScreen
-          place={selectedPlace}
-          userLocation={currentLocation} // Pass the currentLocation as userLocation
-          onDismiss={() => setSelectedPlace(null)}
-        />
-      )}
-
-      {isEnabled &&
-        displayRestaurantDetails(processedPlaces, currentLocation, proximity)}
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
-        style={styles.button}
-      >
-        <Image
-          style={styles.buttonImage}
-          source={require("../assets/profileicon.png")} // replace with your button image path
-        />
-      </TouchableOpacity>
-
-			<TouchableOpacity
-				style={styles.historyButton}
-				onPress={() => navigation.navigate("DiningHistoryPage")}
-			>
-				<Image
-					style={styles.buttonImage}
-					source={require("../assets/diningHistory.png")} // replace with your button image path
+					<Callout>
+					<View style={styles.calloutContainer}>
+						<Text style={styles.calloutTitle}>Your Location</Text>
+						<Text style={styles.calloutDescription}>{address}</Text>
+					</View>
+					</Callout>
+				</Marker>
+				<Circle
+					center={{
+					latitude: currentLocation.latitude,
+					longitude: currentLocation.longitude,
+					}}
+					radius={proximity * 1000} // radius in meters (1 km in this example)
+					strokeColor="rgba(0, 136, 255, 0.8)" // The border color of the circle
+					fillColor="rgba(0, 136, 255, 0.3)" // The fill color of the circle
+					strokeWidth={2} // The width of the circle border
 				/>
-			</TouchableOpacity>
+				</>
+			)}
 
-      <View style={styles.switch}>
-        <Switch
-          value={isEnabled}
-          onValueChange={toggleSwitch}
-          activeText={"Notification On"}
-          inActiveText={"Notification Off"}
-          circleSize={30}
-          barHeight={30}
-          circleBorderWidth={2}
-          backgroundActive={"green"}
-          backgroundInactive={"#DC4731"}
-          circleActiveColor={"#30a566"}
-          circleInActiveColor={"#DC4731"}
-          changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
-          outerCircleStyle={{}} // style for outer animated circle
-          switchLeftPx={1} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
-          switchRightPx={1} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
-          switchWidthMultiplier={7} // multiplied by the `circleSize` prop to calculate total width of the Switch
-          switchBorderRadius={25}
-        />
-        {isEnabled && (
-          <SwitchPopup isEnabled={isEnabled} toggleSwitch={toggleSwitch} />
-        )}
-      </View>
-    </View>
-  );
-};
+			{processedPlaces.map((place, index) => (
+				<Marker
+				key={index}
+				coordinate={{
+					latitude: place.latitude,
+					longitude: place.longitude,
+				}}
+				title={place.name}
+				onPress={() => setSelectedPlace(place)} // Set the selected place on press
+				>
+				<Image
+					source={require("../assets/jiakIcon.png")}
+					style={styles.restaurantIcon}
+				/>
+				</Marker>
+			))}
+			</MapView>
+		)}
 
-const SwitchPopup = ({ isEnabled, toggleSwitch }) => {
-  return (
-    <View style={styles.popupContainer}>
-      {isEnabled && (
-        <View>
-          <Text style={styles.popupText}>Notifications turned on...</Text>
-          <Text style={styles.popupText}>Looking for places to Jiak!</Text>
-          <Button title="Close" onPress={toggleSwitch} />
-        </View>
-      )}
-    </View>
-  );
-};
+		{selectedPlace && (
+			<RestaurantDetailsScreen
+			place={selectedPlace}
+			userLocation={currentLocation} // Pass the currentLocation as userLocation
+			onDismiss={() => setSelectedPlace(null)}
+			/>
+		)}
 
-const calculateDistance = (place, userLocation) => {
-  const distance = haversineDistance(
-    userLocation.latitude,
-    userLocation.longitude,
-    place.latitude,
-    place.longitude
-  ).toFixed(2);
-  return distance;
+		{isEnabled &&
+			displayRestaurantDetails(processedPlaces, currentLocation, proximity)}
+
+		<TouchableOpacity
+			onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
+			style={styles.button}
+		>
+			<Image
+			style={styles.buttonImage}
+			source={require("../assets/profileicon.png")} // replace with your button image path
+			/>
+		</TouchableOpacity>
+
+				<TouchableOpacity
+					style={styles.historyButton}
+					onPress={() => navigation.navigate("DiningHistoryPage")}
+				>
+					<Image
+						style={styles.buttonImage}
+						source={require("../assets/diningHistory.png")} // replace with your button image path
+					/>
+				</TouchableOpacity>
+
+		<View style={styles.switch}>
+			<Switch
+			value={isEnabled}
+			onValueChange={toggleSwitch}
+			activeText={"Notification On"}
+			inActiveText={"Notification Off"}
+			circleSize={30}
+			barHeight={30}
+			circleBorderWidth={2}
+			backgroundActive={"green"}
+			backgroundInactive={"#DC4731"}
+			circleActiveColor={"#30a566"}
+			circleInActiveColor={"#DC4731"}
+			changeValueImmediately={true} // if rendering inside circle, change state immediately or wait for animation to complete
+			outerCircleStyle={{}} // style for outer animated circle
+			switchLeftPx={1} // denominator for logic when sliding to TRUE position. Higher number = more space from RIGHT of the circle to END of the slider
+			switchRightPx={1} // denominator for logic when sliding to FALSE position. Higher number = more space from LEFT of the circle to BEGINNING of the slider
+			switchWidthMultiplier={7} // multiplied by the `circleSize` prop to calculate total width of the Switch
+			switchBorderRadius={25}
+			/>
+			{isEnabled && (
+			<SwitchPopup isEnabled={isEnabled} toggleSwitch={toggleSwitch} />
+			)}
+		</View>
+		</View>
+	);
+	};
+
+	const SwitchPopup = ({ isEnabled, toggleSwitch }) => {
+	return (
+		<View style={styles.popupContainer}>
+		{isEnabled && (
+			<View>
+			<Text style={styles.popupText}>Notifications turned on...</Text>
+			<Text style={styles.popupText}>Looking for places to Jiak!</Text>
+			<Button title="Close" onPress={toggleSwitch} />
+			</View>
+		)}
+		</View>
+	);
+	};
+
+	const calculateDistance = (place, userLocation) => {
+	const distance = haversineDistance(
+		userLocation.latitude,
+		userLocation.longitude,
+		place.latitude,
+		place.longitude
+	).toFixed(2);
+	return distance;
 };
 
 export default HomeScreen;
