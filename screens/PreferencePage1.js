@@ -10,13 +10,14 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import {styles} from '../css/PreferencePage1_CSS';
 import { cuisines , cuisineImage } from "../config/supportedCuisine";
-import firebase from 'firebase';
-
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import 'firebase/auth';
 
 const PreferencePage1 = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const navigation = useNavigation();
-  const user = firebase.auth().currentUser;
+  // Get the current user's UID
   const userId = firebase.auth().currentUser.uid;
 
   const handleSelect = (interest) => {
@@ -49,7 +50,7 @@ const PreferencePage1 = () => {
               .collection("users")
               .doc(userId)
               .set({
-                cuisine: selectedInterests,
+                cuisine: firebase.firestore.FieldValue.arrayUnion(...selectedInterests),
               })
               .then(() => {
                 console.log("Document successfully written!");
@@ -64,7 +65,7 @@ const PreferencePage1 = () => {
               .collection("users")
               .doc(userId)
               .update({
-                cuisine: selectedInterests,
+                cuisine: firebase.firestore.FieldValue.arrayUnion(...selectedInterests),
               })
               .then(() => {
                 console.log("Document successfully updated!");
