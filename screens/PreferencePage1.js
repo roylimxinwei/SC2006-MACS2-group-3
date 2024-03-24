@@ -10,13 +10,13 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import {styles} from '../css/PreferencePage1_CSS';
 import { cuisines , cuisineImage } from "../config/supportedCuisine";
-import firebase from '../firebase';
+import { app, auth, db } from '../firebase';
 
 const PreferencePage1 = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const navigation = useNavigation();
   // Get the current user's UID
-  const userId = firebase.auth().currentUser.uid;
+  const userId = auth.currentUser?.uid;
 
   const handleSelect = (interest) => {
     if (selectedInterests.includes(interest)) {
@@ -37,18 +37,18 @@ const PreferencePage1 = () => {
         ]
       );
     } else {
-      firebase.firestore()
+      db
         .collection("users")
         .doc(userId)
         .get()
         .then(doc => {
           // If the user document does not exist, create a new user with the "cuisine" field
           if (!doc.exists) {
-            firebase.firestore()
+            db
               .collection("users")
               .doc(userId)
               .set({
-                cuisine: firebase.firestore.FieldValue.arrayUnion(...selectedInterests),
+                cuisine: db.FieldValue.arrayUnion(...selectedInterests),
               })
               .then(() => {
                 console.log("Document successfully written!");
@@ -59,11 +59,11 @@ const PreferencePage1 = () => {
               });
           } else {
             // If the user document exists, update the "cuisine" field with the new array
-            firebase.firestore()
+            db
               .collection("users")
               .doc(userId)
               .update({
-                cuisine: firebase.firestore.FieldValue.arrayUnion(...selectedInterests),
+                cuisine: db.FieldValue.arrayUnion(...selectedInterests),
               })
               .then(() => {
                 console.log("Document successfully updated!");
