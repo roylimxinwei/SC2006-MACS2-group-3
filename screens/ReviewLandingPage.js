@@ -18,7 +18,7 @@ const ReviewLandingPage = ({ route, navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.smallText}>Dining at:</Text>
-      <Text style={styles.smallText}>{place.name}</Text>
+      <Text style={styles.smallText}>{selectedRestaurant.name}</Text>
       <TouchableOpacity
         style={styles.smallButton}
         onPress={handleReviewsPressReferral}

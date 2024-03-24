@@ -50,7 +50,7 @@ const DiningHistoryPage = ({navigation}) => {
         updatedData.push({
           id : doc.id,
           name: doc.data().name,
-          image: doc.data().imageUrl, // replace with actual image path
+          image: doc.data().imageUrl.uri, // replace with actual image path
           review: doc.data().review,
           date: dateFormat.toString(),
           rating: doc.data().rating,
