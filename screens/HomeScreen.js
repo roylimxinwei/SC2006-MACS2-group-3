@@ -239,7 +239,7 @@ const HomeScreen = ({ navigation, route }) => {
 
     if (nearbyPlaces.length > 0) {
       // Slice the nearest 3 restaurants
-      const limitedNearbyPlaces = nearbyPlaces.slice(0, 1); //change the number to show how many u want to see
+      const limitedNearbyPlaces = nearbyPlaces.slice(0, 3); //change the number to show how many u want to see
 
       if (limitedNearbyPlaces.length > 0) {
         // Display the limited list of restaurants
@@ -337,7 +337,7 @@ const HomeScreen = ({ navigation, route }) => {
                 longitude: place.longitude,
               }}
               title={place.name}
-              onPress={() => setSelectedPlace({...place, place_id: place.id}, place.id)}
+              onPress={() => setSelectedPlace(place)}
             >
               <Image
                 source={require("../assets/jiakIcon.png")}
@@ -351,7 +351,7 @@ const HomeScreen = ({ navigation, route }) => {
       {selectedPlace && (
         <RestaurantDetailsScreen
           place={selectedPlace}
-          place_id={selectedPlace?.place_id} // Pass the place_id as a prop
+        //   place_id={selectedPlace?.place_id} // Pass the place_id as a prop
           userLocation={currentLocation} // Pass the currentLocation as userLocation
           onDismiss={() => setSelectedPlace(null)}
         />
@@ -408,7 +408,7 @@ const HomeScreen = ({ navigation, route }) => {
 	);
 	};
 
-	const SwitchPopup = ({ isEnabled, toggleSwitch }) => {
+const SwitchPopup = ({ isEnabled, toggleSwitch }) => {
 	return (
 		<View style={styles.popupContainer}>
 		{isEnabled && (
@@ -420,9 +420,9 @@ const HomeScreen = ({ navigation, route }) => {
 		)}
 		</View>
 	);
-	};
+};
 
-	const calculateDistance = (place, userLocation) => {
+const calculateDistance = (place, userLocation) => {
 	const distance = haversineDistance(
 		userLocation.latitude,
 		userLocation.longitude,
