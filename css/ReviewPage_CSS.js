@@ -2,16 +2,18 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 5,
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFF0D9",
   },
   text: {
-    fontSize: 20,
+    fontSize: 25,
+    color:"#7F2B0F",
     position: "absolute",
-    top: 20,
+    top: 40,
     left: 30,
+    paddingBottom:20,
   },
   input: {
     borderWidth: 1,
@@ -21,24 +23,26 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     width: 350,
     height: 75,
-    marginBottom: 10,
+    marginBottom: 30,
+    top:130,
   },
   ImageDesign: {
-    width: 300,
-    height: 300,
-    bottom: 50,
+    width: 280,
+    height: 280,
+    top:100,
   },
   button: {
     backgroundColor: "#CD5C5C",
     paddingVertical: 10,
     paddingHorizontal: 90,
     borderRadius: 5,
-    marginBottom: 10,
+    marginBottom: 500,
     borderRadius: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+    top:130,
   },
   buttonText: {
     color: "#FFFFFF",
@@ -47,6 +51,7 @@ export const styles = StyleSheet.create({
   stars: {
     flexDirection: "row",
     marginBottom: 20,
+    marginTop:-20,
   },
   starContainer: {
     padding: 5,
@@ -54,6 +59,7 @@ export const styles = StyleSheet.create({
   star: {
     fontSize: 30,
     marginHorizontal: 5,
+    top:130,
   },
   starSelected: {
     color: "#FFD700",
@@ -61,6 +67,11 @@ export const styles = StyleSheet.create({
   image: {
     width: 300,
     height: 300,
-    marginVertical: 1,
   },
+  scrollViewContainer: {
+    flex: 5,
+    backgroundColor: "#F5FCFF",
+    backgroundColor: "#FFF0D9",
+  },
+
 });

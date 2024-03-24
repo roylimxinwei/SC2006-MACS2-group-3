@@ -186,7 +186,7 @@ const HomeScreen = ({ navigation, route }) => {
           <View style={styles.textContainer}>
             <Text style={styles.calloutTitle}>{place.name}</Text>
             <Text style={styles.calloutDescription}>
-              Rating: {place.rating}
+              Rating: {place.rating}      
             </Text>
             <Text style={styles.calloutDescription}>
               Cuisine: {place.cuisine}
@@ -220,7 +220,7 @@ const HomeScreen = ({ navigation, route }) => {
             console.log('Error',place.id );
           }
         }} style={styles.UserReviewButton}>
-          <Text style={styles.JiakText}>User Reviews</Text>
+          <Text style={styles.ReviewText}>View Google Review</Text>
         </TouchableOpacity>
       </ScrollView>
     );

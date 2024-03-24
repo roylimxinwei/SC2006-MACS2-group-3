@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
       },
     
     text1:{
-        fontSize:26,
+        fontSize:20,
         color:"#7F2B0F",
         paddingBottom:10,
         paddingTop:20,

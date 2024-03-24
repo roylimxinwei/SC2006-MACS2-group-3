@@ -37,11 +37,15 @@ export const styles = StyleSheet.create({
     paddingLeft: 35,
     borderRadius: 15,
   },
-
+  ReviewText:{
+    fontSize:14,
+    color:"#7F2B0F",
+    textDecorationLine:"underline",
+  },
   UserReviewButton:{
     position: "absolute",
-    top:10,
-    right:-15,
+    top:25,
+    right:20,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 35,
@@ -61,9 +65,9 @@ export const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    top:60,
+    top:50,
     right:20,
-    backgroundColor: "#CD5C5C",
+    backgroundColor: colors.primary,
     marginBottom: 10,
     borderRadius: 100,
     shadowColor: "#000",
@@ -82,8 +86,8 @@ export const styles = StyleSheet.create({
   },
   switch:{
     position:"absolute",
-    top:100,
-    left:20,
+    top:90,
+    left:15,
   },
   map: {
     width: Dimensions.get('window').width,
@@ -159,11 +163,12 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 5,
   },
-  scrollContainer: {
+  scollContainer: {
     position: "absolute",
-    top: 250, // You can adjust the top value to your preference
+    top: 290, // You can adjust the top value to your preference
     left: 10,
     right: 10,
+    bottom:20,
     backgroundColor: colors.primary,
   },
   restaurantContainer: {

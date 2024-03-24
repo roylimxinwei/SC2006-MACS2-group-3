@@ -4,6 +4,7 @@ import {
   Keyboard,
   Text,
   TextInput,
+  ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
@@ -40,32 +41,37 @@ const ReviewPage = ({ navigation, route }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container} behavior="padding" enabled>
-        <Text style={styles.text}>How was...</Text>
-        <Image source={place.imageUrl} style={styles.ImageDesign} />
-        <View style={styles.stars}>
-          {Array.from({ length: 5 }, (_, i) => (
-            <Star
-              key={i}
-              selected={i < rating}
-              onPress={() => handleStarPress(i)}
-            />
-          ))}
+      <ScrollView
+        style={styles.scrollViewContainer}
+        contentContainerStyle={styles.contentContainer}
+      >
+        <View style={styles.container} behavior="padding" enabled>
+          <Text style={styles.text}>How was...</Text>
+          <Image source={place.imageUrl} style={styles.ImageDesign} />
+          <View style={styles.stars}>
+            {Array.from({ length: 5 }, (_, i) => (
+              <Star
+                key={i}
+                selected={i < rating}
+                onPress={() => handleStarPress(i)}
+              />
+            ))}
+          </View>
+          <TextInput
+            style={styles.input}
+            value={review}
+            onChangeText={handleReviewChange}
+            placeholder="Write your review here..."
+            multiline={true}
+            numberOfLines={4}
+          />
+          <TouchableOpacity onPress={handleSubmitReview} style={styles.button}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
         </View>
-        <TextInput
-          style={styles.input}
-          value={review}
-          onChangeText={handleReviewChange}
-          placeholder="Write your review here..."
-          multiline={true}
-          numberOfLines={4}
-        />
-        <TouchableOpacity onPress={handleSubmitReview} style={styles.button}>
-          <Text style={styles.buttonText}>Submit</Text>
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
 
-export default ReviewPage;
+export default ReviewPage
