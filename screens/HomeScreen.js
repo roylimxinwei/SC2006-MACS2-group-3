@@ -21,12 +21,12 @@ import { haversineDistance } from "../config/distanceCalculator";
 import { cuisines } from "../config/supportedCuisine";
 import { styles } from "../css/HomeScreen_CSS";
 import Header from "./Header";
+import MapViewStyle from "../config/MapViewStyle.json";
+
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const proximity = 1; // proximity in user preference (500 meters here)
-import MapViewStyle from "../config/MapViewStyle.json";
-
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
