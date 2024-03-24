@@ -1,6 +1,6 @@
 // SignUpPage.js
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Text,
@@ -28,7 +28,7 @@ const SignUpPage = ({ navigation }) => {
       return;
     }
 
-    if(username == null || email == null || password == null || confirmPassword == null){
+    if(username == "" || email == "" || password == "" || confirmPassword == ""){
       alert("Please fill in all fields.");
       return;
     }

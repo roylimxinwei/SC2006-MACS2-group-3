@@ -162,9 +162,9 @@ export const styles = StyleSheet.create({
   scollContainer: {
     position: "absolute",
     top: 250, // You can adjust the top value to your preference
-    left: 0,
-    right: 0,
-    bottom: 0,
+    left: 10,
+    right: 10,
+    backgroundColor: colors.primary,
   },
   restaurantContainer: {
     position: "relative",

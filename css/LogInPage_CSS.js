@@ -45,7 +45,6 @@ export const styles = StyleSheet.create({
   buttonText: {
     color: "#FFFFFF",
     fontSize: 18,
-
   },
   signUpText: {
     color: "#7F2B0F",

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import {
+  Dimensions,
   Image,
   Text,
   TextInput,
   TouchableOpacity,
   View,
   ScrollView,
-  Dimensions,
+  Alert,
 } from "react-native";
 
-import { styles } from "../css/LogInPage_CSS";
 import { signInWithEmailAndPassword } from "@firebase/auth";
+import { styles } from "../css/LogInPage_CSS";
 import { auth } from "../firebase";
 
 const LoginPage = ({ navigation }) => {
@@ -27,7 +28,7 @@ const LoginPage = ({ navigation }) => {
 
   const handleLogIn = () => {
     if (email == null || password == null) {
-      alert("Please fill in all fields.");
+      Alert.alert("Please fill in all fields.");
       return;
     }
 
@@ -37,24 +38,24 @@ const LoginPage = ({ navigation }) => {
       .then((userCredentials) => {
         const user = userCredentials.user;
         alert("Log in Successfully.");
-        navigation.navigate("HomeScreen");
+        navigation.navigate("HomeScreen", { userId: user.displayName });
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {
-          alert("There no user exist with that email");
+          Alert.alert("There no user exist with that email");
         }
 
         if (error.code === "auth/invalid-email") {
-          alert("The email address is invalid.");
+          Alert.alert("The email address is invalid.");
         }
 
         if (error.code === "auth/invalid-credential") {
-          alert("The password is invalid.");
+          Alert.alert("The password is invalid.");
         }
 
         if (error.code === "auth/too-many-requests") {
-          alert(
-            "Access tothis account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
+          Alert.alert(
+            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
           );
         }
 
@@ -86,13 +87,12 @@ const LoginPage = ({ navigation }) => {
         <TouchableOpacity onPress={handleLogIn} style={styles.button}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate("SignUpPage")}>
+        <TouchableOpacity onPress={() => navigation.navigate("SignUpPage")}>
           <Text style={styles.signUpText}>New to Jiak? Sign up here.</Text>
-        </TouchableOpacity>          
-        </View>
-        <Text style={styles.padpad}> FOR PADDING </Text>
-      </ScrollView>
+        </TouchableOpacity>
+      </View>
+      <Text style={styles.padpad}> FOR PADDING </Text>
+    </ScrollView>
   );
 };
 
