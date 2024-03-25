@@ -13,6 +13,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.tertiary,
     position: "relative",
     justifyContent:"center",
+    // alignItems:"center",
     width:120,
     paddingBottom: 10,
     paddingTop: 10,
@@ -43,14 +44,19 @@ export const styles = StyleSheet.create({
     textDecorationLine:"underline",
   },
   UserReviewButton:{
-    position: "absolute",
-    top:25,
-    right:20,
-    paddingBottom: 10,
-    paddingTop: 10,
-    paddingRight: 35,
-    paddingLeft: 35,
+    backgroundColor: colors.secondary, // or any color you'd like for this button
+    position: "relative",
+    justifyContent:"center",
+    alignItems:"center",
+    width: 60, // match the width of the Jiak button or as needed
+    height: 45, // match the height of the Jiak button or as needed
     borderRadius: 15,
+    // paddingLeft:10,
+    
+  },
+  reviewButtonImage:{
+    width: 35, // Set the width of your button image
+    height: 35, // Set the height of your button image
   },
   container: {
     flex: 1,
@@ -106,6 +112,9 @@ export const styles = StyleSheet.create({
     backgroundColor: "#CD5C5C", // Replace with your desired button color
     borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
+    alignItems: "center", // Centers objects according to the secondary axis
+    justifyContent: "center", // Centers the object according to main axis
+
   },
   icon :{
     width: 40, // Set the width of your image
@@ -137,14 +146,19 @@ export const styles = StyleSheet.create({
     top: screenHeight * 2 / 3, // Set top to 2/3 of the screen height
     left: 0,
     right: 0,
-    marginBottom:200,
+    // marginBottom: 500,
+    paddingBottom: 500,
     height: screenHeight / 3,
     backgroundColor: colors.primary,
-    zIndex: 2,
+    zIndex: 10,
   } ,
   contentContainer: {
     flexDirection: 'row', // Align children horizontally
     padding: 10, // Add some padding around the content
+    justifyContent: 'space-evenly', // this will distribute space evenly around the elements
+    alignItems: 'center', // this will align items vertically in the center
+    flexWrap: 'wrap', // This will allow the content to wrap to the next line if needed
+    paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
   },
   textContainer: {
     flex: 1, // Take up remaining space
