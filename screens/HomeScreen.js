@@ -203,32 +203,33 @@ const HomeScreen = ({ navigation, route }) => {
 							Distance: {distance} km
 						</Text>
 					</View>
-				</View>
+				{/* </View> */}
 				
 				<TouchableOpacity onPress={onDismiss} style={styles.dismissButtonClose}>
 					<Text style={styles.CloseText}>X</Text>
 				</TouchableOpacity>
 
-				<View style={styles.contentContainer}>
-					<TouchableOpacity
-						onPress={jiakButtonPressed}
-						style={styles.dismissButtonJiak}
-					>
-						<Text style={styles.JiakText}>Jiak!</Text>
-					</TouchableOpacity>        
+				
+				<TouchableOpacity
+					onPress={jiakButtonPressed}
+					style={styles.dismissButtonJiak}
+				>
+					<Text style={styles.JiakText}>Jiak!</Text>
+				</TouchableOpacity>        
 
-					<TouchableOpacity onPress={() => {
-						if (place) {
-							navigation.navigate('UserReviewScreen', { placeId: place.place_id });
-						} else {
-							console.log('Error',place.id );
-						}
-					}} style={styles.UserReviewButton}>
-						<Image
-							style={styles.reviewButtonImage}
-							source={require("../assets/view_reviews.png")} // replace with your button image path
-						/>
-					</TouchableOpacity>
+				<TouchableOpacity onPress={() => {
+					if (place) {
+						navigation.navigate('UserReviewScreen', { placeId: place.place_id });
+					} else {
+						console.log('Error',place.id );
+					}
+				}} style={styles.UserReviewButton}>
+					<Image
+						style={styles.reviewButtonImage}
+						source={require("../assets/view_reviews.png")} // replace with your button image path
+					/>
+				</TouchableOpacity>	
+				<Text style={styles.padpad}> FOR PADDING </Text>	
 				</View>
 			</ScrollView>
 		);

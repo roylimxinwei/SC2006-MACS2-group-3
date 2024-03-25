@@ -13,14 +13,16 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.tertiary,
     position: "relative",
     justifyContent:"center",
-    // alignItems:"center",
-    width:120,
+    alignItems:"center",
+    // width:120,
+    marginTop:15,
     paddingBottom: 10,
     paddingTop: 10,
-    paddingRight: 35,
-    paddingLeft: 42,
+    paddingRight: 39,
+    paddingLeft: 39,
     borderRadius: 15,
     marginLeft:130,
+    right:15,
   },
   JiakText:{
     fontSize:16,
@@ -48,9 +50,12 @@ export const styles = StyleSheet.create({
     position: "relative",
     justifyContent:"center",
     alignItems:"center",
-    width: 60, // match the width of the Jiak button or as needed
+    // width: 60, // match the width of the Jiak button or as needed
     height: 45, // match the height of the Jiak button or as needed
     borderRadius: 15,
+    padding:8,
+    paddingRight:15,
+    paddingLeft:15,
     // paddingLeft:10,
     
   },
@@ -153,12 +158,19 @@ export const styles = StyleSheet.create({
     zIndex: 10,
   } ,
   contentContainer: {
+    flex:5,
     flexDirection: 'row', // Align children horizontally
     padding: 10, // Add some padding around the content
     justifyContent: 'space-evenly', // this will distribute space evenly around the elements
     alignItems: 'center', // this will align items vertically in the center
     flexWrap: 'wrap', // This will allow the content to wrap to the next line if needed
     paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
+    marginBottom:300,
+  },
+  padpad:{
+    color: "transparent",
+    backgroundColor: colors.primary,
+    paddingBottom:100,
   },
   textContainer: {
     flex: 1, // Take up remaining space
