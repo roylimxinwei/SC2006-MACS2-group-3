@@ -25,7 +25,9 @@ const Star = ({ selected, onPress, index }) => {
 const ReviewPage = ({ route, navigation }) => {
 
   const selectedRestaurant = route.params;
-  console.log(selectedRestaurant.name)
+  console.log(selectedRestaurant)
+  console.log(selectedRestaurant.id)
+
 
   let user = auth.currentUser;
 
@@ -41,23 +43,10 @@ const ReviewPage = ({ route, navigation }) => {
   };
 
   const handleSubmitReview = async () => {
-    // Add your logic to submit the review
-    // For example, you can send the review and rating to your server or save it in the device storage
-
-    const restaurantReviewed = false;
-    const documentID = null;
-
-    const querySnapshot = await getDocs(collection(db, "users", user.uid, "diningHistory"));
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data());
-      if(doc.data().name == selectedRestaurant.name)
-      {
-        // documentID = doc.id;
-        // restaurantReviewed = true;
-      }
-    });
-
+    //selectedRestaurant.id can only be passed from DiningHistory.
+    //If user is not editting their dining history, we will create a new document.
+    if(selectedRestaurant.id == undefined){
+  
       const docRef = await addDoc(collection(db, "users", user.uid, "diningHistory"), {
         date: Timestamp.now(),
         imageUrl: selectedRestaurant.imageUrl,
@@ -66,6 +55,19 @@ const ReviewPage = ({ route, navigation }) => {
         review: review
       });
 
+    }
+    //edit the current review and rating.
+    else{
+      const docRef = doc(db, "users", user.uid, "diningHistory", selectedRestaurant.id);
+      await updateDoc(docRef, {
+        date: Timestamp.now(),
+        imageUrl: selectedRestaurant.imageUrl,
+        name: selectedRestaurant.name,
+        rating: rating,
+        review: review
+});
+
+    }
 
     alert("Review submitted.");
     navigation.navigate("HomeScreen"); // Go back to the previous screen

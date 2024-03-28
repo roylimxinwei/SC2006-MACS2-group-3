@@ -5,11 +5,12 @@ import {
   FlatList, 
   Image,
   TouchableOpacity,
+  Alert
 } from "react-native";
 import {styles} from "../css/DiningHistoryPage_CSS";
 
 import { auth, db, storage} from '../firebase';
-import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp, deleteDoc} from "firebase/firestore"; 
 
 // const diningHistoryData = [
 //   {
@@ -34,11 +35,10 @@ import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "f
 const DiningHistoryPage = ({navigation}) => {
 
   const [diningHistoryData, setDiningHistoryData] = useState([]);
-
+  let user = auth.currentUser;
 
   const fetchData = async () =>{
     
-    let user = auth.currentUser;
     const updatedData = [];
     const querySnapshot = await getDocs(collection(db, "users", user.uid, "diningHistory"));
       querySnapshot.forEach((doc) => {
@@ -50,7 +50,7 @@ const DiningHistoryPage = ({navigation}) => {
         updatedData.push({
           id : doc.id,
           name: doc.data().name,
-          image: doc.data().imageUrl.uri, // replace with actual image path
+          imageUrl: doc.data().imageUrl, // replace with actual image path
           review: doc.data().review,
           date: dateFormat.toString(),
           rating: doc.data().rating,
@@ -65,23 +65,43 @@ useEffect(() => {
   fetchData();
 }, []);
 
-  const handleSeeAllReview = () => {
-  }
 
-  const handleEditReview = () => {
+  const handleEditReview = (item) => {
 
     // TBD: delete the original review first
     // then create a new review by navigating to the review page
-    navigation.navigate("ReviewPage")
+
+      navigation.navigate("ReviewPage",item)
   }
 
-  const handleDeleteReview = () => {
+  const handleDeleteReview = async (item) => {
+
+    Alert.alert(
+      'Delete Review Confirmation',
+      'Are you sure you want to delete your review?', // <- this part is optional, you can pass an empty string
+      [
+        {text: 'Yes', onPress: async () => 
+        await deleteDoc(doc(db, "users", user.uid, "diningHistory", item.id))
+        .then(
+          alert("Review Deleted!"),
+          fetchData()
+        )
+        
+      },
+        {text: 'No', onPress: () => console.log('OK Pressed')}
+
+      ],
+      {cancelable: true},
+    );
+
+    // await deleteDoc(doc(db, "users", user.uid, "diningHistory", item.id));
+    // alert("Review Deleted!")
   }
 
   // Render each item in the history list
   const renderHistoryItem = ({ item }) => (
     <View style={styles.card}>
-      <Image style={styles.image} source={{ uri: item.image }} 
+      <Image style={styles.image} source={item.imageUrl} 
       resizeMode="cover"
       />
       <View style={styles.detailsContainer}>
@@ -101,19 +121,16 @@ useEffect(() => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity 
             style={styles.button}
-            onPress={handleSeeAllReview}
+            
           >
-            <Text style={styles.buttonText}>See All</Text>
+            <Text style={styles.buttonText}
+            onPress={() => handleEditReview(item)}
+            >Edit
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.button}
-            onPress={handleEditReview}
-          >
-            <Text style={styles.buttonText}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={handleDeleteReview}
+            onPress={() =>handleDeleteReview(item)}
           >
             <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
