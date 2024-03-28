@@ -18,8 +18,10 @@ const PreferencePage1 = () => {
 	const navigation = useNavigation();
 
 	const handleSelect = (interest) => {
+		
 		if (selectedInterests.includes(interest)) {
 			setSelectedInterests(selectedInterests.filter((item) => item !== interest));
+			console.log(selectedInterests)
 		} else {
 			setSelectedInterests([...selectedInterests, interest]);
 		}

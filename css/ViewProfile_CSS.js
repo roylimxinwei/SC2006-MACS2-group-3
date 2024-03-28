@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
         marginLeft:50
     },
     profileDetails:{
-        marginTop:30,
+        marginTop:10,
         marginLeft:20
     },
     username:{
@@ -22,6 +22,13 @@ export const styles = StyleSheet.create({
         marginTop: 5,
         fontSize: 13,
         textDecorationLine: "underline"
+    },
+    referralCode:{
+        fontSize: 15,
+        marginTop:10
+    },
+    referralCodeText:{
+        fontSize: 18,
     },
     headerText:{
         fontSize: 25
