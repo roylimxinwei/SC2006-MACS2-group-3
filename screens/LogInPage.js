@@ -27,8 +27,11 @@ const LoginPage = ({ navigation }) => {
   };
 
   const handleLogIn = () => {
-    if (email == null || password == null) {
-      Alert.alert("Please fill in all fields.");
+    if (email == "" || password == "") {
+      Alert.alert(
+        "Log in Failed",
+        "Please fill in all fields."
+      );
       return;
     }
 
@@ -37,25 +40,38 @@ const LoginPage = ({ navigation }) => {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        alert("Log in Successfully.");
+        Alert.alert(
+          "Log in Successfully",
+          "Let's Jiak!"
+        );
         navigation.navigate("HomeScreen", { userId: user.displayName });
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {
-          Alert.alert("There no user exist with that email");
+          Alert.alert(
+            "Log in Failed",
+            "No user found with this email address."
+          );
         }
 
         if (error.code === "auth/invalid-email") {
-          Alert.alert("The email address is invalid.");
+          Alert.alert(
+            "Log in Failed",
+            "The email address is invalid."
+          );
         }
 
         if (error.code === "auth/invalid-credential") {
-          Alert.alert("The password is invalid.");
+          Alert.alert(
+            "Log in Failed",
+            "The password is invalid."
+          );
         }
 
         if (error.code === "auth/too-many-requests") {
           Alert.alert(
-            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
+            "Log in Failed",
+            "Access to this account has been temporarily disabled due to many failed login attempts. Try again later."
           );
         }
 

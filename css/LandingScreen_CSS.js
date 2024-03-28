@@ -11,7 +11,15 @@ export const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     textAlign: "center",
+    color: "#FFFFFF",
+    marginTop: 20,
   },
+  jiakText: {
+    fontSize: 30,
+    textAlign: "center",
+    color: "#FFFFFF",
+    marginTop: 40,
+  }, 
   button: {
     backgroundColor: "#CD5C5C",
     paddingVertical: 10,

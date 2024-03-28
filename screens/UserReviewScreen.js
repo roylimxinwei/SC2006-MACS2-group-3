@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { View, Text, ScrollView} from "react-native";
 import axios from "axios";
 import { haversineDistance } from "../config/distanceCalculator";
 import GlobalApi from "../config/GlobalApi";
 import * as Location from "expo-location";
+import {styles} from "../css/UserReviewScreen_CSS";
 
 const UserReviewScreen = ({ route }) => {
 	const { placeId } = route.params;
@@ -92,26 +93,5 @@ const UserReviewScreen = ({ route }) => {
 			</View>
 		);
 	};
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 16,
-		backgroundColor: "#fff",
-	},
-	reviewsContainer: {
-		flex: 1,
-	},
-	reviewContainer: {
-		marginBottom: 16,
-	},
-	reviewAuthor: {
-		fontSize: 16,
-		fontWeight: "bold",
-	},
-	reviewText: {
-		fontSize: 14,
-	},
-});
 
 export default UserReviewScreen;

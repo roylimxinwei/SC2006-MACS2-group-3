@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
   ScrollView,
+  Alert,
 } from "react-native";
 import { styles } from "../css/SignUpPage_CSS"; 
 
@@ -23,13 +24,41 @@ const SignUpPage = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+    if(username == "" || email == "" || password == "" || confirmPassword == ""){
+      alert("Please fill in all fields.");
       return;
     }
 
-    if(username == "" || email == "" || password == "" || confirmPassword == ""){
-      alert("Please fill in all fields.");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      Alert.alert(
+        "Invalid Email",
+        "Please enter a valid email address."
+      );
+      setPassword(""); 
+      setConfirmPassword("");
+      return;
+    }
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(password)) {
+      Alert.alert(
+        "Invalid Password",
+        "Password must be at least 8 characters long and include at least one uppercase character, one lowercase character, one number, and one special character."
+        );
+      setPassword("");
+      setConfirmPassword(""); 
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert(
+        "Passwords do not match.",
+        "Re-enter your password to confirm.");
+      setPassword("");
+      setConfirmPassword(""); 
       return;
     }
 
@@ -42,13 +71,16 @@ const SignUpPage = ({ navigation }) => {
 
       await setDoc(doc(db, "users", user.uid), {});
 
-      navigation.navigate("LogInPage"); 
-
+      navigation.navigate("PreferencePage1"); 
     })
-    .catch(error => console.log(error.message))
-
-
-    navigation.navigate("PreferencePage1"); // Replace 'HomePage' with your home screen route name
+    .catch(error => {
+      Alert.alert( 
+        "Sign Up Failed",
+        error.message
+      )
+      setPassword("");
+      setConfirmPassword ("") ;
+    })
   };
 
   const handleInsert = async () =>{
@@ -125,7 +157,11 @@ const SignUpPage = ({ navigation }) => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={handleInsert}>
+        <TouchableOpacity onPress={() => navigation.navigate("LogInPage")}>
+          <Text style={styles.logInText}>Have an account? Log in instead.</Text>
+        </TouchableOpacity>
+
+        {/* <TouchableOpacity style={styles.button} onPress={handleInsert}>
           <Text style={styles.buttonText}>Insert Data</Text>
         </TouchableOpacity>
 
@@ -135,7 +171,7 @@ const SignUpPage = ({ navigation }) => {
 
         <TouchableOpacity style={styles.button} onPress={handleUpdate}>
           <Text style={styles.buttonText}>Update Data</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );
