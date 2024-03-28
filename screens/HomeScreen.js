@@ -27,12 +27,14 @@ import MapViewStyle from "../config/MapViewStyle.json";
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentUser, setCurrentUser] = useState("");
-  const proximity = 1; // proximity in user preference (500 meters here)
+  // const proximity = 1; // proximity in user preference (500 meters here)
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
+  const [proximity, setProximity] = useState(5);
+  const [cuisines, setCuisines] = useState([]);
 
   const fetchData = async () =>{
     let user = auth.currentUser;
@@ -44,8 +46,9 @@ const HomeScreen = ({ navigation, route }) => {
     if (docSnap.exists()) {
       console.log(docSnap.data().name);
       setCurrentUser(docSnap.data().name);
+      setProximity(docSnap.data().proximity/1000);
+      setCuisines(docSnap.data().cuisines);
     }}
-
 
   useEffect(() => {
     fetchData();
@@ -58,7 +61,6 @@ const HomeScreen = ({ navigation, route }) => {
       return newState;
     });
   };
-
 
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
@@ -100,7 +102,7 @@ const HomeScreen = ({ navigation, route }) => {
     if (currentLocation) {
       const GetNearbyPlace = async () => {
         const location = `${currentLocation.latitude},${currentLocation.longitude}`;
-        const radius = 1000; // 1000 meters (1 km)
+        const radius = proximity * 1000; // 1000 meters (1 km)
         const type = "restaurant";
         const keywords = cuisines;
 
@@ -343,6 +345,7 @@ const HomeScreen = ({ navigation, route }) => {
                 latitude: place.latitude,
                 longitude: place.longitude,
               }}
+              
               title={place.name}
               onPress={() => setSelectedPlace(place)}
             >
