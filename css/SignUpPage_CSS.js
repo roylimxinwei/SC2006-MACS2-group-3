@@ -55,4 +55,10 @@ export const styles = StyleSheet.create({
         color: "#FFFFFF",
         fontSize: 18,
     },
+    logInText: {
+        color: "#7F2B0F",
+        textDecorationLine: "underline",
+        fontSize: 16,
+        top: 20,
+    },
 });
