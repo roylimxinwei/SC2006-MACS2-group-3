@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import {
     Image,
     Text,
@@ -7,6 +7,8 @@ import {
     Button,
 	ScrollView,
 } from "react-native";
+import { auth, db, storage} from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 import { styles } from "../css/ViewProfile_CSS";  
 
 import Slider from '@react-native-community/slider';
@@ -15,17 +17,36 @@ import { cuisines , cuisineImage } from "../config/supportedCuisine";
 
 const ViewProfile = ({ navigation }) => {
 	const [username, setUsername] = useState("");
-	// const [cuisines, setCuisine] = useState("");
+	const [selectedInterests, setSelectedInterests] = useState([]);
 	const [ratings, setRatings] = useState("");
-	const [sliderRestaurantState, setRestaurantSliderState] = React.useState(1);
-	const [sliderProximityState, setProximitySliderState] = React.useState(0);
+	const [proximity, setProximity] = useState("");
+	const [operationStatus, setOperationStatus] = useState("");
+	const [referralCode, setReferralCode] = useState("");
+	const [referralCodeUsed, setReferralCodeUsed] = useState("");
 
-	const [isEnabled, setIsEnabled] = useState(true);
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-	const [fromRestaurantValue, setFromRestaurantValue] = useState(0);
-	const [toRestaurantValue, setToRestaurantValue] = useState(0);
-	const [Restaurantvalue, setRestaurantValue] = useState(0);
+	const fetchData = async () =>{
+		let user = auth.currentUser;
+		// setCurrentUser(user)
+		// User is signed in
+		const docRef = doc(db, "users", user.uid);
+		const docSnap = await getDoc(docRef);
+	
+		if (docSnap.exists()) {
+		  setUsername(docSnap.data().name);
+		  setSelectedInterests(docSnap.data().cuisines)
+		  setRatings(docSnap.data().restaurantRating)
+		  setProximity(docSnap.data().proximity)
+		  setOperationStatus(docSnap.data().operationStatus)
+		  setReferralCode(docSnap.data().referralCode)
+		  setReferralCodeUsed(docSnap.data().referralCodeUsed)
+
+		}}
+
+		useEffect(() => {
+			fetchData();
+		  }, []);
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -37,12 +58,19 @@ const ViewProfile = ({ navigation }) => {
 						style={styles.ImageDesign}
 					/>
 					<View style={styles.profileDetails}>
-						<Text style={styles.username}>Wei Yang</Text>
+						<Text style={styles.username}>{username}</Text>
 						<TouchableOpacity 
 							onPress={() => navigation.navigate("PreferencePage1")}
 						>
 							<Text style={styles.editProfile}>Edit Profile</Text>
 						</TouchableOpacity>
+						
+						{!referralCodeUsed &&
+						<View>
+							<Text style={styles.referralCode}>Referral Code:</Text>
+							<Text style={styles.referralCodeText}>{referralCode}</Text>
+						</View>
+						}	
 					</View>
 				</View>
 
@@ -59,6 +87,7 @@ const ViewProfile = ({ navigation }) => {
 							key={cuisine}
 							style={[
 								styles.interestIcon,
+								selectedInterests.includes(cuisine) ? styles.selected : null,
 							]}
 							>
 							<Image source={cuisineImage[cuisine]} style={styles.interestImage} />
@@ -69,7 +98,7 @@ const ViewProfile = ({ navigation }) => {
 
 				<View style={styles.detailContainer}>
 					<Text style={styles.sectionText}>
-						Restaurant Ratings: {sliderRestaurantState} Stars
+						Restaurant Ratings: {ratings} Stars
 					</Text>
 				</View>
 
@@ -87,7 +116,7 @@ const ViewProfile = ({ navigation }) => {
 				</View> */}
 
 				<View style={styles.detailContainer}>
-					<Text style={styles.sectionText}>Proximity: {sliderProximityState}m</Text>
+					<Text style={styles.sectionText}>Proximity: {proximity}m</Text>
 				</View>
 
 				{/* <View style={styles.slider}>
@@ -104,7 +133,7 @@ const ViewProfile = ({ navigation }) => {
 				</View> */}
 
 				<View style={styles.detailContainer}>
-					<Text style={styles.sectionText}>Operation Status:</Text>
+					<Text style={styles.sectionText}>Operation Status: {operationStatus}</Text>
 				</View>
 
 				<View style={styles.switch}>

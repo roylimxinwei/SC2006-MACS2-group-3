@@ -3,7 +3,8 @@
 // Welcome screen links to sign up and log in screen
 
 import * as Location from "expo-location";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { auth, db, storage} from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -25,7 +26,7 @@ import MapViewStyle from "../config/MapViewStyle.json";
 
 
 const HomeScreen = ({ navigation, route }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState("");
   const proximity = 1; // proximity in user preference (500 meters here)
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
@@ -33,20 +34,21 @@ const HomeScreen = ({ navigation, route }) => {
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
 
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setCurrentUser(user);
-      } else {
-        // User is signed out
-        setCurrentUser(null);
-      }
-    });
+  const fetchData = async () =>{
+    let user = auth.currentUser;
+    // setCurrentUser(user)
+    // User is signed in
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
 
-    // Clean up the subscription
-    return unsubscribe;
+    if (docSnap.exists()) {
+      console.log(docSnap.data().name);
+      setCurrentUser(docSnap.data().name);
+    }}
+
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const toggleSwitch = () => {
@@ -292,7 +294,7 @@ const HomeScreen = ({ navigation, route }) => {
 
 	return (
 		<View style={styles.headerContainer}>
-		{currentUser && <Header user={currentUser} />}
+		{currentUser && <Header username={currentUser} />}
 		{initialRegion && (
 			<MapView 
         style={styles.map} 
