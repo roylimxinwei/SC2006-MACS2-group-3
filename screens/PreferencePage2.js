@@ -68,7 +68,7 @@ const PreferencePage2 = () => {
                   style={styles.slider}
                   value={proximity}
                   minimumValue={0}
-                  maximumValue={250}
+                  maximumValue={1000}
                   step={10}
                   onValueChange={(value) => setProximity(value)}
                   minimumTrackTintColor="#000000"
