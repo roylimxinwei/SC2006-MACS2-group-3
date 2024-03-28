@@ -39,7 +39,7 @@ const ViewProfile = ({ navigation }) => {
 					<View style={styles.profileDetails}>
 						<Text style={styles.username}>Wei Yang</Text>
 						<TouchableOpacity 
-							onPress={() => navigation.navigate("PreferencePage1")}
+							onPress={() => navigation.navigate("SelectCuisine")}
 						>
 							<Text style={styles.editProfile}>Edit Profile</Text>
 						</TouchableOpacity>

@@ -7,11 +7,11 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {styles} from '../css/PreferencePage2_CSS';
+import {styles} from '../css/RestaurantExperience_CSS';
 import Slider from '@react-native-community/slider';
 import { Switch } from 'react-native-switch';
 
-const PreferencePage2 = () => {
+const RestaurantExperience = () => {
     const [restaurantRating, setRestaurantRating] = useState(3);
     const [proximity, setProximity] = useState(100);
     const [operationStatus, setOperationStatus] = useState('Open Now');
@@ -86,4 +86,4 @@ const PreferencePage2 = () => {
   };
   
   
-  export default PreferencePage2;
+  export default RestaurantExperience;

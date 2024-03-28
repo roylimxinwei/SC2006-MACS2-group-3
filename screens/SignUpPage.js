@@ -71,7 +71,7 @@ const SignUpPage = ({ navigation }) => {
 
       await setDoc(doc(db, "users", user.uid), {});
 
-      navigation.navigate("PreferencePage1"); 
+      navigation.navigate("SelectCuisine"); 
     })
     .catch(error => {
       Alert.alert( 

@@ -8,11 +8,11 @@ import {
 	Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {styles} from '../css/PreferencePage1_CSS';
+import {styles} from '../css/SelectCuisine_CSS';
 import { cuisines , cuisineImage } from "../config/supportedCuisine";
 
 
-const PreferencePage1 = () => {
+const SelectCuisine = () => {
 	const [selectedInterests, setSelectedInterests] = useState([]);
 	const navigation = useNavigation();
 
@@ -68,7 +68,7 @@ const PreferencePage1 = () => {
 								]
 							);
 						} else {
-							navigation.navigate('PreferencePage2');
+							navigation.navigate('RestaurantExperience');
 						}
 					}}
 				>
