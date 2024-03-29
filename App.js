@@ -3,26 +3,23 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import {app, auth} from "./firebase.js";
-
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 
 import DiningHistoryPage from "./screens/DiningHistoryPage";
 import HomeScreen from "./screens/HomeScreen";
 import InputReferralCodePage from "./screens/InputReferralCodePage";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
+import RestaurantExperience from "./screens/PreferencePage2.js";
 import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
+import SelectCuisine from "./screens/SelectCuisine";
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
+import UserReviewScreen from "./screens/UserReviewScreen";
 import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
-import SelectCuisine from "./screens/SelectCuisine"
-import RestaurantExperience from "./screens/RestaurantExperience"
-import UserReviewScreen from "./screens/UserReviewScreen";
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (
@@ -37,7 +34,10 @@ export default function App() {
         <Stack.Screen name="ReviewLandingPage" component={ReviewLandingPage} />
         <Stack.Screen name="UserReviewScreen" component={UserReviewScreen} />
         <Stack.Screen name="SelectCuisine" component={SelectCuisine} />
-        <Stack.Screen name="RestaurantExperience" component={RestaurantExperience} />
+        <Stack.Screen
+          name="RestaurantExperience"
+          component={RestaurantExperience}
+        />
         <Stack.Screen
           name="InputReferralCodePage"
           component={InputReferralCodePage}
@@ -50,4 +50,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
