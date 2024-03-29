@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 import { cuisineImage, cuisines } from "../config/supportedCuisine";
-import { styles } from "../css/SelectCuisine_CSS";
+import { styles } from "../css/SelectCuisinePage_CSS";
 
 const SelectCuisine = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);

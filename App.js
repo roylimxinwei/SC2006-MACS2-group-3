@@ -10,10 +10,10 @@ import HomeScreen from "./screens/HomeScreen";
 import InputReferralCodePage from "./screens/InputReferralCodePage";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
-import RestaurantExperience from "./screens/PreferencePage2.js";
+import RestaurantExperience from "./screens/RestaurantExperiencePage.js";
 import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
-import SelectCuisine from "./screens/SelectCuisine";
+import SelectCuisine from "./screens/SelectCuisinePage.js";
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import UserReviewScreen from "./screens/UserReviewScreen";
 import ViewProfile from "./screens/ViewProfile";
