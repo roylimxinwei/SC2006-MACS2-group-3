@@ -3,16 +3,15 @@
 // Welcome screen links to sign up and log in screen
 
 import * as Location from "expo-location";
-import { auth, db, storage} from '../firebase';
-import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import {
-	Button,
-	Image,
-	ScrollView,
-	Text,
-	TouchableOpacity,
-	View,
+  Button,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import MapView, {
   Callout,
@@ -30,35 +29,28 @@ import { styles } from "../css/HomeScreen_CSS";
 import Header from "./Header";
 
 const HomeScreen = ({ navigation, route }) => {
-  const [currentUser, setCurrentUser] = useState("");
-  // const proximity = 1; // proximity in user preference (500 meters here)
+  const [currentUser, setCurrentUser] = useState(null);
+  const proximity = 1; // proximity in user preference (500 meters here)
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
-  const [proximity, setProximity] = useState(1);
-  const [cuisines, setCuisines] = useState([]);
-  const [minRating, setMinRating] = useState(3);
-
-  const fetchData = async () =>{
-    let user = auth.currentUser;
-    // setCurrentUser(user)
-    // User is signed in
-    const docRef = doc(db, "users", user.uid);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log(docSnap.data().name);
-      setCurrentUser(docSnap.data().name);
-      setProximity(docSnap.data().proximity/1000);
-      setMinRating(docSnap.data().restaurantRating);
-      setCuisines(docSnap.data().cuisines);
-      console.log(proximity, cuisines, minRating);
-    }}
 
   useEffect(() => {
-    fetchData();
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        setCurrentUser(user);
+      } else {
+        // User is signed out
+        setCurrentUser(null);
+      }
+    });
+
+    // Clean up the subscription
+    return unsubscribe;
   }, []);
 
   const toggleSwitch = () => {
@@ -69,136 +61,135 @@ const HomeScreen = ({ navigation, route }) => {
     });
   };
 
-
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
   const [address, setAddress] = useState(null);
 
-	const [selectedPlace, setSelectedPlace] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState(null);
 
-	const jiakButtonPressed = () =>{
-		// console.log(selectedPlace)    
-		navigation.navigate("ReviewLandingPage",selectedPlace);
-	};
+  const jiakButtonPressed = () => {
+    // console.log(selectedPlace)
+    navigation.navigate("ReviewLandingPage", selectedPlace);
+  };
 
-	useEffect(() => {
-		const getLocation = async () => {
-			let { status } = await Location.requestForegroundPermissionsAsync();
-			if (status !== "granted") {
-				console.log("Permission to access location was denied");
-				return;
-			}
+  useEffect(() => {
+    const getLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        console.log("Permission to access location was denied");
+        return;
+      }
 
-			let location = await Location.getCurrentPositionAsync({});
-			setCurrentLocation(location.coords);
+      let location = await Location.getCurrentPositionAsync({});
+      setCurrentLocation(location.coords);
 
-			const newInitialRegion = {
-				latitude: location.coords.latitude,
-				longitude: location.coords.longitude,
-				latitudeDelta: 0.005,
-				longitudeDelta: 0.005,
-			};
+      const newInitialRegion = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
+      };
 
-			setInitialRegion(newInitialRegion);
-			console.log("Initial Region Set: ", newInitialRegion);
-		};
+      setInitialRegion(newInitialRegion);
+      console.log("Initial Region Set: ", newInitialRegion);
+    };
 
-		getLocation();
-	}, []);
+    getLocation();
+  }, []);
 
   useEffect(() => {
     if (currentLocation) {
       const GetNearbyPlace = async () => {
         const location = `${currentLocation.latitude},${currentLocation.longitude}`;
-        const radius = proximity * 1000; // 1000 meters (1 km)
+        const radius = 1000; // 1000 meters (1 km)
         const type = "restaurant";
         const keywords = cuisines;
 
-				// Prepare all promises for the API calls
-				const promises = keywords.map((keyword) =>
-					GlobalApi.NewNearByPlace(location, radius, type, keyword).catch(
-						(error) => {
-							console.error("Error fetching nearby places:", error);
-							return null; // Return null or an appropriate value to handle failed requests gracefully
-						}
-					)
-				);
+        // Prepare all promises for the API calls
+        const promises = keywords.map((keyword) =>
+          GlobalApi.NewNearByPlace(location, radius, type, keyword).catch(
+            (error) => {
+              console.error("Error fetching nearby places:", error);
+              return null; // Return null or an appropriate value to handle failed requests gracefully
+            }
+          )
+        );
 
-				// Wait for all promises to settle
-				const results = await Promise.all(promises);
+        // Wait for all promises to settle
+        const results = await Promise.all(promises);
 
-				// Process and update state once with all new data
-				const allProcessedData = results.flatMap((resp, index) => {
-					if (!resp) return []; // Skip processing if the response is null due to an error
-					console.log("Response:", resp);
-					return resp.results.map((place) => ({
-						latitude: place.geometry.location.lat,
-						longitude: place.geometry.location.lng,
-						name: place.name,
-						price_level: place.price_level,
-						place_id: place.place_id,
-						rating: place.rating || "No rating",
-						cuisine: keywords[index],
-						address: place.vicinity,
-						imageUrl:
-							place.photos && place.photos.length > 0
-								? {
-										uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAOuEs_zxFDQXynk8YZx35_nNWwzpsQy78`,
-									}
-								: require("../assets/no_image.jpg"),
-					}));
-				});
+        // Process and update state once with all new data
+        const allProcessedData = results.flatMap((resp, index) => {
+          if (!resp) return []; // Skip processing if the response is null due to an error
+          console.log("Response:", resp);
+          return resp.results.map((place) => ({
+            latitude: place.geometry.location.lat,
+            longitude: place.geometry.location.lng,
+            name: place.name,
+            price_level: place.price_level,
+            place_id: place.place_id,
+            rating: place.rating || "No rating",
+            cuisine: keywords[index],
+            address: place.vicinity,
+            imageUrl:
+              place.photos && place.photos.length > 0
+                ? {
+                    uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photos[0].photo_reference}&key=AIzaSyAOuEs_zxFDQXynk8YZx35_nNWwzpsQy78`,
+                  }
+                : require("../assets/no_image.jpg"),
+          }));
+        });
 
-				// Update state once with all new data
-				setProcessedPlaces((prevPlaces) => [
-					...prevPlaces,
-					...allProcessedData,
-				]);
-			};
+        // Update state once with all new data
+        setProcessedPlaces((prevPlaces) => [
+          ...prevPlaces,
+          ...allProcessedData,
+        ]);
+      };
 
-			GetNearbyPlace();
-		}
-	}, [currentLocation]); // Assuming `currentLocation` is stable or properly memoized
+      GetNearbyPlace();
+    }
+  }, [currentLocation]); // Assuming `currentLocation` is stable or properly memoized
 
-	useEffect(() => {
-		if (rawPlacesData && rawPlacesData.results) {
-			const processedData = rawPlacesData.results.map((place) => ({
-				latitude: place.geometry.location.lat,
-				longitude: place.geometry.location.lng,
-				name: place.name,
-				address: place.vicinity,
-			}));
+  useEffect(() => {
+    if (rawPlacesData && rawPlacesData.results) {
+      const processedData = rawPlacesData.results.map((place) => ({
+        latitude: place.geometry.location.lat,
+        longitude: place.geometry.location.lng,
+        name: place.name,
+        address: place.vicinity,
+      }));
 
-			setProcessedPlaces(processedData); // Update state with processed data
-		}
-	}, [rawPlacesData]); // This effect depends on rawPlacesData
+      setProcessedPlaces(processedData); // Update state with processed data
+    }
+  }, [rawPlacesData]); // This effect depends on rawPlacesData
 
-	useEffect(() => {
-		if (currentLocation) {
-			GeoCoding.getAddress(currentLocation.latitude, currentLocation.longitude)
-				.then((data) => {
-					const address = data.results[0].formatted_address;
-					setAddress(address);
-				})
-				.catch((error) => console.error("Error fetching address:", error));
-		}
-	}, [currentLocation]);
+  useEffect(() => {
+    if (currentLocation) {
+      GeoCoding.getAddress(currentLocation.latitude, currentLocation.longitude)
+        .then((data) => {
+          const address = data.results[0].formatted_address;
+          setAddress(address);
+        })
+        .catch((error) => console.error("Error fetching address:", error));
+    }
+  }, [currentLocation]);
 
-	const RestaurantDetailsScreen = ({ place, userLocation, onDismiss }) => {
-		const distance = haversineDistance(
-			userLocation.latitude,
-			userLocation.longitude,
-			place.latitude,
-			place.longitude
-		).toFixed(2); // Round the distance to 2 decimal places
+  const RestaurantDetailsScreen = ({ place, userLocation, onDismiss }) => {
+    const distance = haversineDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      place.latitude,
+      place.longitude
+    ).toFixed(2); // Round the distance to 2 decimal places
 
-		return (
-			<ScrollView
-				style={styles.restaurantPopUp}
-				contentContainerStyle={{ flexGrow: 1 }}
-			>
-				<View style={styles.contentContainer}>
-					<Image source={place.imageUrl} style={styles.ImageDesign} />
+    return (
+      <ScrollView
+        style={styles.restaurantPopUp}
+        contentContainerStyle={{ flexGrow: 1 }}
+      >
+        <View style={styles.contentContainer}>
+          <Image source={place.imageUrl} style={styles.ImageDesign} />
 
           <View style={styles.textContainer}>
             <Text style={styles.calloutTitle}>{place.name}</Text>
@@ -231,120 +222,108 @@ const HomeScreen = ({ navigation, route }) => {
             <Text style={styles.JiakText}>Jiak!</Text>
           </TouchableOpacity>
 
-        <TouchableOpacity onPress={onDismiss} style={styles.dismissButtonClose}>
-          <Text style={styles.CloseText}>X</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => {
-          if (place) {
-            navigation.navigate("UserReviewScreen", {
-              placeId: place.place_id,
-            });
-          } else {
-            console.log("Error", place.id);
-          }
-        }}
-        style={styles.UserReviewButton}
-      >
-        <Image
-          style={styles.reviewButtonImage}
-          source={require("../assets/view_reviews.png")} // replace with your button image path
-        />
-      </TouchableOpacity>
-      <Text style={styles.padpad}> FOR PADDING </Text>
-    </View>
-  </ScrollView>
+          <TouchableOpacity
+            onPress={() => {
+              if (place) {
+                navigation.navigate("UserReviewScreen", {
+                  placeId: place.place_id,
+                });
+              } else {
+                console.log("Error", place.id);
+              }
+            }}
+            style={styles.UserReviewButton}
+          >
+            <Image
+              style={styles.reviewButtonImage}
+              source={require("../assets/view_reviews.png")} // replace with your button image path
+            />
+          </TouchableOpacity>
+          <Text style={styles.padpad}> FOR PADDING </Text>
+        </View>
+      </ScrollView>
     );
   };
 
   const displayRestaurantDetails = (
     processedPlaces,
     currentLocation,
-    proximity,
-    minRating,
-    cuisines
+    radius
   ) => {
     const nearbyPlaces = processedPlaces.filter((place) => {
       // Filter the places based on the current location and radius
       const distance = calculateDistance(place, currentLocation);
-      const isWithinProximity = parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
-      const isAboveRating = parseFloat(place.rating).toFixed(2) <= parseFloat(minRating).toFixed(2);
-      const hasCuisine = cuisines.includes(place.cuisine);
-
-      return isWithinProximity && isAboveRating && hasCuisine;
+      return distance <= radius;
     });
 
-		if (nearbyPlaces.length > 0) {
-			// Slice the nearest 3 restaurants
-			const limitedNearbyPlaces = nearbyPlaces.slice(0, 3); //change the number to show how many u want to see
+    if (nearbyPlaces.length > 0) {
+      // Slice the nearest 3 restaurants
+      const limitedNearbyPlaces = nearbyPlaces.slice(0, 3); //change the number to show how many u want to see
 
-			if (limitedNearbyPlaces.length > 0) {
-				// Display the limited list of restaurants
-				return (
-					<ScrollView style={styles.scrollContainer}>
-						{limitedNearbyPlaces.map((place, index) => (
-				<View 
-					style={styles.resPopupContainer}
-					key = {index} 
-				>
-					<Image source={place.imageUrl} style={styles.ImageDesign} />
-					<View style={styles.textContainer}>
-					<Text style={styles.calloutTitle}>{place.name}</Text>
-					<Text style={styles.calloutDescription}>
-						Rating: {place.rating}
-					</Text>
-					<Text style={styles.calloutDescription}>
-						Cuisine: {place.cuisine}
-					</Text>
-					<Text style={styles.calloutDescription}>
-						Address: {place.address}
-					</Text>
-					<TouchableOpacity
-						onPress={() =>
-						navigation.navigate("ReviewLandingPage", { place })
-						}
-						style={styles.dismissButtonJiak}
-					>
-						<Text style={styles.JiakText}>Jiak!</Text>
-					</TouchableOpacity>
-					</View>
-				</View>
-				))}
-			</ScrollView>
-			);
-		} else {
-			// Display a message if there are no nearby restaurants in the limited list
-			return <Text>No nearby restaurants found (limited to 3 results).</Text>;
-		}
-		} else {
-		// Display the original message if no nearby restaurants were found
-		return <Text>No nearby restaurants found.</Text>;
-		}
-	};
+      if (limitedNearbyPlaces.length > 0) {
+        // Display the limited list of restaurants
+        return (
+          <ScrollView style={styles.scrollContainer}>
+            {limitedNearbyPlaces.map((place, index) => (
+              <View style={styles.resPopupContainer} key={index}>
+                <Image source={place.imageUrl} style={styles.ImageDesign} />
+                <View style={styles.textContainer}>
+                  <Text style={styles.calloutTitle}>{place.name}</Text>
+                  <Text style={styles.calloutDescription}>
+                    Rating: {place.rating}
+                  </Text>
+                  <Text style={styles.calloutDescription}>
+                    Cuisine: {place.cuisine}
+                  </Text>
+                  <Text style={styles.calloutDescription}>
+                    Address: {place.address}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate("ReviewLandingPage", { place })
+                    }
+                    style={styles.dismissButtonJiak2}
+                  >
+                    <Text style={styles.JiakText}>Jiak!</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        );
+      } else {
+        // Display a message if there are no nearby restaurants in the limited list
+        return <Text>No nearby restaurants found (limited to 3 results).</Text>;
+      }
+    } else {
+      // Display the original message if no nearby restaurants were found
+      return <Text>No nearby restaurants found.</Text>;
+    }
+  };
 
-	return (
-		<View style={styles.headerContainer}>
-		{currentUser && <Header user={currentUser} />}
-		{initialRegion && (
-			<MapView 
-				style={styles.map} 
-				initialRegion={initialRegion}
-				provider= {PROVIDER_GOOGLE}
-				customMapStyle={MapViewStyle}
-			>
-			{currentLocation && (
-				<>
-				<Marker
-					coordinate={{
-					latitude: currentLocation.latitude,
-					longitude: currentLocation.longitude,
-					}}
-					title="Your Location"
-				>
-					<Image
-					source={require("../assets/userIcon.png")}
-					style={styles.icon}
-					/>
+  return (
+    <View style={styles.headerContainer}>
+      {currentUser && <Header user={currentUser} />}
+      {initialRegion && (
+        <MapView
+          style={styles.map}
+          initialRegion={initialRegion}
+          provider={PROVIDER_GOOGLE}
+          customMapStyle={MapViewStyle}
+        >
+          {currentLocation && (
+            <>
+              <Marker
+                coordinate={{
+                  latitude: currentLocation.latitude,
+                  longitude: currentLocation.longitude,
+                }}
+                title="Your Location"
+              >
+                <Image
+                  source={require("../assets/userIcon.png")}
+                  style={styles.icon}
+                />
 
                 <Callout>
                   <View style={styles.calloutContainer}>
@@ -373,7 +352,6 @@ const HomeScreen = ({ navigation, route }) => {
                 latitude: place.latitude,
                 longitude: place.longitude,
               }}
-              
               title={place.name}
               onPress={() => setSelectedPlace(place)}
             >
@@ -386,17 +364,17 @@ const HomeScreen = ({ navigation, route }) => {
         </MapView>
       )}
 
-			{selectedPlace && (
-				<RestaurantDetailsScreen
-					place={selectedPlace}
-				  //   place_id={selectedPlace?.place_id} // Pass the place_id as a prop
-					userLocation={currentLocation} // Pass the currentLocation as userLocation
-					onDismiss={() => setSelectedPlace(null)}
-				/>
-			)}
+      {selectedPlace && (
+        <RestaurantDetailsScreen
+          place={selectedPlace}
+          //   place_id={selectedPlace?.place_id} // Pass the place_id as a prop
+          userLocation={currentLocation} // Pass the currentLocation as userLocation
+          onDismiss={() => setSelectedPlace(null)}
+        />
+      )}
 
-		{isEnabled &&
-			displayRestaurantDetails(processedPlaces, currentLocation, proximity, minRating, cuisines)}
+      {isEnabled &&
+        displayRestaurantDetails(processedPlaces, currentLocation, proximity)}
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name

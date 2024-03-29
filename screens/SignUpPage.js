@@ -67,22 +67,9 @@ const SignUpPage = ({ navigation }) => {
     createUserWithEmailAndPassword(auth,email,password)
     .then(async userCredentials =>{
       const user = userCredentials.user;
-      // alert("Account Created Successfully.")
+      alert("Account Created Successfully.")
 
-      let result = '';
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      const charactersLength = characters.length;
-      let counter = 0;
-      while (counter < 6) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        counter += 1;
-      }
-      
-      await setDoc(doc(db, "users", user.uid), {
-        name: username,
-        referralCode: result,
-        referralCodeUsed: false
-      });
+      await setDoc(doc(db, "users", user.uid), {});
 
       navigation.navigate("SelectCuisine"); 
     })
