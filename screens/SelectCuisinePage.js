@@ -10,6 +10,8 @@ import {
 } from "react-native";
 import { cuisineImage, cuisines } from "../config/supportedCuisine";
 import { styles } from "../css/SelectCuisinePage_CSS";
+import { auth, db } from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 
 const SelectCuisine = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
@@ -26,13 +28,35 @@ const SelectCuisine = () => {
 
   const handleSelect = (interest) => {
     if (selectedInterests.includes(interest)) {
-      setSelectedInterests(
-        selectedInterests.filter((item) => item !== interest)
-      );
-    } else {
-      setSelectedInterests([...selectedInterests, interest]);
-    }
-  };
+			setSelectedInterests(selectedInterests.filter((item) => item !== interest));
+			console.log(selectedInterests)
+		} else {
+			setSelectedInterests([...selectedInterests, interest]);
+		}
+	};
+
+  const saveCuisines = async () => {
+		if (selectedInterests && selectedInterests.length >= 3) {
+		  try {
+			await setDoc(doc(db, 'users', auth.currentUser.uid), {
+			  cuisines: selectedInterests,
+			}, { merge: true });
+			navigation.navigate('RestaurantExperience');
+		  } catch (error) {
+			console.error("Error saving cuisines: ", error);
+		  }
+		} else {
+		  Alert.alert(
+			"Selection Error",
+			"Please select at least 3 interests",
+			[
+			  {
+				text: "OK",
+			  },
+			]
+		  );
+		}
+	};
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -70,7 +94,7 @@ const SelectCuisine = () => {
                 [{ text: "OK" }]
               );
             } else {
-              navigation.navigate("RestaurantExperience");
+              saveCuisines();
             }
           }}
         >
