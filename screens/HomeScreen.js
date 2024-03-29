@@ -40,12 +40,12 @@ const HomeScreen = ({ navigation, route }) => {
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
   const [proximity, setProximity] = useState(1);
   const [cuisines, setCuisines] = useState([]);
-  const [minRating, setMinRating] = useState(3);
+  const [minRating, setMinRating] = useState(1);
 
 
   const fetchData = async () =>{
     let user = auth.currentUser;
-    // setCurrentUser(user)
+    setCurrentUser(user);
     // User is signed in
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
