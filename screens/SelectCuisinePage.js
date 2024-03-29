@@ -10,19 +10,13 @@ import {
 } from "react-native";
 import { cuisineImage, cuisines } from "../config/supportedCuisine";
 import { styles } from "../css/SelectCuisinePage_CSS";
+import { auth, db } from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
+
 
 const SelectCuisine = () => {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const navigation = useNavigation();
-
-  // const interestList = [
-  //   { name: 'French', image: require('../assets/croissant.png') },
-  //   { name: 'Italian', image: require('../assets/italian.png') },
-  //   { name: 'Japanese', image: require('../assets/ramen.png') },
-  //   { name: 'Chinese', image: require('../assets/chinese.png') },
-  //   { name: 'Fast Food', image: require('../assets/fastfood.png') },
-  //   { name: 'Vegetarian', image: require('../assets/salad.png') },
-  // ];
 
   const handleSelect = (interest) => {
     if (selectedInterests.includes(interest)) {
@@ -33,6 +27,29 @@ const SelectCuisine = () => {
       setSelectedInterests([...selectedInterests, interest]);
     }
   };
+
+  const saveCuisines = async () => {
+		if (selectedInterests && selectedInterests.length >= 3) {
+		  try {
+			await setDoc(doc(db, 'users', auth.currentUser.uid), {
+			  cuisines: selectedInterests,
+			}, { merge: true });
+			navigation.navigate('RestaurantExperiencePage');
+		  } catch (error) {
+			console.error("Error saving cuisines: ", error);
+		  }
+		} else {
+		  Alert.alert(
+			"Selection Error",
+			"Please select at least 3 interests",
+			[
+			  {
+				text: "OK",
+			  },
+			]
+		  );
+		}
+	};
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -70,7 +87,7 @@ const SelectCuisine = () => {
                 [{ text: "OK" }]
               );
             } else {
-              navigation.navigate("RestaurantExperience");
+              saveCuisines();
             }
           }}
         >

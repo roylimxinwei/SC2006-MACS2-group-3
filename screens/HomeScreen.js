@@ -27,30 +27,40 @@ import { haversineDistance } from "../config/distanceCalculator";
 import { cuisines } from "../config/supportedCuisine";
 import { styles } from "../css/HomeScreen_CSS";
 import Header from "./Header";
+import { auth, db, storage} from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
+
 
 const HomeScreen = ({ navigation, route }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const proximity = 1; // proximity in user preference (500 meters here)
+  const [currentUser, setCurrentUser] = useState("");
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
+  const [proximity, setProximity] = useState(1);
+  const [cuisines, setCuisines] = useState([]);
+  const [minRating, setMinRating] = useState(3);
+
+
+  const fetchData = async () =>{
+    let user = auth.currentUser;
+    // setCurrentUser(user)
+    // User is signed in
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log(docSnap.data().name);
+      setCurrentUser(docSnap.data().name);
+      setProximity(parseFloat(docSnap.data().proximity/1000).toFixed(2));
+      setMinRating(docSnap.data().restaurantRating);
+      setCuisines(docSnap.data().cuisines);
+      console.log(proximity, cuisines, minRating);
+    }}
 
   useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // User is signed in
-        setCurrentUser(user);
-      } else {
-        // User is signed out
-        setCurrentUser(null);
-      }
-    });
-
-    // Clean up the subscription
-    return unsubscribe;
+    fetchData();
   }, []);
 
   const toggleSwitch = () => {
@@ -64,7 +74,6 @@ const HomeScreen = ({ navigation, route }) => {
   const [rawPlacesData, setRawPlacesData] = useState(null);
   const [processedPlaces, setProcessedPlaces] = useState([]);
   const [address, setAddress] = useState(null);
-
   const [selectedPlace, setSelectedPlace] = useState(null);
 
   const jiakButtonPressed = () => {
@@ -101,7 +110,7 @@ const HomeScreen = ({ navigation, route }) => {
     if (currentLocation) {
       const GetNearbyPlace = async () => {
         const location = `${currentLocation.latitude},${currentLocation.longitude}`;
-        const radius = 1000; // 1000 meters (1 km)
+        const radius = parseFloat(proximity*1000).toFixed(2);
         const type = "restaurant";
         const keywords = cuisines;
 
@@ -248,12 +257,18 @@ const HomeScreen = ({ navigation, route }) => {
   const displayRestaurantDetails = (
     processedPlaces,
     currentLocation,
-    radius
+    proximity,
+    minRating,
+    cuisines
   ) => {
     const nearbyPlaces = processedPlaces.filter((place) => {
-      // Filter the places based on the current location and radius
+      // Filter the places
       const distance = calculateDistance(place, currentLocation);
-      return distance <= radius;
+      const isWithinProximity = parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
+      const isAboveRating = parseFloat(place.rating).toFixed(2) <= parseFloat(minRating).toFixed(2);
+      const hasCuisine = cuisines.includes(place.cuisine);
+
+      return isWithinProximity && isAboveRating && hasCuisine;
     });
 
     if (nearbyPlaces.length > 0) {
