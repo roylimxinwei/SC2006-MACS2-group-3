@@ -1,80 +1,79 @@
+import { Dimensions, StyleSheet } from "react-native";
 import colors from "../config/colors";
-import { StyleSheet, Dimensions } from "react-native";
 
-const screenHeight = Dimensions.get('window').height; 
+const screenHeight = Dimensions.get("window").height;
 
 export const styles = StyleSheet.create({
-  headerContainer:{
-    position:"absolute",
-    width:"100%",
+  headerContainer: {
+    position: "absolute",
+    width: "100%",
   },
 
-  dismissButtonJiak:{
+  dismissButtonJiak: {
     backgroundColor: colors.tertiary,
     position: "relative",
-    justifyContent:"center",
-    alignItems:"center",
+    justifyContent: "center",
+    alignItems: "center",
     // width:120,
-    marginTop:15,
+    marginTop: 15,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 39,
     paddingLeft: 39,
     borderRadius: 15,
-    marginLeft:130,
-    right:15,
+    marginLeft: 130,
+    right: 15,
   },
-  dismissButtonJiak2:{
+  dismissButtonJiak2: {
     backgroundColor: colors.tertiary,
     position: "relative",
-    justifyContent:"center",
-    alignItems:"center",
+    justifyContent: "center",
+    alignItems: "center",
     // width:120,
-    marginTop:15,
+    marginTop: 15,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 19,
     paddingLeft: 19,
     borderRadius: 15,
-    marginLeft:130,
-    right:15,
+    marginLeft: 130,
+    right: 15,
   },
-  JiakText:{
-    fontSize:16,
+  JiakText: {
+    fontSize: 16,
   },
-  CloseText:{
-    fontSize:16,
+  CloseText: {
+    fontSize: 16,
   },
-  dismissButtonClose:{
+  dismissButtonClose: {
     position: "absolute",
-    top:3,
-    right:-15,
+    top: 3,
+    right: -15,
     paddingBottom: 10,
     paddingTop: 10,
     paddingRight: 35,
     paddingLeft: 35,
     borderRadius: 15,
   },
-  ReviewText:{
-    fontSize:14,
-    color:"#7F2B0F",
-    textDecorationLine:"underline",
+  ReviewText: {
+    fontSize: 14,
+    color: "#7F2B0F",
+    textDecorationLine: "underline",
   },
-  UserReviewButton:{
+  UserReviewButton: {
     backgroundColor: colors.secondary, // or any color you'd like for this button
     position: "relative",
-    justifyContent:"center",
-    alignItems:"center",
+    justifyContent: "center",
+    alignItems: "center",
     // width: 60, // match the width of the Jiak button or as needed
     height: 45, // match the height of the Jiak button or as needed
     borderRadius: 15,
-    padding:8,
-    paddingRight:15,
-    paddingLeft:15,
+    padding: 8,
+    paddingRight: 15,
+    paddingLeft: 15,
     // paddingLeft:10,
-    
   },
-  reviewButtonImage:{
+  reviewButtonImage: {
     width: 35, // Set the width of your button image
     height: 35, // Set the height of your button image
   },
@@ -91,8 +90,8 @@ export const styles = StyleSheet.create({
   },
   button: {
     position: "absolute",
-    top:50,
-    right:20,
+    top: 50,
+    right: 20,
     backgroundColor: colors.primary,
     marginBottom: 10,
     borderRadius: 100,
@@ -110,20 +109,20 @@ export const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
   },
-  switch:{
-    position:"absolute",
-    top:90,
-    left:15,
+  switch: {
+    position: "absolute",
+    top: 90,
+    left: 15,
   },
   map: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   restaurantIcon: {
     width: 30,
     height: 30,
     borderRadius: 15, // Half of the width and height to make it circular
-    backgroundColor: 'rgba(255, 0, 0, 0.5)', // Red color with 50% opacity
+    backgroundColor: "rgba(255, 0, 0, 0.5)", // Red color with 50% opacity
   },
   historyButton: {
     position: "absolute", // Position the button over the screen
@@ -134,9 +133,8 @@ export const styles = StyleSheet.create({
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
     alignItems: "center", // Centers objects according to the secondary axis
     justifyContent: "center", // Centers the object according to main axis
-
   },
-  icon :{
+  icon: {
     width: 40, // Set the width of your image
     height: 40, // Set the height of your image to the same value to maintain aspect ratio
     borderRadius: 20, // Half the width or height to make it round
@@ -152,44 +150,53 @@ export const styles = StyleSheet.create({
   calloutTitle: {
     fontSize: 16,
     fontWeight: "bold",
-    color:"#7F2B0F",
+    color: "#7F2B0F",
     marginBottom: 5,
-
   },
   calloutDescription: {
+    flex: 1,
     fontSize: 14,
-    padding:1,
-    color:"#7F2B0F",
+    padding: 1,
+    color: "#7F2B0F",
   },
   restaurantPopUp: {
-    position: 'absolute',
-    top: screenHeight * 2 / 3, // Set top to 2/3 of the screen height
+    position: "absolute",
+    top: (screenHeight * 2) / 3, // Set top to 2/3 of the screen height
     left: 0,
     right: 0,
     // marginBottom: 500,
-    paddingBottom: 500,
+    //paddingBottom: 500,
     height: screenHeight / 3,
     backgroundColor: colors.primary,
     zIndex: 10,
-  } ,
-  contentContainer: {
-    flex:5,
-    flexDirection: 'row', // Align children horizontally
-    padding: 10, // Add some padding around the content
-    justifyContent: 'space-evenly', // this will distribute space evenly around the elements
-    alignItems: 'center', // this will align items vertically in the center
-    flexWrap: 'wrap', // This will allow the content to wrap to the next line if needed
-    paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
-    marginBottom:300,
   },
-  padpad:{
+  contentContainer: {
+    flex: 5,
+    flexDirection: "row", // Align children horizontally
+    padding: 10, // Add some padding around the content
+    justifyContent: "space-evenly", // this will distribute space evenly around the elements
+    alignItems: "center", // this will align items vertically in the center
+    flexWrap: "wrap", // This will allow the content to wrap to the next line if needed
+    paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
+    marginBottom: 300,
+  },
+  resPopupContainer: {
+    flex: 5,
+    flexDirection: "row", // Align children horizontally
+    padding: 10, // Add some padding around the content
+    justifyContent: "space-evenly", // this will distribute space evenly around the elements
+    alignItems: "center", // this will align items vertically in the center
+    flexWrap: "wrap", // This will allow the content to wrap to the next line if needed
+    paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
+  },
+  padpad: {
     color: "transparent",
     backgroundColor: colors.primary,
-    paddingBottom:100,
+    paddingBottom: 100,
   },
   textContainer: {
     flex: 1, // Take up remaining space
-    justifyContent: 'center', // Center text vertically
+    justifyContent: "center", // Center text vertically
   },
   popupContainer: {
     backgroundColor: "#FFFFFF",
@@ -209,7 +216,7 @@ export const styles = StyleSheet.create({
     top: 290, // You can adjust the top value to your preference
     left: 10,
     right: 10,
-    bottom:20,
+    bottom: 20,
     backgroundColor: colors.primary,
   },
   restaurantContainer: {
