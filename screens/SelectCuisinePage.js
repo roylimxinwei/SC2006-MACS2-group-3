@@ -34,7 +34,7 @@ const SelectCuisine = () => {
 			await setDoc(doc(db, 'users', auth.currentUser.uid), {
 			  cuisines: selectedInterests,
 			}, { merge: true });
-			navigation.navigate('RestaurantExperiencePage');
+			navigation.navigate('RestaurantExperience');
 		  } catch (error) {
 			console.error("Error saving cuisines: ", error);
 		  }
