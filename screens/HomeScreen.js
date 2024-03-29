@@ -275,7 +275,7 @@ const HomeScreen = ({ navigation, route }) => {
 						onPress={() =>
 						navigation.navigate("ReviewLandingPage", { place })
 						}
-						style={styles.dismissButtonJiak}
+						style={styles.dismissButtonJiak2}
 					>
 						<Text style={styles.JiakText}>Jiak!</Text>
 					</TouchableOpacity>
