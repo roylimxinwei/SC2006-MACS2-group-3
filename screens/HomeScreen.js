@@ -48,8 +48,9 @@ const HomeScreen = ({ navigation, route }) => {
       console.log(docSnap.data().name);
       setCurrentUser(docSnap.data().name);
       setProximity(docSnap.data().proximity/1000);
-      setMinRating(docSnap.data().minRating || 3);
-      setCuisines(docSnap.data().cuisines || []);
+      setMinRating(docSnap.data().restaurantRating);
+      setCuisines(docSnap.data().cuisines);
+      console.log(proximity, cuisines, minRating);
     }}
 
   useEffect(() => {
@@ -240,13 +241,15 @@ const HomeScreen = ({ navigation, route }) => {
   const displayRestaurantDetails = (
     processedPlaces,
     currentLocation,
-    radius
+    proximity,
+    minRating,
+    cuisines
   ) => {
     const nearbyPlaces = processedPlaces.filter((place) => {
       // Filter the places based on the current location and radius
       const distance = calculateDistance(place, currentLocation);
-      const isWithinProximity = distance <= radius;
-      const isAboveRating = place.rating <= ratings;
+      const isWithinProximity = distance <= proximity;
+      const isAboveRating = place.rating <= parseFloat(minRating);
       const hasCuisine = cuisines.includes(place.cuisine);
 
       return isWithinProximity && isAboveRating && hasCuisine;
@@ -374,7 +377,7 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
 		{isEnabled &&
-			displayRestaurantDetails(processedPlaces, currentLocation, proximity)}
+			displayRestaurantDetails(processedPlaces, currentLocation, proximity, minRating, cuisines)}
 
 		<TouchableOpacity
 			onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
