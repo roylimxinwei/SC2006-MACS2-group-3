@@ -11,18 +11,19 @@ export const styles = StyleSheet.create({
 
   dismissButtonJiak: {
     backgroundColor: colors.tertiary,
-    position: "relative",
+    alignSelf: "center", // Center button in the container
     justifyContent: "center",
     alignItems: "center",
-    // width:120,
     marginTop: 15,
-    paddingBottom: 10,
-    paddingTop: 10,
-    paddingRight: 39,
-    paddingLeft: 39,
-    borderRadius: 15,
-    marginLeft: 130,
-    right: 15,
+    marginBottom: 15, // Add some margin at the bottom
+    paddingHorizontal: 60, // Adjust padding to make the button wider
+    paddingVertical: 10, // Adjust vertical padding if needed
+    borderRadius: 20, // Slightly more rounded corners
+    shadowColor: "#000", // Adding shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3, // For Android shadow
   },
   dismissButtonJiak2: {
     backgroundColor: colors.tertiary,
@@ -170,14 +171,11 @@ export const styles = StyleSheet.create({
     zIndex: 10,
   },
   contentContainer: {
-    flex: 5,
-    flexDirection: "row", // Align children horizontally
-    padding: 10, // Add some padding around the content
-    justifyContent: "space-evenly", // this will distribute space evenly around the elements
-    alignItems: "center", // this will align items vertically in the center
-    flexWrap: "wrap", // This will allow the content to wrap to the next line if needed
-    paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
-    marginBottom: 300,
+    flex: 1, // You might not need 'flex: 5' if you are using 'flexGrow: 1' in the parent ScrollView
+    flexDirection: "column", // Use column to stack elements vertically
+    justifyContent: "space-between", // Distribute space at the start and end of the container
+    padding: 10,
+    // Remove paddingRight if you're centering the Jiak button
   },
   resPopupContainer: {
     flex: 5,
