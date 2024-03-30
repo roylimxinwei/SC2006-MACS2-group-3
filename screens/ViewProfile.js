@@ -10,12 +10,16 @@ import {
 import { auth, db, storage} from '../firebase';
 import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 import { styles } from "../css/ViewProfile_CSS";  
+import { useIsFocused } from "@react-navigation/native";
 
 import Slider from '@react-native-community/slider';
 import { Switch } from 'react-native-switch';
 import { cuisines , cuisineImage } from "../config/supportedCuisine";
 
 const ViewProfile = ({ navigation }) => {
+
+	const isFocused = useIsFocused();
+
 	const [username, setUsername] = useState("");
 	const [selectedInterests, setSelectedInterests] = useState([]);
 	const [ratings, setRatings] = useState("");
@@ -32,7 +36,7 @@ const ViewProfile = ({ navigation }) => {
 		// User is signed in
 		const docRef = doc(db, "users", user.uid);
 		const docSnap = await getDoc(docRef);
-	
+		console.log(docSnap.data())
 		if (docSnap.exists()) {
 		  setUsername(docSnap.data().name);
 		  setSelectedInterests(docSnap.data().cuisines)
@@ -45,8 +49,10 @@ const ViewProfile = ({ navigation }) => {
 		}}
 
 		useEffect(() => {
+			if(isFocused){ 
 			fetchData();
-		  }, []);
+			}
+		  }, [navigation, isFocused]);
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -60,7 +66,7 @@ const ViewProfile = ({ navigation }) => {
 					<View style={styles.profileDetails}>
 						<Text style={styles.username}>{username}</Text>
 						<TouchableOpacity 
-							onPress={() => navigation.navigate("PreferencePage1")}
+							onPress={() => navigation.navigate("SelectCuisine")}
 						>
 							<Text style={styles.editProfile}>Edit Profile</Text>
 						</TouchableOpacity>
