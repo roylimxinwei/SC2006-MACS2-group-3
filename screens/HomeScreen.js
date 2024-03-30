@@ -2,9 +2,11 @@
 
 // Welcome screen links to sign up and log in screen
 
+import { useFocusEffect } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState, useCallback } from "react";
+import { doc, getDoc } from "firebase/firestore";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -19,18 +21,15 @@ import MapView, {
   Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
-import { useFocusEffect } from '@react-navigation/native';
 import { Switch } from "react-native-switch";
 import GeoCoding from "../config/GeoCoding";
 import GlobalApi from "../config/GlobalApi";
 import MapViewStyle from "../config/MapViewStyle.json";
 import { haversineDistance } from "../config/distanceCalculator";
-import { cuisines as supportedCuisine} from "../config/supportedCuisine";
+import { cuisines as supportedCuisine } from "../config/supportedCuisine";
 import { styles } from "../css/HomeScreen_CSS";
+import { db } from "../firebase";
 import Header from "./Header";
-import { auth, db, storage} from '../firebase';
-import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
-
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentUser, setCurrentUser] = useState("");
@@ -43,58 +42,55 @@ const HomeScreen = ({ navigation, route }) => {
   const [cuisines, setCuisines] = useState([]);
   const [minRating, setMinRating] = useState(null);
 
-
-  const fetchData = async (user) =>{
+  const fetchData = async (user) => {
     // User is signed in
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
-		if (docSnap.exists()) {
-			console.log("document name: " , docSnap.data());
-			setProximity(parseFloat(docSnap.data().proximity / 1000).toFixed(2));
-			setMinRating(docSnap.data().restaurantRating);
-			setCuisines(docSnap.data().cuisines);
-		} else {
-			console.log("No document exists")
-		}
-	}
+    if (docSnap.exists()) {
+      console.log("document name: ", docSnap.data());
+      setProximity(parseFloat(docSnap.data().proximity / 1000).toFixed(2));
+      setMinRating(docSnap.data().restaurantRating);
+      setCuisines(docSnap.data().cuisines);
+    } else {
+      console.log("No document exists");
+    }
+  };
 
+  /*
+   * for debugging
+   */
+  useEffect(() => {
+    console.log(proximity, cuisines, minRating);
+  }, [proximity, cuisines, minRating]);
 
-	/*
-	 * for debugging
-	 */
-	useEffect(() => {
-		console.log(proximity, cuisines, minRating);
-	}, [proximity, cuisines, minRating]);
+  /***
+   * This function is called everytime the Home Screen is navigated (eg from resturant experience page)
+   * This ensures that user preferences are refreshed after every time user edit his preferences
+   */
+  useFocusEffect(
+    useCallback(() => {
+      fetchData(currentUser);
+      console.log("Home Screen focused");
+    }, []) // Empty dependency array means this effect runs on focus without dependencies
+  );
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User:", user);
+        // User is signed in
+        setCurrentUser(user);
+        fetchData(user);
+      } else {
+        // User is signed out
+        setCurrentUser(null);
+      }
+    });
 
-	/***
-	 * This function is called everytime the Home Screen is navigated (eg from resturant experience page)
-	 * This ensures that user preferences are refreshed after every time user edit his preferences
-	 */
-	useFocusEffect(
-		useCallback(() => {
-			fetchData(currentUser)
-			console.log("Home Screen focused")
-		}, []) // Empty dependency array means this effect runs on focus without dependencies
-	);
-
-	useEffect(() => {
-		const auth = getAuth();
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-		if (user) {
-			console.log("User:" , user)
-			// User is signed in
-			setCurrentUser(user);
-			fetchData(user);
-		} else {
-			// User is signed out
-			setCurrentUser(null);
-		}
-		});
-
-		// Clean up the subscription
-		return unsubscribe;
-	}, []);
+    // Clean up the subscription
+    return unsubscribe;
+  }, []);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => {
@@ -144,10 +140,10 @@ const HomeScreen = ({ navigation, route }) => {
       const GetNearbyPlace = async () => {
         const location = `${currentLocation.latitude},${currentLocation.longitude}`;
         const radius = 1000; // hardcoded to 1km. This means that the map will display all restaurants within 1km of the user's location on the map
-							 // did not use proximity here as proximity refers to the distance for notif pop up
+        // did not use proximity here as proximity refers to the distance for notif pop up
         const type = "restaurant";
         const keywords = supportedCuisine; // map should display all resturants
-										   // cuisines is used for notif pop up
+        // cuisines is used for notif pop up
 
         // Prepare all promises for the API calls
         const promises = keywords.map((keyword) =>
@@ -299,8 +295,10 @@ const HomeScreen = ({ navigation, route }) => {
     const nearbyPlaces = processedPlaces.filter((place) => {
       // Filter the places
       const distance = calculateDistance(place, currentLocation);
-      const isWithinProximity = parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
-      const isAboveRating = parseFloat(place.rating).toFixed(2) <= parseFloat(minRating).toFixed(2);
+      const isWithinProximity =
+        parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
+      const isAboveRating =
+        parseFloat(place.rating).toFixed(2) <= parseFloat(minRating).toFixed(2);
       const hasCuisine = cuisines.includes(place.cuisine);
 
       return isWithinProximity && isAboveRating && hasCuisine;
@@ -330,7 +328,7 @@ const HomeScreen = ({ navigation, route }) => {
                   </Text>
                   <TouchableOpacity
                     onPress={() =>
-                      navigation.navigate("ReviewLandingPage", { place })
+                      navigation.navigate("ReviewLandingPage", place)
                     }
                     style={styles.dismissButtonJiak2}
                   >
@@ -424,7 +422,13 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
       {isEnabled &&
-        displayRestaurantDetails(processedPlaces, currentLocation, proximity, minRating, cuisines)}
+        displayRestaurantDetails(
+          processedPlaces,
+          currentLocation,
+          proximity,
+          minRating,
+          cuisines
+        )}
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
