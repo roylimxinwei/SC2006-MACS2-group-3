@@ -33,6 +33,7 @@ import Header from "./Header";
 
 const HomeScreen = ({ navigation, route }) => {
   const [currentUser, setCurrentUser] = useState("");
+  const [currentUserName, setCurrentUserName] = useState("");
   const [currentLocation, setCurrentLocation] = useState(null);
   const [initialRegion, setInitialRegion] = useState(null);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -48,6 +49,7 @@ const HomeScreen = ({ navigation, route }) => {
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       console.log("document name: ", docSnap.data());
+      setCurrentUserName(docSnap.data().name);
       setProximity(parseFloat(docSnap.data().proximity / 1000).toFixed(2));
       setMinRating(docSnap.data().restaurantRating);
       setCuisines(docSnap.data().cuisines);
@@ -351,7 +353,7 @@ const HomeScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.headerContainer}>
-      {currentUser && <Header user={currentUser} />}
+      {currentUserName && <Header user={currentUserName} />}
       {initialRegion && (
         <MapView
           style={styles.map}
