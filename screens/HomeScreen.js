@@ -424,7 +424,7 @@ const HomeScreen = ({ navigation, route }) => {
       )}
 
       {isEnabled &&
-        displayRestaurantDetails(processedPlaces, currentLocation, proximity)}
+        displayRestaurantDetails(processedPlaces, currentLocation, proximity, minRating, cuisines)}
 
       <TouchableOpacity
         onPress={() => navigation.navigate("ViewProfile")} // Replace 'HomeScreen' with your home screen route name
