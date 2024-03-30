@@ -248,8 +248,10 @@ const HomeScreen = ({ navigation, route }) => {
     const nearbyPlaces = processedPlaces.filter((place) => {
       // Filter the places based on the current location and radius
       const distance = calculateDistance(place, currentLocation);
-      const isWithinProximity = parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
-      const isAboveRating = parseFloat(place.rating).toFixed(2) <= parseFloat(minRating).toFixed(2);
+      const isWithinProximity =
+        parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
+      const isAboveRating =
+        parseFloat(place.rating).toFixed(2) >= parseFloat(minRating).toFixed(2);
       const hasCuisine = cuisines.includes(place.cuisine);
 
       return isWithinProximity && isAboveRating && hasCuisine;
