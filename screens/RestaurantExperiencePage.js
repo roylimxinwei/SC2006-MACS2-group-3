@@ -24,7 +24,7 @@ const RestaurantExperience = () => {
         operationStatus: isEnabled ? 'Open Now' : 'All',
       });
       Alert.alert('Preferences Saved');
-      navigation.navigate('HomeScreen');
+      navigation.push('HomeScreen');
     } catch (error) {
       console.error('Error saving preferences: ', error);
       Alert.alert('Error saving preferences. Please try again.');

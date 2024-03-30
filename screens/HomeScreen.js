@@ -4,7 +4,7 @@
 
 import * as Location from "expo-location";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Button,
   Image,
@@ -19,12 +19,13 @@ import MapView, {
   Marker,
   PROVIDER_GOOGLE,
 } from "react-native-maps";
+import { useFocusEffect } from '@react-navigation/native';
 import { Switch } from "react-native-switch";
 import GeoCoding from "../config/GeoCoding";
 import GlobalApi from "../config/GlobalApi";
 import MapViewStyle from "../config/MapViewStyle.json";
 import { haversineDistance } from "../config/distanceCalculator";
-import { cuisines } from "../config/supportedCuisine";
+import { cuisines as supportedCuisine} from "../config/supportedCuisine";
 import { styles } from "../css/HomeScreen_CSS";
 import Header from "./Header";
 import { auth, db, storage} from '../firebase';
@@ -57,10 +58,25 @@ const HomeScreen = ({ navigation, route }) => {
 		}
 	}
 
+
+	/*
+	 * for debugging
+	 */
 	useEffect(() => {
 		console.log(proximity, cuisines, minRating);
 	}, [proximity, cuisines, minRating]);
 
+
+	/***
+	 * This function is called everytime the Home Screen is navigated (eg from resturant experience page)
+	 * This ensures that user preferences are refreshed after every time user edit his preferences
+	 */
+	useFocusEffect(
+		useCallback(() => {
+			fetchData(currentUser)
+			console.log("Home Screen focused")
+		}, []) // Empty dependency array means this effect runs on focus without dependencies
+	);
 
 	useEffect(() => {
 		const auth = getAuth();
@@ -130,7 +146,8 @@ const HomeScreen = ({ navigation, route }) => {
         const radius = 1000; // hardcoded to 1km. This means that the map will display all restaurants within 1km of the user's location on the map
 							 // did not use proximity here as proximity refers to the distance for notif pop up
         const type = "restaurant";
-        const keywords = cuisines;
+        const keywords = supportedCuisine; // map should display all resturants
+										   // cuisines is used for notif pop up
 
         // Prepare all promises for the API calls
         const promises = keywords.map((keyword) =>
