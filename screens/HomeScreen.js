@@ -38,30 +38,47 @@ const HomeScreen = ({ navigation, route }) => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [nearbyRestaurants, setNearbyRestaurants] = useState([]);
   const [selectedPlaceId, setSelectedPlaceId] = useState(null);
-  const [proximity, setProximity] = useState(1);
+  const [proximity, setProximity] = useState(null);
   const [cuisines, setCuisines] = useState([]);
-  const [minRating, setMinRating] = useState(1);
+  const [minRating, setMinRating] = useState(null);
 
 
-  const fetchData = async () =>{
-    let user = auth.currentUser;
-    setCurrentUser(user);
+  const fetchData = async (user) =>{
     // User is signed in
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+			console.log("document name: " , docSnap.data());
+			setProximity(parseFloat(docSnap.data().proximity / 1000).toFixed(2));
+			setMinRating(docSnap.data().restaurantRating);
+			setCuisines(docSnap.data().cuisines);
+		} else {
+			console.log("No document exists")
+		}
+	}
 
-    if (docSnap.exists()) {
-      console.log(docSnap.data().name);
-      setCurrentUser(docSnap.data().name);
-      setProximity(parseFloat(docSnap.data().proximity/1000).toFixed(2));
-      setMinRating(docSnap.data().restaurantRating);
-      setCuisines(docSnap.data().cuisines);
-      console.log(proximity, cuisines, minRating);
-    }}
+	useEffect(() => {
+		console.log(proximity, cuisines, minRating);
+	}, [proximity, cuisines, minRating]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+
+	useEffect(() => {
+		const auth = getAuth();
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		if (user) {
+			console.log("User:" , user)
+			// User is signed in
+			setCurrentUser(user);
+			fetchData(user);
+		} else {
+			// User is signed out
+			setCurrentUser(null);
+		}
+		});
+
+		// Clean up the subscription
+		return unsubscribe;
+	}, []);
 
   const toggleSwitch = () => {
     setIsEnabled((previousState) => {
@@ -110,7 +127,8 @@ const HomeScreen = ({ navigation, route }) => {
     if (currentLocation) {
       const GetNearbyPlace = async () => {
         const location = `${currentLocation.latitude},${currentLocation.longitude}`;
-        const radius = parseFloat(proximity*1000).toFixed(2);
+        const radius = 1000; // hardcoded to 1km. This means that the map will display all restaurants within 1km of the user's location on the map
+							 // did not use proximity here as proximity refers to the distance for notif pop up
         const type = "restaurant";
         const keywords = cuisines;
 
@@ -158,7 +176,7 @@ const HomeScreen = ({ navigation, route }) => {
 
       GetNearbyPlace();
     }
-  }, [currentLocation]); // Assuming `currentLocation` is stable or properly memoized
+  }, [currentLocation, cuisines]); // Assuming `currentLocation` is stable or properly memoized
 
   useEffect(() => {
     if (rawPlacesData && rawPlacesData.results) {
