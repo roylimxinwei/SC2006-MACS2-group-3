@@ -154,7 +154,6 @@ export const styles = StyleSheet.create({
     marginBottom: 5,
   },
   calloutDescription: {
-    flex: 1,
     fontSize: 14,
     padding: 1,
     color: "#7F2B0F",
