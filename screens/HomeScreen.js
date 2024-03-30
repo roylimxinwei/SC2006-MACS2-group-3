@@ -300,7 +300,7 @@ const HomeScreen = ({ navigation, route }) => {
       const isWithinProximity =
         parseFloat(distance).toFixed(2) <= parseFloat(proximity).toFixed(2);
       const isAboveRating =
-        parseFloat(place.rating).toFixed(2) <= parseFloat(minRating).toFixed(2);
+        parseFloat(place.rating).toFixed(2) >= parseFloat(minRating).toFixed(2);
       const hasCuisine = cuisines.includes(place.cuisine);
 
       return isWithinProximity && isAboveRating && hasCuisine;
