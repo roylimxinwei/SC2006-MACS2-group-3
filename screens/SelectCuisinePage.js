@@ -30,6 +30,8 @@ const SelectCuisine = () => {
 
   const saveCuisines = async () => {
 		if (selectedInterests && selectedInterests.length >= 3) {
+      console.log(auth.currentUser.uid)
+      console.log(selectedInterests)
 		  try {
 			await setDoc(doc(db, 'users', auth.currentUser.uid), {
 			  cuisines: selectedInterests,
