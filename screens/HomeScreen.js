@@ -284,7 +284,7 @@ const HomeScreen = ({ navigation, route }) => {
 					</Text>
 					<TouchableOpacity
 						onPress={() =>
-						navigation.navigate("ReviewLandingPage", { place })
+						navigation.navigate("ReviewLandingPage",place)
 						}
 						style={styles.dismissButtonJiak}
 					>
