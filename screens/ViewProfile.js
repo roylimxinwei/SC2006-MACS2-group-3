@@ -6,9 +6,11 @@ import {
     View,
     Button,
 	ScrollView,
+	Alert
 } from "react-native";
 import { auth, db, storage} from '../firebase';
 import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
+import { signOut } from "firebase/auth";
 import { styles } from "../css/ViewProfile_CSS";  
 import { useIsFocused } from "@react-navigation/native";
 
@@ -29,6 +31,16 @@ const ViewProfile = ({ navigation }) => {
 	const [referralCodeUsed, setReferralCodeUsed] = useState("");
 
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+	const handleSignout = () =>{
+		signOut(auth).then(() => {
+			Alert.alert('You are signed out!');
+			navigation.navigate("LogInPage"); 
+
+		}).catch((error) => {
+		// An error happened.
+		});
+	}
 
 	const fetchData = async () =>{
 		let user = auth.currentUser;
@@ -141,6 +153,10 @@ const ViewProfile = ({ navigation }) => {
 				<View style={styles.detailContainer}>
 					<Text style={styles.sectionText}>Operation Status: {operationStatus}</Text>
 				</View>
+
+				<TouchableOpacity style={styles.button} onPress={handleSignout}>
+					<Text style={styles.buttonText}>Sign Out</Text>
+				</TouchableOpacity>
 
 				<View style={styles.switch}>
 					{/* <Switch

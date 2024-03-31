@@ -79,6 +79,8 @@ export const styles = StyleSheet.create({
     buttonText: {
         color: "#FFFFFF",
         fontSize: 18,
+        marginLeft: 25,
+
     },
     interestGrid: {
         display: 'flex',
