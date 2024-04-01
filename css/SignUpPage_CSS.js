@@ -51,6 +51,7 @@ export const styles = StyleSheet.create({
         shadowRadius: 4,
         top: 10,
     },
+    
     buttonText: {
         color: "#FFFFFF",
         fontSize: 18,
@@ -61,4 +62,8 @@ export const styles = StyleSheet.create({
         fontSize: 16,
         top: 20,
     },
+    pad:{
+        color:"transparent",
+        paddingBottom:200,
+    }
 });

@@ -66,13 +66,14 @@ export const styles = StyleSheet.create({
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
-    // width: 60, // match the width of the Jiak button or as needed
+    width: 160, // match the width of the Jiak button or as needed
     height: 45, // match the height of the Jiak button or as needed
-    borderRadius: 15,
+    borderRadius: 30,
     padding: 8,
     paddingRight: 15,
     paddingLeft: 15,
-    // paddingLeft:10,
+    marginLeft:116,
+    marginTop:-5,
   },
   reviewButtonImage: {
     width: 35, // Set the width of your button image
@@ -186,10 +187,10 @@ export const styles = StyleSheet.create({
     flexWrap: "wrap", // This will allow the content to wrap to the next line if needed
     paddingRight: 30, // Adjust this value so it's at least as large as the dismissButtonClose width
   },
-  padpad: {
+  pad: {
     color: "transparent",
     backgroundColor: colors.primary,
-    paddingBottom: 100,
+    paddingBottom: 200,
   },
   textContainer: {
     flex: 1, // Take up remaining space

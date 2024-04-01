@@ -185,6 +185,7 @@ const SignUpPage = ({ navigation }) => {
         <TouchableOpacity style={styles.button} onPress={handleUpdate}>
           <Text style={styles.buttonText}>Update Data</Text>
         </TouchableOpacity> */}
+        <Text style={styles.pad}>for padding</Text>
       </View>
     </ScrollView>
   );

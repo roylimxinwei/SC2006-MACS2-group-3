@@ -234,6 +234,7 @@ const HomeScreen = ({ navigation, route }) => {
         }} style={styles.UserReviewButton}>
           <Text style={styles.ReviewText}>View Google Review</Text>
         </TouchableOpacity>
+        <Text style={styles.pad}>for padding</Text>
       </ScrollView>
     );
   };
@@ -290,9 +291,11 @@ const HomeScreen = ({ navigation, route }) => {
 					>
 						<Text style={styles.JiakText}>Jiak!</Text>
 					</TouchableOpacity>
+          
 					</View>
 				</View>
 				))}
+        <Text style={styles.pad}>for padding</Text>
 			</ScrollView>
 			);
 		} else {
