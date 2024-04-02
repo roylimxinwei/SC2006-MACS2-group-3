@@ -262,7 +262,8 @@ const HomeScreen = ({ navigation, route }) => {
           <Text style={styles.CloseText}>X</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => {
+        <View style = {styles.ReviewButtonView}>
+          <TouchableOpacity onPress={() => {
           if (place) {
             console.log('Pdsd2',place.place_id );
             navigation.navigate("UserReviewScreen", { placeId: place.place_id });
@@ -273,6 +274,7 @@ const HomeScreen = ({ navigation, route }) => {
         }} style={styles.UserReviewButton}>
           <Text style={styles.ReviewText}>View Google Review</Text>
         </TouchableOpacity>
+          </View>
         <Text style={styles.pad}>for padding</Text>
       </ScrollView>
     );

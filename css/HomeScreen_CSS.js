@@ -70,11 +70,16 @@ export const styles = StyleSheet.create({
     height: 45, // match the height of the Jiak button or as needed
     borderRadius: 30,
     padding: 8,
+    textAlign:"center",
     paddingRight: 15,
     paddingLeft: 15,
-    marginLeft:116,
+    // marginLeft:116,
+
     marginTop:-5,
   },
+  ReviewButtonView:{
+    alignItems:"center",
+   },
   reviewButtonImage: {
     width: 35, // Set the width of your button image
     height: 35, // Set the height of your button image
