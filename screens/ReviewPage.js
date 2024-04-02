@@ -80,7 +80,8 @@ const ReviewPage = ({ route, navigation }) => {
         contentContainerStyle={styles.contentContainer}
       >
         <View style={styles.container} behavior="padding" enabled>
-          <Text style={styles.text}>How was...</Text>
+          <Text style={styles.text}>How was</Text>
+          <Text style={styles.smallText}>{selectedRestaurant.name}</Text>
           <Image source={selectedRestaurant.imageUrl} style={styles.ImageDesign} />
           <View style={styles.stars}>
             {Array.from({ length: 5 }, (_, i) => (

@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#FFF0D9",
+    paddingTop:50,
   },
   text: {
     fontSize: 25,
@@ -14,6 +15,14 @@ export const styles = StyleSheet.create({
     top: 40,
     left: 30,
     paddingBottom:20,
+  },
+  smallText: {
+    fontSize: 25,
+    color:"#7F2B0F",
+    position: "absolute",
+    top: 80,
+    left: 30,
+    paddingBottom:30,
   },
   input: {
     borderWidth: 1,
@@ -30,6 +39,7 @@ export const styles = StyleSheet.create({
     width: 280,
     height: 280,
     top:100,
+
   },
   button: {
     backgroundColor: "#CD5C5C",
