@@ -4,8 +4,9 @@
 
 import * as Location from "expo-location";
 import { auth, db, storage} from '../firebase';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
   Image,
@@ -14,12 +15,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 import MapView, { Callout, Circle, Marker, PROVIDER_GOOGLE}  from "react-native-maps";
 import { Switch } from "react-native-switch";
 import GeoCoding from "../config/GeoCoding";
 import GlobalApi from "../config/GlobalApi";
 import { haversineDistance } from "../config/distanceCalculator";
-import { cuisines } from "../config/supportedCuisine";
+import { cuisines as supportedCuisine } from "../config/supportedCuisine";
 import { styles } from "../css/HomeScreen_CSS";
 import Header from "./Header";
 import MapViewStyle from "../config/MapViewStyle.json";
@@ -51,10 +53,46 @@ const HomeScreen = ({ navigation, route }) => {
       setMinRating(docSnap.data().restaurantRating);
       setCuisines(docSnap.data().cuisines);
       console.log(proximity, cuisines, minRating);
-    }}
+    } else {
+      console.log("No document exists");
+    }
+  }
+
+    /***
+   * This function is called everytime the Home Screen is navigated (eg from resturant experience page)
+   * This ensures that user preferences are refreshed after every time user edit his preferences
+   */
+  useFocusEffect(
+    useCallback(() => {
+      fetchData(currentUser);
+      console.log("Home Screen focused");
+    }, []) // Empty dependency array means this effect runs on focus without dependencies
+  );
+
+    /*
+   * for debugging
+   */
+  useEffect(() => {
+    console.log(proximity, cuisines, minRating);
+  }, [proximity, cuisines, minRating]);
 
   useEffect(() => {
-    fetchData();
+    // const auth = getAuth();
+    // const unsubscribe = onAuthStateChanged(auth, (user) => {
+    //   if (user) {
+    //     console.log("User:", user);
+    //     // User is signed in
+    //     setCurrentUser(user);
+    //     fetchData(user);
+    //   } else {
+    //     // User is signed out
+    //     setCurrentUser(null);
+    //   }
+    // });
+
+    // // Clean up the subscription
+    // return unsubscribe;
+    fetchData() ;
   }, []);
 
   const toggleSwitch = () => {
@@ -105,9 +143,10 @@ const HomeScreen = ({ navigation, route }) => {
     if (currentLocation) {
       const GetNearbyPlace = async () => {
         const location = `${currentLocation.latitude},${currentLocation.longitude}`;
-        const radius = proximity * 1000; // 1000 meters (1 km)
+        const radius = 1000; // hardcoded to 1km. This means that the map will display all restaurants within 1km of the user's location on the map
+        // did not use proximity here as proximity refers to the distance for notif pop up
         const type = "restaurant";
-        const keywords = cuisines;
+        const keywords = supportedCuisine;
 
         // Prepare all promises for the API calls
         const promises = keywords.map((keyword) =>
@@ -226,7 +265,7 @@ const HomeScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => {
           if (place) {
             console.log('Pdsd2',place.place_id );
-            navigation.navigate('UserReviewScreen', { placeId: place.place_id });
+            navigation.navigate("UserReviewScreen", { placeId: place.place_id });
             console.log('Pdsd6',place.place_id );
           } else {
             console.log('Error',place.id );
