@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const BASE_URL="https://maps.googleapis.com/maps/api/place/nearbysearch/json";
-const API_KEY="AIzaSyAOuEs_zxFDQXynk8YZx35_nNWwzpsQy78";
+const BASE_URL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json";
+const API_KEY = "AIzaSyAjbOeXgrY01MK0CSkd-M4IKI_kxvCqzac";
 
 // const config = {
 //     headers:{
@@ -24,20 +24,22 @@ const NewNearByPlace = (location, radius, type, keyword) => {
     key: API_KEY, // Your API key
   };
 
-  return axios.get(BASE_URL, { params })
-    .then(response => response.data)
-    .catch(error => {
+  return axios
+    .get(BASE_URL, { params })
+    .then((response) => response.data)
+    .catch((error) => {
       // Handle errors more robustly here
-      console.error('Error fetching nearby places:', error);
-    //   throw error; // Re-throw the error so it can be handled by the caller
+      console.error("Error fetching nearby places:", error);
+      //   throw error; // Re-throw the error so it can be handled by the caller
     });
 };
 
 const GetReviews = (params) => {
-  return axios.get("https://maps.googleapis.com/maps/api/place/details/json", { params })
-    .then(response => response.data)
-    .catch(error => {
-      console.error('Error fetching reviews:', error);
+  return axios
+    .get("https://maps.googleapis.com/maps/api/place/details/json", { params })
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Error fetching reviews:", error);
     });
 };
 
@@ -54,8 +56,7 @@ const GetReviews = (params) => {
 //     });
 // };
 
-
-export default{
-    NewNearByPlace,
-    GetReviews
-}
+export default {
+  NewNearByPlace,
+  GetReviews,
+};
