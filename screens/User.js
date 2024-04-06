@@ -12,19 +12,20 @@ import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "f
 import { useIsFocused } from "@react-navigation/native";
 
 const UserScreen = ({ navigation, route }) => {
+  const [currentPoints, setCurrentPoints] = useState(0);
   const [points, setPoints] = useState(0);
 
   const isFocused = useIsFocused();
+  let user = auth.currentUser;
 
   const fetchData = async () =>{
-		let user = auth.currentUser;
 		// setCurrentUser(user)
 		// User is signed in
 		const docRef = doc(db, "users", user.uid);
 		const docSnap = await getDoc(docRef);
 		console.log(docSnap.data())
 		if (docSnap.exists()) {
-      setPoints(docSnap.data().points)
+      setCurrentPoints(docSnap.data().points)
 
 		}}
 
@@ -37,10 +38,25 @@ const UserScreen = ({ navigation, route }) => {
 
   
 
-  const redeemPoints = () => {
+  const redeemPoints = async () => {
     // Handle redeeming points here
     console.log("Redeeming points:", points);
+
+    let currentPoints = 0
+    const docRef = doc(db, "users", user.uid);
+		const docSnap = await getDoc(docRef);
+		if (docSnap.exists()) {
+      currentPoints = docSnap.data().points - points;
+
+		}
+      const updateDocRef = doc(db, "users", user.uid);
+      await updateDoc(updateDocRef, {
+        points: currentPoints
+      }).then(
+        console.log("success")
+      );
   };
+
 
   return (
     <View style={styles.container}>
@@ -59,12 +75,12 @@ const UserScreen = ({ navigation, route }) => {
       </Pressable>
 
       <Text style={styles.title}>Redeem Points</Text>
-      <Text style={styles.pointsText}>Points: {points}</Text>
+      <Text style={styles.pointsText}>Current Points: {currentPoints}</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter points to redeem"
         value={points}
-        onChangeText={(text) => setPoints(parseInt(text))}
+        onChangeText={(text) => setPoints(text)}
         keyboardType="numeric"
       />
       <Button title="Redeem" onPress={redeemPoints} />
