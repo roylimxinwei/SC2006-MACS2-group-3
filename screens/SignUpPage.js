@@ -1,21 +1,21 @@
 // SignUpPage.js
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
+  Alert,
   Image,
+  ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  ScrollView,
-  Alert,
 } from "react-native";
-import { styles } from "../css/SignUpPage_CSS"; 
+import { styles } from "../css/SignUpPage_CSS";
 
 // import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
-import {createUserWithEmailAndPassword } from '@firebase/auth';
-import { auth, db } from '../firebase';
-import { doc, setDoc, getDoc, updateDoc} from "firebase/firestore"; 
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase";
 
 const SignUpPage = ({ navigation }) => {
   const [username, setUsername] = useState("");
@@ -24,7 +24,12 @@ const SignUpPage = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSignUp = () => {
-    if(username == "" || email == "" || password == "" || confirmPassword == ""){
+    if (
+      username == "" ||
+      email == "" ||
+      password == "" ||
+      confirmPassword == ""
+    ) {
       alert("Please fill in all fields.");
       return;
     }
@@ -32,105 +37,103 @@ const SignUpPage = ({ navigation }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      Alert.alert(
-        "Invalid Email",
-        "Please enter a valid email address."
-      );
-      setPassword(""); 
+      Alert.alert("Invalid Email", "Please enter a valid email address.");
+      setPassword("");
       setConfirmPassword("");
       return;
     }
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     if (!passwordRegex.test(password)) {
       Alert.alert(
         "Invalid Password",
         "Password must be at least 8 characters long and include at least one uppercase character, one lowercase character, one number, and one special character."
-        );
+      );
       setPassword("");
-      setConfirmPassword(""); 
+      setConfirmPassword("");
       return;
     }
 
     if (password !== confirmPassword) {
       Alert.alert(
         "Passwords do not match.",
-        "Re-enter your password to confirm.");
+        "Re-enter your password to confirm."
+      );
       setPassword("");
-      setConfirmPassword(""); 
+      setConfirmPassword("");
       return;
     }
 
- // Add your sign up logic here
+    // Add your sign up logic here
     // For example, you can send the data to your server
-    createUserWithEmailAndPassword(auth,email,password)
-    .then(async userCredentials =>{
-      const user = userCredentials.user;
-      // alert("Account Created Successfully.")
+    createUserWithEmailAndPassword(auth, email, password)
+      .then(async (userCredentials) => {
+        const user = userCredentials.user;
+        // alert("Account Created Successfully.")
 
-      let result = '';
-      const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      const charactersLength = characters.length;
-      let counter = 0;
-      while (counter < 6) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        counter += 1;
-      }
-      
-      await setDoc(doc(db, "users", user.uid), {
-        name: username,
-        referralCode: result,
-        referralCodeUsed: false
+        let result = "";
+        const characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        const charactersLength = characters.length;
+        let counter = 0;
+        while (counter < 6) {
+          result += characters.charAt(
+            Math.floor(Math.random() * charactersLength)
+          );
+          counter += 1;
+        }
+
+        await setDoc(doc(db, "users", user.uid), {
+          name: username,
+          referralCode: result,
+          referralCodeUsed: false,
+          points: 0,
+        });
+
+        navigation.navigate("SelectCuisine");
+      })
+      .catch((error) => {
+        Alert.alert("Sign Up Failed", error.message);
+        setPassword("");
+        setConfirmPassword("");
       });
-
-      navigation.navigate("SelectCuisine"); 
-    })
-    .catch(error => {
-      Alert.alert( 
-        "Sign Up Failed",
-        error.message
-      )
-      setPassword("");
-      setConfirmPassword ("") ;
-    })
   };
 
-  const handleInsert = async () =>{
+  const handleInsert = async () => {
     await setDoc(doc(db, "cities", "ayy"), {
       name: "Los Angeles",
       state: "CA",
-      country: "USA"
-    }).catch(error => console.log(error.message))
-    ;
-  }
+      country: "USA",
+    }).catch((error) => console.log(error.message));
+  };
 
-  const handleGet = async () =>{
-
+  const handleGet = async () => {
     const docRef = doc(db, "cities", "ayy");
     const docSnap = await getDoc(docRef);
-  
+
     if (docSnap.exists()) {
       console.log("Document data:", docSnap.data());
     } else {
       // docSnap.data() will be undefined in this case
       console.log("No such document!");
     }
-  }
+  };
 
-  const handleUpdate = async () =>{
-  
-  const ref = doc(db, "cities", "ayy");
+  const handleUpdate = async () => {
+    const ref = doc(db, "cities", "ayy");
 
     await updateDoc(ref, {
-      state: "singapore"
-    }).then(message =>{
-      alert("Success")
-
-    }).catch(message =>{
-      console.log(message)
-    });
-  }
+      state: "singapore",
+    })
+      .then((message) => {
+        alert("Success");
+      })
+      .catch((message) => {
+        console.log(message);
+      });
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>

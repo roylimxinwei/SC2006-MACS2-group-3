@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Pressable,
@@ -7,9 +7,24 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { auth, db } from "../firebase";
 
 const UserScreen = ({ navigation, route }) => {
-  const [points, setPoints] = useState("");
+  const [points, setPoints] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("users")
+      .doc(auth.currentUser.uid)
+      .onSnapshot((snapshot) => {
+        const data = snapshot.data();
+        setPoints(data.points);
+      });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const redeemPoints = () => {
     // Handle redeeming points here
@@ -33,11 +48,12 @@ const UserScreen = ({ navigation, route }) => {
       </Pressable>
 
       <Text style={styles.title}>Redeem Points</Text>
+      <Text style={styles.pointsText}>Points: {points}</Text>
       <TextInput
         style={styles.input}
         placeholder="Enter points to redeem"
         value={points}
-        onChangeText={(text) => setPoints(text)}
+        onChangeText={(text) => setPoints(parseInt(text))}
         keyboardType="numeric"
       />
       <Button title="Redeem" onPress={redeemPoints} />
