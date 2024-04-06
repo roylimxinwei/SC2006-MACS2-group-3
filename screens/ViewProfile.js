@@ -83,12 +83,11 @@ const ViewProfile = ({ navigation }) => {
 							<Text style={styles.editProfile}>Edit Profile</Text>
 						</TouchableOpacity>
 						
-						{!referralCodeUsed &&
 						<View>
 							<Text style={styles.referralCode}>Referral Code:</Text>
 							<Text style={styles.referralCodeText}>{referralCode}</Text>
 						</View>
-						}	
+							
 					</View>
 				</View>
 
