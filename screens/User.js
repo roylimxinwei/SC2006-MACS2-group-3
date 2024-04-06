@@ -79,7 +79,7 @@ const UserScreen = ({ navigation, route }) => {
         </Pressable>
 
         <Text style={styles.title}>Redeem Points</Text>
-        <Text style={styles.pointsText}>Points: {points}</Text>
+        <Text style={styles.pointsText}>Points: {currentPoints}</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter points to redeem"
