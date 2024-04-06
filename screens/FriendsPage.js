@@ -1,5 +1,4 @@
-import { Timestamp, doc, getDoc, setDoc } from "firebase/firestore";
-import React, { useState } from "react";
+import React, {useState, useEffect} from "react";
 import {
   Button,
   Keyboard,
@@ -8,31 +7,87 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  ScrollView
 } from "react-native";
-import { db } from "../firebase";
+import { auth, db, storage} from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp, deleteDoc, addDoc} from "firebase/firestore"; 
+import { useIsFocused } from "@react-navigation/native";
 
-const FriendsPage = () => {
+
+const FriendsPage = (navigation) => {
   const [friendCode, setFriendCode] = useState("");
   const [friendName, setFriendName] = useState("");
+  let [currentUsers, setCurrentUsers] = useState([]);
+  let [friends, setFriends] = useState([]);
+
+  let user = auth.currentUser;
+  const isFocused = useIsFocused();
+
+  const fetchData = async () =>{
+
+		let user = auth.currentUser;
+    let tempCurrentUser = [];
+		const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+		console.log(doc.data())
+		console.log(doc.id)
+			tempCurrentUser.push({
+			referralCode: doc.data().referralCode,
+			userId: doc.id
+		})
+		
+	  })
+
+	  setCurrentUsers(tempCurrentUser)
+
+    let tempFriends = [];
+		const querySnapshot2 = await getDocs(collection(db, "users",user.uid,"friends"));
+      querySnapshot2.forEach((doc) => {
+		console.log(doc.data())
+		console.log(doc.id)
+    tempFriends.push({
+			amountOwed: doc.data().amountOwed,
+			name: doc.data().name
+		})
+		
+	  })
+
+    setFriends(tempFriends)
+
+	}
 
   const addFriend = async () => {
-    const friendRef = doc(db, "users", friendCode);
-    const friendSnap = await getDoc(friendRef);
-    if (friendSnap.exists()) {
-      const friendData = friendSnap.data();
-      const newFriend = {
-        name: friendData.name,
-        friendCode: friendCode,
-        timestamp: Timestamp.now(),
-      };
-      await setDoc(doc(db, "friends", friendCode), newFriend);
-      setFriendCode("");
-      setFriendName("");
-      alert("Friend added successfully!");
-    } else {
-      alert("Friend not found.");
+    let codeDoesNotExist = true;
+    let friendId = "";
+    for(let i=0; i<currentUsers.length; i++){
+
+      if(friendCode == currentUsers[i].referralCode){
+        codeDoesNotExist = false;
+        friendId = currentUsers[i].userId;
     }
-  };
+
+  }
+    if(!codeDoesNotExist){
+    await setDoc(doc(db, "users", user.uid, "friends", friendId), {
+      name: friendName,
+      amountOwed: 0,
+    }).then(()=>{
+      alert("Friend added")
+    }); 
+  }
+  else{
+    alert("Please enter a valid Eater's Code")
+  }
+    
+
+
+}
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchData();
+    }
+  }, [navigation, isFocused]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -51,6 +106,17 @@ const FriendsPage = () => {
           onChangeText={(text) => setFriendName(text)}
         />
         <Button title="Add Friend" onPress={addFriend} />
+         {/* ScrollView for friends list */}
+        { <ScrollView style={styles.friendsList}>
+          {friends.map((friend, index) => (
+            <View key={index} style={styles.friendItem}>
+               {/* <Image source={place.imageUrl} style={styles.ImageDesign} /> */}
+              <Text style={styles.friendUsername}>{friend.name}</Text>
+              <Text style={styles.friendUsername}>{friend.amountOwed}</Text>
+            </View>
+          ))}
+        </ScrollView>
+         }
       </View>
     </TouchableWithoutFeedback>
   );
