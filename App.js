@@ -15,6 +15,7 @@ import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
 import SelectCuisine from "./screens/SelectCuisinePage.js";
 import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
+import UserScreen from "./screens/User"; // Import your user screen
 import UserReviewScreen from "./screens/UserReviewScreen";
 import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
@@ -45,6 +46,7 @@ export default function App() {
         <Stack.Screen name="ViewProfile" component={ViewProfile} />
 
         <Stack.Screen name="DiningHistoryPage" component={DiningHistoryPage} />
+        <Stack.Screen name="User" component={UserScreen} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>

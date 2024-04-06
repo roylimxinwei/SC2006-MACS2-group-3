@@ -454,6 +454,16 @@ const HomeScreen = ({ navigation, route }) => {
         />
       </TouchableOpacity>
 
+      <TouchableOpacity
+        style={styles.userButton}
+        onPress={() => navigation.navigate("User")}
+      >
+        <Image
+          style={styles.buttonImage}
+          source={require("../assets/userIcon.png")} // replace with your button image path
+        />
+      </TouchableOpacity>
+
       <View style={styles.switch}>
         <Switch
           value={isEnabled}
