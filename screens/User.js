@@ -1,15 +1,17 @@
+import { useIsFocused } from "@react-navigation/native";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
   Button,
+  Keyboard,
   Pressable,
   StyleSheet,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { auth, db } from "../firebase";
-import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
-import { useIsFocused } from "@react-navigation/native";
 
 const UserScreen = ({ navigation, route }) => {
   const [currentPoints, setCurrentPoints] = useState(0);
@@ -18,31 +20,28 @@ const UserScreen = ({ navigation, route }) => {
   const isFocused = useIsFocused();
   let user = auth.currentUser;
 
-  const fetchData = async () =>{
-		// setCurrentUser(user)
-		// User is signed in
-		const docRef = doc(db, "users", user.uid);
-		const docSnap = await getDoc(docRef);
-		console.log(docSnap.data())
-		if (docSnap.exists()) {
-      setCurrentPoints(docSnap.data().points)
-
-		}}
+  const fetchData = async () => {
+    // setCurrentUser(user)
+    // User is signed in
+    const docRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(docRef);
+    console.log(docSnap.data());
+    if (docSnap.exists()) {
+      setCurrentPoints(docSnap.data().points);
+    }
+  };
 
   useEffect(() => {
-    if(isFocused){ 
-    fetchData();
+    if (isFocused) {
+      fetchData();
     }
-    }, [navigation, isFocused]);
-
-
-  
+  }, [navigation, isFocused]);
 
   const redeemPoints = async () => {
     // Handle redeeming points here
     console.log("Redeeming points:", points);
 
-    let currentPoints = 0
+    let currentPoints = 0;
     const docRef = doc(db, "users", user.uid);
 		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
@@ -62,34 +61,35 @@ const UserScreen = ({ navigation, route }) => {
       );
   };
 
-
   return (
-    <View style={styles.container}>
-      <Pressable
-        style={styles.friendButton}
-        onPress={() => navigation.navigate("FriendsPage")}
-      >
-        <Text style={styles.friendText}>Friends</Text>
-      </Pressable>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Pressable
+          style={styles.friendButton}
+          onPress={() => navigation.navigate("FriendsPage")}
+        >
+          <Text style={styles.friendText}>Friends</Text>
+        </Pressable>
 
-      <Pressable
-        style={styles.partyButton}
-        onPress={() => navigation.navigate("PartyPage")}
-      >
-        <Text style={styles.partyText}>Party</Text>
-      </Pressable>
+        <Pressable
+          style={styles.partyButton}
+          onPress={() => navigation.navigate("PartyPage")}
+        >
+          <Text style={styles.partyText}>Party</Text>
+        </Pressable>
 
-      <Text style={styles.title}>Redeem Points</Text>
-      <Text style={styles.pointsText}>Current Points: {currentPoints}</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter points to redeem"
-        value={points}
-        onChangeText={(text) => setPoints(text)}
-        keyboardType="numeric"
-      />
-      <Button title="Redeem" onPress={redeemPoints} />
-    </View>
+        <Text style={styles.title}>Redeem Points</Text>
+        <Text style={styles.pointsText}>Points: {points}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter points to redeem"
+          value={points}
+          onChangeText={(text) => setPoints(parseInt(text))}
+          keyboardType="numeric"
+        />
+        <Button title="Redeem" onPress={redeemPoints} />
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 
