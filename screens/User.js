@@ -46,7 +46,12 @@ const UserScreen = ({ navigation, route }) => {
     const docRef = doc(db, "users", user.uid);
 		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
+      if(docSnap.data().points < points){
+      alert("You do not have enough points.")
+      }
+      else{
       currentPoints = docSnap.data().points - points;
+      }
 
 		}
       const updateDocRef = doc(db, "users", user.uid);
