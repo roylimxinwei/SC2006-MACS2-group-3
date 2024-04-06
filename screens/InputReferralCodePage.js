@@ -77,10 +77,10 @@ const InputReferralCodePage = (navigation) => {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.welcomeText}>Enter Referral Code</Text>
+			<Text style={styles.welcomeText}>Enter Your Friend's Eater Code</Text>
 			<TextInput
 				style={styles.input}
-				placeholder="Enter referral code here"
+				placeholder="Enter eater code here"
 				value={referralCode}
 				onChangeText={setReferralCode}
 			/>

@@ -84,7 +84,7 @@ const ViewProfile = ({ navigation }) => {
 						</TouchableOpacity>
 						
 						<View>
-							<Text style={styles.referralCode}>Referral Code:</Text>
+							<Text style={styles.referralCode}>Eater's Code:</Text>
 							<Text style={styles.referralCodeText}>{referralCode}</Text>
 						</View>
 							
