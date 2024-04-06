@@ -33,6 +33,7 @@ const ReviewPage = ({ route, navigation }) => {
 
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
+  // const [currentPoints, setCurrentPoints] = useState();
 
   const handleReviewChange = (text) => {
     setReview(text);
@@ -53,6 +54,18 @@ const ReviewPage = ({ route, navigation }) => {
         name: selectedRestaurant.name,
         rating: rating,
         review: review
+      });
+
+    let currentPoints = 0
+    const docRef2 = doc(db, "users", user.uid);
+		const docSnap = await getDoc(docRef2);
+		if (docSnap.exists()) {
+      currentPoints = docSnap.data().points + 5;
+
+		}
+      const updateDocRef = doc(db, "users", user.uid);
+      await updateDoc(updateDocRef, {
+        points: currentPoints
       });
 
     }

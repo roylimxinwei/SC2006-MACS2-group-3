@@ -8,23 +8,34 @@ import {
   View,
 } from "react-native";
 import { auth, db } from "../firebase";
+import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
+import { useIsFocused } from "@react-navigation/native";
 
 const UserScreen = ({ navigation, route }) => {
   const [points, setPoints] = useState(0);
 
-  useEffect(() => {
-    const unsubscribe = db
-      .collection("users")
-      .doc(auth.currentUser.uid)
-      .onSnapshot((snapshot) => {
-        const data = snapshot.data();
-        setPoints(data.points);
-      });
+  const isFocused = useIsFocused();
 
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const fetchData = async () =>{
+		let user = auth.currentUser;
+		// setCurrentUser(user)
+		// User is signed in
+		const docRef = doc(db, "users", user.uid);
+		const docSnap = await getDoc(docRef);
+		console.log(docSnap.data())
+		if (docSnap.exists()) {
+      setPoints(docSnap.data().points)
+
+		}}
+
+  useEffect(() => {
+    if(isFocused){ 
+    fetchData();
+    }
+    }, [navigation, isFocused]);
+
+
+  
 
   const redeemPoints = () => {
     // Handle redeeming points here
