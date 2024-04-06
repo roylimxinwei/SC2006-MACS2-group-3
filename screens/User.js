@@ -15,7 +15,7 @@ import { auth, db } from "../firebase";
 
 const UserScreen = ({ navigation, route }) => {
   const [currentPoints, setCurrentPoints] = useState(0);
-  const [points, setPoints] = useState(0);
+  const [redeemPoints, setRedeemPoints] = useState(0);
 
   const isFocused = useIsFocused();
   let user = auth.currentUser;
@@ -37,28 +37,33 @@ const UserScreen = ({ navigation, route }) => {
     }
   }, [navigation, isFocused]);
 
-  const redeemPoints = async () => {
+  const redeem = async () => {
     // Handle redeeming points here
-    console.log("Redeeming points:", points);
+    console.log("Redeeming points:", redeemPoints);
 
     let currentPoints = 0;
     const docRef = doc(db, "users", user.uid);
 		const docSnap = await getDoc(docRef);
 		if (docSnap.exists()) {
-      if(docSnap.data().points < points){
+      currentPoints = docSnap.data().points
+      console.log("current points: "+docSnap.data().points)
+      console.log("redeem points: "+redeemPoints)
+      if(docSnap.data().points < redeemPoints){
       alert("You do not have enough points.")
       }
       else{
-      currentPoints = docSnap.data().points - points;
+      currentPoints = currentPoints - redeemPoints;
       }
 
 		}
       const updateDocRef = doc(db, "users", user.uid);
       await updateDoc(updateDocRef, {
         points: currentPoints
-      }).then(
-        console.log("success")
-      );
+      }).then((data)=>{
+        let dollars = redeemPoints * 0.1
+        setCurrentPoints(currentPoints)
+        alert("Succesfully redeemed $"+dollars.toFixed(2))
+   });
   };
 
   return (
@@ -83,11 +88,11 @@ const UserScreen = ({ navigation, route }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter points to redeem"
-          value={points}
-          onChangeText={(text) => setPoints(parseInt(text))}
+          value={redeemPoints}
+          onChangeText={(text) => setRedeemPoints(parseInt(text))}
           keyboardType="numeric"
         />
-        <Button title="Redeem" onPress={redeemPoints} />
+        <Button title="Redeem" onPress={redeem} />
       </View>
     </TouchableWithoutFeedback>
   );
