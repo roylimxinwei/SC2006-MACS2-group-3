@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import {
+  Button,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
-const UserScreen = () => {
+const UserScreen = ({ navigation, route }) => {
   const [points, setPoints] = useState("");
 
   const redeemPoints = () => {
@@ -11,6 +18,20 @@ const UserScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Pressable
+        style={styles.friendButton}
+        onPress={() => navigation.navigate("FriendsPage")}
+      >
+        <Text style={styles.friendText}>Friends</Text>
+      </Pressable>
+
+      <Pressable
+        style={styles.partyButton}
+        onPress={() => navigation.navigate("PartyPage")}
+      >
+        <Text style={styles.partyText}>Party</Text>
+      </Pressable>
+
       <Text style={styles.title}>Redeem Points</Text>
       <TextInput
         style={styles.input}
@@ -43,6 +64,20 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 10,
     paddingHorizontal: 10,
+  },
+  friendText: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
+  friendButton: {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    borderRadius: 5,
+    bottom: 20,
+  },
+  partyText: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
+  partyButton: {
+    backgroundColor: "#007AFF",
+    padding: 10,
+    borderRadius: 5,
+    bottom: 10,
   },
 });
 

@@ -6,10 +6,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import "react-native-gesture-handler";
 
 import DiningHistoryPage from "./screens/DiningHistoryPage";
+import FriendsPage from "./screens/FriendsPage";
 import HomeScreen from "./screens/HomeScreen";
 import InputReferralCodePage from "./screens/InputReferralCodePage";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
+import PartyPage from "./screens/PartyPage";
 import RestaurantExperience from "./screens/RestaurantExperiencePage.js";
 import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
@@ -47,6 +49,8 @@ export default function App() {
 
         <Stack.Screen name="DiningHistoryPage" component={DiningHistoryPage} />
         <Stack.Screen name="User" component={UserScreen} />
+        <Stack.Screen name="FriendsPage" component={FriendsPage} />
+        <Stack.Screen name="PartyPage" component={PartyPage} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>
