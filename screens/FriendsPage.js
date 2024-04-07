@@ -25,7 +25,7 @@ import {
 import { auth, db } from "../firebase";
 // import { styles } from "../css/FriendsPage_CSS.js";
 
-const FriendsPage = (navigation) => {
+const FriendsPage = ({navigation}) => {
   const [friendCode, setFriendCode] = useState("");
   const [friendName, setFriendName] = useState("");
   let [currentUsers, setCurrentUsers] = useState([]);
@@ -79,7 +79,6 @@ const FriendsPage = (navigation) => {
         partyMembers: doc.data().groupMembers
       }
       tempParty = partyDetails
-      setParty(tempParty);
     });
       setParty(tempParty);
     console.log("party details: "+party);
@@ -95,7 +94,6 @@ const FriendsPage = (navigation) => {
       for (let x = 0; x < tempParty.length; x++) {
         if (doc.id == tempParty[x]) {
           isInParty = true;
-          break;
         }
       }
 
@@ -107,7 +105,7 @@ const FriendsPage = (navigation) => {
         isInParty: isInParty,
       });
     });
-
+    console.log("tempfrieds"+ tempFriends[0].isInParty)
     setFriends(tempFriends);
   };
 
@@ -150,25 +148,30 @@ const FriendsPage = (navigation) => {
   //add someone to your party.
   const handleAddToParty = async (friend) => {
 
-    tempParty.push(friend.userId);
+    friend.isInParty = true;
+    tempParty.push(friend);
+   
+    // console.log(friends)
+    setParty(tempParty); 
+    console.log(friends)
 
   };
 
   const confirmParty = async () => {
-    
+        
     if(party.length > 0 ){  
 
-      party.push(user.uid)
       const updateDocRef = doc(db, "party", party.partyId);
       await updateDoc(updateDocRef, {
-        points: currentPoints
+        groupMembers: party
       });
 
     }
     else{
 
+    party.push(user.uid)
     await addDoc(collection(db, "party"), {
-      groupMembers: groupMembers,
+      groupMembers: party,
     }).then(() => {
       fetchData();
     });
@@ -226,6 +229,7 @@ const FriendsPage = (navigation) => {
                     </Text>
                     <Text style={styles.friendUsername}>
                       Amount Owed: ${friend.amountOwed}
+                     party: {friend.isInParty}
                     </Text>
                   </View>
                 </View>
@@ -236,7 +240,7 @@ const FriendsPage = (navigation) => {
                     style={styles.button}
                     onPress={() => handleAddToParty(friend)}
                   >
-                    <Text style={styles.buttonText}>Add to Party</Text>
+                    <Text style={styles.buttonText}>Add to Party {friend.isInParty}</Text>
                   </TouchableOpacity>
                 )}
 
@@ -246,7 +250,7 @@ const FriendsPage = (navigation) => {
                     style={styles.button}
                     onPress={() => handleRemoveFromParty(friend)}
                   >
-                    <Text style={styles.buttonText}>Remove from Party</Text>
+                    <Text style={styles.buttonText}>Remove from Party {friend.isInParty}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -257,7 +261,7 @@ const FriendsPage = (navigation) => {
                     style={styles.button}
                     onPress={() => confirmParty()}
                   >
-                    <Text style={styles.buttonText}>"Confirm Party</Text>
+                    <Text style={styles.buttonText}>Confirm Party</Text>
                   </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
