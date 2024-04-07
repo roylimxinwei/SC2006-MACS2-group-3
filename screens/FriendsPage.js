@@ -156,7 +156,16 @@ const FriendsPage = (navigation) => {
     });
   };
 
-  const handleRemoveFromParty = async (friend) => {};
+  const handleRemoveFromParty = async (friend) => {
+    let groupMembers = [];
+    // Get the current group members from the document in the party collection
+    const partyDoc = await getDoc(doc(db, "party", user.uid, "groupMembers"));
+    if (partyDoc.exists()) {
+      console.log("member removed");
+    } else {
+      console.log("partyDoc does not exist");
+    }
+  };
 
   useEffect(() => {
     if (isFocused) {
