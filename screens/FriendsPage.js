@@ -8,6 +8,7 @@ import {
   query,
   setDoc,
   where,
+  updateDoc
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import {
@@ -31,7 +32,6 @@ const FriendsPage = ({navigation}) => {
   let [currentUsers, setCurrentUsers] = useState([]);
   let [friends, setFriends] = useState([]);
   let [party, setParty] = useState([]);
-  let [tempParty, setTempParty] = useState([]);
   
 
   let user = auth.currentUser;
@@ -50,53 +50,30 @@ const FriendsPage = ({navigation}) => {
 
     setCurrentUsers(tempCurrentUsers);
 
-    //check whether user is in a party. If so, get those that are in the party.
-    //the information will be useful when we display the friend scrollview.
-    // let tempParty = [];
-    // const querySnapshot3 = await getDocs(collection(db, "party"));
-    // querySnapshot3.forEach((doc) => {
-    //   tempParty = doc.data().groupMembers
-    //   console.log(tempParty)
-    // for(let i = 0; i < tempParty.length; i++){
-    //   if(tempParty[i] == user.uid){
-    //     //we break because we found the party that we want.
-    //     setParty(tempParty);
-    //       break;
-    //   }
-    // }
-
-    // })
-
     //https://firebase.google.com/docs/firestore/query-data/queries
-    let tempParty = [];
-    const ref = collection(db, "party");
-    const q = query(ref, where("groupMembers", "array-contains", user.uid));
-    const querySnapshot2 = await getDocs(q);
-    querySnapshot2.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      partyDetails = {
-        partyId: doc.id,
-        partyMembers: doc.data().groupMembers
-      }
-      tempParty = partyDetails
-    });
-      setParty(tempParty);
-    console.log("party details: "+party);
+   const tempParty = await getParty();
 
-    //get all your current friends and put them in the scrollview.
+    //get all your current friends(and check whether they are in a party) and put them in the scrollview.
     let tempFriends = [];
+    let isInParty = false;
     const querySnapshot3 = await getDocs(
       collection(db, "users", user.uid, "friends")
     );
+
     querySnapshot3.forEach((doc) => {
-      let isInParty = false;
+       isInParty = false;
       //check if the friend is also in the party:
-      for (let x = 0; x < tempParty.length; x++) {
-        if (doc.id == tempParty[x]) {
+      console.log("length"+tempFriends)
+      if(tempParty.length > 0){
+      for (let x = 0; x < tempParty.partyMembers.length; x++) {
+        console.log("member: "+tempParty.partyMembers[x])
+          console.log("doc id: "+doc.id)
+        if (doc.id == tempParty.partyMembers[x]) {
+
           isInParty = true;
         }
-      }
-
+      } 
+    }
       tempFriends.push({
         amountOwed: doc.data().amountOwed,
         name: doc.data().name,
@@ -104,10 +81,32 @@ const FriendsPage = ({navigation}) => {
         userId: doc.id,
         isInParty: isInParty,
       });
+      
     });
-    console.log("tempfrieds"+ tempFriends[0].isInParty)
     setFriends(tempFriends);
+    console.log(tempFriends)
   };
+
+  const getParty = async () =>{
+     //https://firebase.google.com/docs/firestore/query-data/queries
+     let tempParty = [];
+     const ref = collection(db, "party");
+     const q = query(ref, where("groupMembers", "array-contains", user.uid));
+     const querySnapshot2 = await getDocs(q);
+     querySnapshot2.forEach((doc) => {
+      console.log("foreach")
+       // doc.data() is never undefined for query doc snapshots
+       partyDetails = {
+         partyId: doc.id,
+         partyMembers: doc.data().groupMembers
+       }
+       tempParty = partyDetails
+       tempParty.length = 1
+     });
+       setParty(tempParty);
+     console.log("party details: "+tempParty.partyMembers);
+     return tempParty;
+  }
 
   const addFriend = async () => {
     let codeDoesNotExist = true;
@@ -146,48 +145,59 @@ const FriendsPage = ({navigation}) => {
     }
   };
   //add someone to your party.
-  const handleAddToParty = async (friend) => {
+  const handleAddToParty = async (friend,index) => {
 
-    friend.isInParty = true;
-    tempParty.push(friend);
-   
-    // console.log(friends)
-    setParty(tempParty); 
-    console.log(friends)
+    setFriends((prevFriends) => {
+      const newFriends = [...prevFriends];  
+      newFriends[index].isInParty = true;
+      return newFriends;
+  
+    });    
 
   };
 
-  const confirmParty = async () => {
-        
-    if(party.length > 0 ){  
+  const handleRemoveFromParty = (friend,index) => {
 
+    setFriends((prevFriends) => {
+      const newFriends = [...prevFriends];  
+      newFriends[index].isInParty = false;
+      return newFriends;
+  
+    });
+  
+  };
+
+  const confirmParty = async () => {
+
+    const tempParty = []
+
+    for(let i = 0;i<friends.length; i++)
+    {
+        if(friends[i].isInParty == true){
+          tempParty.push(friends[i].userId)
+        }
+  
+    }
+
+    if(party.length > 0 && party.partyMembers.length > 0 ){  
+      tempParty.push(user.uid)
       const updateDocRef = doc(db, "party", party.partyId);
       await updateDoc(updateDocRef, {
-        groupMembers: party
+        groupMembers: tempParty
+      }).then(()=>{
+        alert("Party Setting Saved!")
       });
 
     }
     else{
-
-    party.push(user.uid)
+      tempParty.push(user.uid)
     await addDoc(collection(db, "party"), {
-      groupMembers: party,
+      groupMembers: tempParty,
     }).then(() => {
-      fetchData();
+      alert("Party Setting Saved!")
     });
   }
   }
-
-  const handleRemoveFromParty = async (friend) => {
-    let groupMembers = [];
-    // Get the current group members from the document in the party collection
-    const partyDoc = await getDoc(doc(db, "party", user.uid, "groupMembers"));
-    if (partyDoc.exists()) {
-      console.log("member removed");
-    } else {
-      console.log("partyDoc does not exist");
-    }
-  };
 
   useEffect(() => {
     if (isFocused) {
@@ -229,7 +239,6 @@ const FriendsPage = ({navigation}) => {
                     </Text>
                     <Text style={styles.friendUsername}>
                       Amount Owed: ${friend.amountOwed}
-                     party: {friend.isInParty}
                     </Text>
                   </View>
                 </View>
@@ -238,7 +247,7 @@ const FriendsPage = ({navigation}) => {
                 {!friend.isInParty && (
                   <TouchableOpacity
                     style={styles.button}
-                    onPress={() => handleAddToParty(friend)}
+                    onPress={() => handleAddToParty(friend,index)}
                   >
                     <Text style={styles.buttonText}>Add to Party {friend.isInParty}</Text>
                   </TouchableOpacity>
@@ -248,7 +257,7 @@ const FriendsPage = ({navigation}) => {
                 {friend.isInParty && (
                   <TouchableOpacity
                     style={styles.button}
-                    onPress={() => handleRemoveFromParty(friend)}
+                    onPress={() => handleRemoveFromParty(friend,index)}
                   >
                     <Text style={styles.buttonText}>Remove from Party {friend.isInParty}</Text>
                   </TouchableOpacity>
