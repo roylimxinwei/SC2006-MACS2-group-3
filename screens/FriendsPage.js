@@ -31,6 +31,8 @@ const FriendsPage = (navigation) => {
   let [currentUsers, setCurrentUsers] = useState([]);
   let [friends, setFriends] = useState([]);
   let [party, setParty] = useState([]);
+  let [tempParty, setTempParty] = useState([]);
+  
 
   let user = auth.currentUser;
   const isFocused = useIsFocused();
@@ -72,11 +74,15 @@ const FriendsPage = (navigation) => {
     const querySnapshot2 = await getDocs(q);
     querySnapshot2.forEach((doc) => {
       // doc.data() is never undefined for query doc snapshots
-      tempParty = doc.data().groupMembers;
+      partyDetails = {
+        partyId: doc.id,
+        partyMembers: doc.data().groupMembers
+      }
+      tempParty = partyDetails
       setParty(tempParty);
-      console.log(doc.data());
-      console.log("hi");
     });
+      setParty(tempParty);
+    console.log("party details: "+party);
 
     //get all your current friends and put them in the scrollview.
     let tempFriends = [];
@@ -143,18 +149,31 @@ const FriendsPage = (navigation) => {
   };
   //add someone to your party.
   const handleAddToParty = async (friend) => {
-    let groupMembers = [];
-    //current implementation is only for a 2 person party. Further considerations for
-    //how handleAddToParty should be done.
-    groupMembers.push(user.uid);
-    groupMembers.push(friend.userId);
+
+    tempParty.push(friend.userId);
+
+  };
+
+  const confirmParty = async () => {
+    
+    if(party.length > 0 ){  
+
+      party.push(user.uid)
+      const updateDocRef = doc(db, "party", party.partyId);
+      await updateDoc(updateDocRef, {
+        points: currentPoints
+      });
+
+    }
+    else{
 
     await addDoc(collection(db, "party"), {
       groupMembers: groupMembers,
     }).then(() => {
       fetchData();
     });
-  };
+  }
+  }
 
   const handleRemoveFromParty = async (friend) => {
     let groupMembers = [];
@@ -173,7 +192,7 @@ const FriendsPage = (navigation) => {
     }
   }, [navigation, isFocused]);
 
-  return (
+  return (  
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
         <Text style={styles.title}>Add Friend</Text>
@@ -233,7 +252,13 @@ const FriendsPage = (navigation) => {
               </View>
             ))}
           </ScrollView>
-        }
+        } 
+        <TouchableOpacity
+                    style={styles.button}
+                    onPress={() => confirmParty()}
+                  >
+                    <Text style={styles.buttonText}>"Confirm Party</Text>
+                  </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );
