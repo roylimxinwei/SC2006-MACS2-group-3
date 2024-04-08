@@ -20,20 +20,20 @@ import { auth, db } from "../firebase"; // Ensure these are correctly imported
 const PartyPage = ({ navigation }) => {
   const [totalCost, setTotalCost] = useState("");
   const [party, setParty] = useState({ partyMembers: [] });
-  const [memberNames, setMemberNames] = useState([]);
+  const [guestNames, setGuestNames] = useState([]);
   const user = auth.currentUser;
 
   useEffect(() => {
     const fetchParty = async () => {
       const ref = collection(db, "party");
-      const q = query(ref, where("groupMembers", "array-contains", user.uid));
+      const q = query(ref, where("guests", "array-contains", user.uid));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         const partyDetails = querySnapshot.docs[0].data(); // Assuming single party per user for simplicity
         setParty({ ...partyDetails, partyId: querySnapshot.docs[0].id });
 
         // Fetch member names
-        const memberNamesPromises = partyDetails.groupMembers.map(
+        const guestNamesPromises = partyDetails.guests.map(
           async (userId) => {
             const userDocRef = doc(db, "users", userId);
             const userDoc = await getDoc(userDocRef);
@@ -43,8 +43,8 @@ const PartyPage = ({ navigation }) => {
           }
         );
 
-        const membersWithName = await Promise.all(memberNamesPromises);
-        setMemberNames(membersWithName.filter(Boolean)); // Filter out any null values
+        const membersWithName = await Promise.all(guestNamesPromises);
+        setGuestNames(membersWithName.filter(Boolean)); // Filter out any null values
       }
     };
 
@@ -52,14 +52,14 @@ const PartyPage = ({ navigation }) => {
   }, [user.uid]);
 
   const handleSplitCost = () => {
-    console.log("Party members at time of split:", memberNames);
-    // Using memberNames.length to ensure we're working with the initialized and populated array
-    if (!totalCost || memberNames.length === 0) {
+    console.log("Party members at time of split:", guestNames);
+    // Using guestName.length to ensure we're working with the initialized and populated array
+    if (!totalCost || guestNames.length === 0) {
       console.log("Invalid total cost or empty party");
       return;
     }
 
-    const splitCost = parseFloat(totalCost) / memberNames.length;
+    const splitCost = parseFloat(totalCost) / guestNames.length;
     console.log(`Each member should pay: ${splitCost}`);
   };
 
@@ -67,10 +67,10 @@ const PartyPage = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Party Page</Text>
       <FlatList
-        data={memberNames}
+        data={guestNames}
         keyExtractor={(item) => item.userId}
         renderItem={({ item }) => (
-          <Text style={styles.memberName}>{item.name}</Text>
+          <Text style={styles.guestNames}>{item.name}</Text>
         )}
       />
       <TextInput
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     textAlign: "center",
   },
-  memberName: {
+  guestNames: {
     fontSize: 18,
     marginTop: 8,
   },
