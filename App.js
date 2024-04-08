@@ -18,6 +18,7 @@ import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import UserReviewScreen from "./screens/UserReviewScreen";
 import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import WeatherPageSunny from "./screens/WeatherPageSunny.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function App() {
         <Stack.Screen name="ReviewLandingPage" component={ReviewLandingPage} />
         <Stack.Screen name="UserReviewScreen" component={UserReviewScreen} />
         <Stack.Screen name="SelectCuisine" component={SelectCuisine} />
+        <Stack.Screen name="WeatherPageSunny" component={WeatherPageSunny} />
         <Stack.Screen
           name="RestaurantExperience"
           component={RestaurantExperience}

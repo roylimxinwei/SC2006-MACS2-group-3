@@ -453,6 +453,13 @@ const HomeScreen = ({ navigation, route }) => {
           source={require("../assets/diningHistory.png")} // replace with your button image path
         />
       </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={styles.weatherButton}
+        onPress={() => navigation.navigate("WeatherPageSunny")}
+      >
+        <Text>Weather</Text>
+      </TouchableOpacity>
 
       <View style={styles.switch}>
         <Switch

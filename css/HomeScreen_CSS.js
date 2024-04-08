@@ -141,6 +141,13 @@ export const styles = StyleSheet.create({
     alignItems: "center", // Centers objects according to the secondary axis
     justifyContent: "center", // Centers the object according to main axis
   },
+  weatherButton: {
+    position: "absolute", // Position the button over the screen
+    right: 20, // Distance from the left
+    top: 500, // Distance from the bottom
+    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+  },
   icon: {
     width: 40, // Set the width of your image
     height: 40, // Set the height of your image to the same value to maintain aspect ratio
