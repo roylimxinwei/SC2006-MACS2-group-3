@@ -34,6 +34,10 @@ import {
         const ref = collection(db, "party");
         const q = query(ref, where("guests", "array-contains", user.uid));
         const querySnapshot = await getDocs(q);
+        if(querySnapshot.size == 0){
+            setIsLoading(false)
+            setParties([])
+        }
         await querySnapshot.forEach(async (document) => {
             const partyDetails = document.data();
             partyDetails.partyId = document.id;
@@ -105,8 +109,6 @@ import {
     }
 
     useEffect(() => {
-
-
         fetchParties()
         console.log("useeffect")
     }, []);
