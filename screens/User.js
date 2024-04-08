@@ -50,6 +50,7 @@ const UserScreen = ({ navigation, route }) => {
       console.log("redeem points: " + redeemPoints);
       if (docSnap.data().points < redeemPoints) {
         alert("You do not have enough points.");
+        return; // Add a return statement here to exit the function if the user doesn't have enough points
       } else {
         currentPoints = currentPoints - redeemPoints;
       }

@@ -90,6 +90,7 @@ const PartyPage = ({ navigation }) => {
       );
 
       console.log("All guests' amount owed updated.");
+      alert("success!");
     } catch (error) {
       console.error("Error updating guests' amount owed:", error);
     }
