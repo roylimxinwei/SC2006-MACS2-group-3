@@ -8,6 +8,7 @@ import {
     Button,
 } from 'react-native';
 import { auth, db } from '../firebase';
+import { styles } from "../css/UserFeedBack_CSS.js";
 import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 
 const UserFeedBack = ({navigation}) => {
@@ -50,13 +51,5 @@ const UserFeedBack = ({navigation}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-});
 
 export default UserFeedBack;
