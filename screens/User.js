@@ -43,27 +43,25 @@ const UserScreen = ({ navigation, route }) => {
 
     let currentPoints = 0;
     const docRef = doc(db, "users", user.uid);
-		const docSnap = await getDoc(docRef);
-		if (docSnap.exists()) {
-      currentPoints = docSnap.data().points
-      console.log("current points: "+docSnap.data().points)
-      console.log("redeem points: "+redeemPoints)
-      if(docSnap.data().points < redeemPoints){
-      alert("You do not have enough points.")
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      currentPoints = docSnap.data().points;
+      console.log("current points: " + docSnap.data().points);
+      console.log("redeem points: " + redeemPoints);
+      if (docSnap.data().points < redeemPoints) {
+        alert("You do not have enough points.");
+      } else {
+        currentPoints = currentPoints - redeemPoints;
       }
-      else{
-      currentPoints = currentPoints - redeemPoints;
-      }
-
-		}
-      const updateDocRef = doc(db, "users", user.uid);
-      await updateDoc(updateDocRef, {
-        points: currentPoints
-      }).then((data)=>{
-        let dollars = redeemPoints * 0.1
-        setCurrentPoints(currentPoints)
-        alert("Succesfully redeemed $"+dollars.toFixed(2))
-   });
+    }
+    const updateDocRef = doc(db, "users", user.uid);
+    await updateDoc(updateDocRef, {
+      points: currentPoints,
+    }).then((data) => {
+      let dollars = redeemPoints * 0.1;
+      setCurrentPoints(currentPoints);
+      alert("Succesfully redeemed $" + dollars.toFixed(2));
+    });
   };
 
   return (
@@ -80,7 +78,7 @@ const UserScreen = ({ navigation, route }) => {
           style={styles.partyButton}
           onPress={() => navigation.navigate("PartyPage")}
         >
-          <Text style={styles.partyText}>Party</Text>
+          <Text style={styles.partyText}>Split cost</Text>
         </Pressable>
 
         <Text style={styles.title}>Redeem Points</Text>
