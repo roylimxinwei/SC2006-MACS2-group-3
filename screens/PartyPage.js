@@ -19,20 +19,22 @@ import { auth, db } from "../firebase"; // Ensure these are correctly imported
 
 const PartyPage = ({ navigation }) => {
   const [totalCost, setTotalCost] = useState("");
-  const [party, setParty] = useState({ partyMembers: [] });
+  const [party, setParty] = useState({ guestNames: [], hostName: "" });
   const [guestNames, setGuestNames] = useState([]);
+  const [hostName, setHostName] = useState("");
   const user = auth.currentUser;
 
   useEffect(() => {
     const fetchParty = async () => {
+      //get guest names
       const ref = collection(db, "party");
       const q = query(ref, where("guests", "array-contains", user.uid));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         const partyDetails = querySnapshot.docs[0].data(); // Assuming single party per user for simplicity
         setParty({ ...partyDetails, partyId: querySnapshot.docs[0].id });
-
-        // Fetch member names
+        console.log(partyDetails)
+        // Fetch member and host names
         const guestNamesPromises = partyDetails.guests.map(
           async (userId) => {
             const userDocRef = doc(db, "users", userId);
@@ -43,9 +45,19 @@ const PartyPage = ({ navigation }) => {
           }
         );
 
-        const membersWithName = await Promise.all(guestNamesPromises);
-        setGuestNames(membersWithName.filter(Boolean)); // Filter out any null values
+        // Fetch member and host names
+        const userDocRef = doc(db, "users", partyDetails.host);
+        const userDoc = await getDoc(userDocRef);
+        if (userDoc.exists()) {
+          setHostName(userDoc.data().name);
+        }
+
+        const guestsNames = await Promise.all(guestNamesPromises);
+        setGuestNames(guestsNames.filter(Boolean)); // Filter out any null values
+
       }
+
+      
     };
 
     fetchParty();
@@ -66,6 +78,8 @@ const PartyPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Party Page</Text>
+      <Text style={styles.guestNames}>Host Name: {hostName}</Text>
+      <Text style={styles.guestNames}>Guest List:</Text>
       <FlatList
         data={guestNames}
         keyExtractor={(item) => item.userId}
