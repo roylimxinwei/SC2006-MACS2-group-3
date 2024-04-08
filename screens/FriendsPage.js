@@ -51,7 +51,7 @@ const FriendsPage = ({navigation}) => {
     setCurrentUsers(tempCurrentUsers);
 
     //https://firebase.google.com/docs/firestore/query-data/queries
-   const tempParty = await getParty();
+   const tempGuests = await getParty();
 
     //get all your current friends(and check whether they are in a party) and put them in the scrollview.
     let tempFriends = [];
@@ -63,13 +63,13 @@ const FriendsPage = ({navigation}) => {
     querySnapshot3.forEach((doc) => {
        isInParty = false;
       //check if the friend is also in the party:
-      console.log("length"+tempFriends)
-      if(tempParty.length > 0){
-      for (let x = 0; x < tempParty.partyMembers.length; x++) {
-        console.log("member: "+tempParty.partyMembers[x])
-          console.log("doc id: "+doc.id)
-        if (doc.id == tempParty.partyMembers[x]) {
-
+      console.log("length"+tempGuests)
+      if(tempGuests.length > 0){
+      for (let x = 0; x < tempGuests.guests.length; x++) {
+        console.log("guest: "+tempGuests.guests[x])
+        console.log("doc.id: "+doc.id)
+        if (doc.id == tempGuests.guests[x]) {
+          console.log("isinparty true")
           isInParty = true;
         }
       } 
@@ -91,20 +91,21 @@ const FriendsPage = ({navigation}) => {
      //https://firebase.google.com/docs/firestore/query-data/queries
      let tempParty = [];
      const ref = collection(db, "party");
-     const q = query(ref, where("groupMembers", "array-contains", user.uid));
+     const q = query(ref, where("host", "==", user.uid));
      const querySnapshot2 = await getDocs(q);
      querySnapshot2.forEach((doc) => {
-      console.log("foreach")
        // doc.data() is never undefined for query doc snapshots
        partyDetails = {
          partyId: doc.id,
+         host: doc.data().host,
+         guests: doc.data().guests,
          partyMembers: doc.data().groupMembers
        }
        tempParty = partyDetails
        tempParty.length = 1
      });
        setParty(tempParty);
-     console.log("party details: "+tempParty.partyMembers);
+     console.log("party details: "+tempParty.partyId);
      return tempParty;
   }
 
@@ -171,6 +172,8 @@ const FriendsPage = ({navigation}) => {
 
     const tempParty = []
 
+    console.log("confirmparty")
+
     for(let i = 0;i<friends.length; i++)
     {
         if(friends[i].isInParty == true){
@@ -179,22 +182,25 @@ const FriendsPage = ({navigation}) => {
   
     }
 
-    if(party.length > 0 && party.partyMembers.length > 0 ){  
-      tempParty.push(user.uid)
+    if(party.partyId != null){  
+      console.log("update doc")
       const updateDocRef = doc(db, "party", party.partyId);
       await updateDoc(updateDocRef, {
-        groupMembers: tempParty
+        host: user.uid,
+        guests: tempParty
       }).then(()=>{
         alert("Party Setting Saved!")
+        getParty();
       });
 
     }
     else{
-      tempParty.push(user.uid)
     await addDoc(collection(db, "party"), {
-      groupMembers: tempParty,
+      host: user.uid,
+      guests: tempParty
     }).then(() => {
       alert("Party Setting Saved!")
+      getParty();
     });
   }
   }
