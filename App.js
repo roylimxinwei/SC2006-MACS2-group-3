@@ -18,6 +18,7 @@ import SignUpScreen from "./screens/SignUpPage"; // Import your signup screen
 import UserReviewScreen from "./screens/UserReviewScreen";
 import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
+import UserFeedbackPage from "./screens/UserFeedbackPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -45,6 +46,8 @@ export default function App() {
         <Stack.Screen name="ViewProfile" component={ViewProfile} />
 
         <Stack.Screen name="DiningHistoryPage" component={DiningHistoryPage} />
+
+        <Stack.Screen name="UserFeedbackPage" component={UserFeedbackPage} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>

@@ -141,6 +141,16 @@ export const styles = StyleSheet.create({
     alignItems: "center", // Centers objects according to the secondary axis
     justifyContent: "center", // Centers the object according to main axis
   },
+  feedbackButton: {
+    position: "absolute", // Position the button over the screen
+    left: 20, // Distance from the left
+    top: 650, // Distance from the bottom
+    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+    overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
+    alignItems: "center", // Centers objects according to the secondary axis
+    justifyContent: "center", // Centers the object according to main axis
+  },
   icon: {
     width: 40, // Set the width of your image
     height: 40, // Set the height of your image to the same value to maintain aspect ratio
