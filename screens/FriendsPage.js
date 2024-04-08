@@ -24,7 +24,7 @@ import {
   View,
 } from "react-native";
 import { auth, db } from "../firebase";
-// import { styles } from "../css/FriendsPage_CSS.js";
+import { styles } from "../css/FriendsPage_CSS.js";
 
 const FriendsPage = ({navigation}) => {
   const [friendCode, setFriendCode] = useState("");
@@ -271,96 +271,14 @@ const FriendsPage = ({navigation}) => {
           </ScrollView>
         } 
         <TouchableOpacity
-                    style={styles.button}
+                    style={styles.button2}
                     onPress={() => confirmParty()}
                   >
-                    <Text style={styles.buttonText}>Confirm Party</Text>
+                    <Text style={styles.buttonText2}>Confirm Party</Text>
                   </TouchableOpacity>
       </View>
     </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginVertical: 10,
-    width: "100%",
-  },
-  friendsList: {
-    width: "100%",
-    marginTop: 20,
-  },
-  friendItem: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "gray",
-    borderRadius: 5,
-  },
-  friendUsername: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  amountOwed: {
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: "#CD5C5C",
-    paddingVertical: 5,
-    paddingHorizontal: 45,
-    borderRadius: 5,
-    marginBottom: 10,
-    borderRadius: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    marginLeft: "auto",
-    top: 5,
-  },
-  buttonText: {
-    color: "#FFFFFF",
-    fontSize: 12,
-  },
-  buttonImage: {
-    width: 70, // Set the width of your button image
-    height: 70, // Set the height of your button image
-    borderRadius: 70, // Makes the image round
-    left: -5,
-  },
-  userInfo: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    marginLeft: 10,
-  },
-  nameOwe: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    marginLeft: 10,
-    top: 15,
-  },
-});
 
 export default FriendsPage;

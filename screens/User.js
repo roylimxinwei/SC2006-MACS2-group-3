@@ -10,8 +10,10 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  Image,
 } from "react-native";
 import { auth, db } from "../firebase";
+import {styles} from '../css/UserPage_CSS';
 
 const UserScreen = ({ navigation, route }) => {
   const [currentPoints, setCurrentPoints] = useState(0);
@@ -68,11 +70,28 @@ const UserScreen = ({ navigation, route }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Pressable
-          style={styles.friendButton}
+      <Text style={styles.title}>Redeem Points</Text>
+      
+      <Image source={require("../assets/restaurant.png")} style={styles.icon}/>
+
+      <View style={styles.container2}>
+        <Text style={styles.pointsText}>Current Points: {currentPoints}</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter points to redeem"
+          value={redeemPoints}
+          onChangeText={(text) => setRedeemPoints(parseInt(text))}
+          keyboardType="numeric"
+        />
+        <Button title="Redeem" onPress={redeem}   />
+      </View>
+
+        <View style={styles.container3}>
+         <Pressable
+          style={styles.partyButton}
           onPress={() => navigation.navigate("FriendsPage")}
         >
-          <Text style={styles.friendText}>Friends</Text>
+          <Text style={styles.partyText}>Friends</Text>
         </Pressable>
 
         <Pressable
@@ -87,58 +106,14 @@ const UserScreen = ({ navigation, route }) => {
           onPress={() => navigation.navigate("Parties")}
         >
           <Text style={styles.partyText}>Parties</Text>
-        </Pressable>
+        </Pressable> 
+        </View>
 
-        <Text style={styles.title}>Redeem Points</Text>
-        <Text style={styles.pointsText}>Points: {currentPoints}</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter points to redeem"
-          value={redeemPoints}
-          onChangeText={(text) => setRedeemPoints(parseInt(text))}
-          keyboardType="numeric"
-        />
-        <Button title="Redeem" onPress={redeem} />
       </View>
     </TouchableWithoutFeedback>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    width: "100%",
-    marginVertical: 10,
-    paddingHorizontal: 10,
-  },
-  friendText: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
-  friendButton: {
-    backgroundColor: "#007AFF",
-    padding: 10,
-    borderRadius: 5,
-    bottom: 20,
-  },
-  partyText: { color: "#FFFFFF", fontSize: 16, fontWeight: "bold" },
-  partyButton: {
-    backgroundColor: "#007AFF",
-    padding: 10,
-    borderRadius: 5,
-    bottom: 10,
-    marginBottom: 10,
-  },
-});
+
 
 export default UserScreen;

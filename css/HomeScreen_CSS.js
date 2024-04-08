@@ -112,6 +112,16 @@ export const styles = StyleSheet.create({
     height: 70, // Set the height of your button image
     borderRadius: 70, // Makes the image round
   },
+  weatherButton: {
+    position: "absolute", // Position the button over the screen
+    right: 20, // Distance from the left
+    top: 150, // Distance from the bottom
+    backgroundColor: "#FFF1B5", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+    overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
+    alignItems: "center", // Centers objects according to the secondary axis
+    justifyContent: "center", // Centers the object according to main axis
+  },
   signUpText: {
     color: "#FFFFFF",
     fontSize: 16,

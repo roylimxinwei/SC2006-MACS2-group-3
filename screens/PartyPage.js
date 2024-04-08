@@ -16,7 +16,8 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { auth, db } from "../firebase"; // Ensure these are correctly imported
+import { auth, db } from "../firebase"; 
+import { styles } from "../css/PartyPage_CSS.js";// Ensure these are correctly imported
 
 const PartyPage = ({ navigation }) => {
   const [totalCost, setTotalCost] = useState("");
@@ -105,63 +106,39 @@ const PartyPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Party Page</Text>
-      <Text style={styles.guestNames}>Host Name: {hostName}</Text>
-
-      <Text style={styles.guestNames}>Guest List:</Text>
+      
+      <View style={styles.host}> 
+        <Text style={styles.hostNames}>Host Name: </Text>
+        <Text style={styles.hostNames}>{hostName}</Text>
+      </View>
+      
+      <View style={styles.guest}>
+        <Text style={styles.guestNames}>Guest List:</Text>
       <FlatList
         data={guestNames}
+        style={styles.list}
         keyExtractor={(item) => item.userId}
         renderItem={({ item }) => (
           <Text style={styles.guestNames}>{item.name}</Text>
         )}
       />
-      <TextInput
+      </View>
+      
+      <View style={styles.container2} >
+       <TextInput
         placeholder="Enter total cost spent"
         keyboardType="numeric"
         value={totalCost}
         onChangeText={(text) => setTotalCost(text)}
         style={styles.input}
       />
-      <Button title="Split Cost" onPress={handleSplitCost} />
+      <Button title="Split Cost" onPress={handleSplitCost} /> 
+      </View>
+      
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: "#fff",
-  },
-  title: {
-    marginTop: 16,
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginTop: 16,
-    paddingHorizontal: 8,
-  },
-  button: {
-    marginTop: 16,
-    backgroundColor: "#4CAF50",
-    paddingVertical: 12,
-    borderRadius: 4,
-  },
-  buttonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-    textAlign: "center",
-  },
-  guestNames: {
-    fontSize: 18,
-    marginTop: 8,
-  },
-});
+
 
 export default PartyPage;
