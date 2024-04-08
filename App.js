@@ -23,6 +23,7 @@ import UserReviewScreen from "./screens/UserReviewScreen";
 import ViewProfile from "./screens/ViewProfile";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import WeatherPage from "./screens/WeatherPage";
+import UserFeedBack from "./screens/UserFeedBack.js";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +41,7 @@ export default function App() {
         <Stack.Screen name="UserReviewScreen" component={UserReviewScreen} />
         <Stack.Screen name="SelectCuisine" component={SelectCuisine} />
         <Stack.Screen name="WeatherPage" component={WeatherPage} />
+        <Stack.Screen name="UserFeedBack" component={UserFeedBack} />
         <Stack.Screen
           name="RestaurantExperience"
           component={RestaurantExperience}

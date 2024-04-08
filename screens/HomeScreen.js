@@ -443,16 +443,6 @@ const HomeScreen = ({ navigation, route }) => {
           source={require("../assets/profileicon.png")} // replace with your button image path
         />
       </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.historyButton}
-        onPress={() => navigation.navigate("DiningHistoryPage")}
-      >
-        <Image
-          style={styles.buttonImage}
-          source={require("../assets/diningHistory.png")} // replace with your button image path
-        />
-      </TouchableOpacity>
       <TouchableOpacity
         style={styles.weatherButton}
         onPress={() => navigation.navigate("WeatherPage")}
@@ -462,6 +452,19 @@ const HomeScreen = ({ navigation, route }) => {
           source={require("../assets/weatherimage.png")} // replace with your button image path
         />
       </TouchableOpacity>
+      
+
+      <View style={styles.buttonscontainer}>
+       <TouchableOpacity
+        style={styles.historyButton}
+        onPress={() => navigation.navigate("DiningHistoryPage")}
+      >
+        <Image
+          style={styles.buttonImage}
+          source={require("../assets/diningHistory.png")} // replace with your button image path
+        />
+      </TouchableOpacity>
+
 
       <TouchableOpacity
         style={styles.userButton}
@@ -469,9 +472,20 @@ const HomeScreen = ({ navigation, route }) => {
       >
         <Image
           style={styles.buttonImage}
-          source={require("../assets/userIcon.png")} // replace with your button image path
+          source={require("../assets/friendmenu.png")} // replace with your button image path
         />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.feedbackButton}
+        onPress={() => navigation.navigate("UserFeedBack")}
+      >
+        <Image
+          style={styles.buttonImage}
+          source={require("../assets/feedback.png")} // replace with your button image path
+        />
+      </TouchableOpacity> 
+      </View>
+      
 
       <View style={styles.switch}>
         <Switch

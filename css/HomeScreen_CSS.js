@@ -73,9 +73,25 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     paddingRight: 15,
     paddingLeft: 15,
-    // marginLeft:116,
-
     marginTop: -5,
+  },
+  buttonscontainer:{ // Distance from the left
+    top: 650,
+    justifyContent:"center",
+    alignContent:"center",
+    width: "100%",
+    position:"absolute",
+    flexDirection:"row",
+    gap:50,
+  },
+  feedbackButton: {
+    position: "relative", // Position the button over the screen
+// Distance from the bottom
+    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
+    overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
+    alignItems: "center", // Centers objects according to the secondary axis
+    justifyContent: "center", // Centers the object according to main axis
   },
   ReviewButtonView: {
     alignItems: "center",
@@ -113,9 +129,10 @@ export const styles = StyleSheet.create({
     borderRadius: 70, // Makes the image round
   },
   weatherButton: {
-    position: "absolute", // Position the button over the screen
-    right: 20, // Distance from the left
-    top: 150, // Distance from the bottom
+    position: "absolute",
+    top:150,
+    right:20, // Position the button over the screen
+// Distance from the bottom
     backgroundColor: "#FFF1B5", // Replace with your desired button color
     borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
@@ -142,10 +159,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 0, 0, 0.5)", // Red color with 50% opacity
   },
   historyButton: {
-    position: "absolute", // Position the button over the screen
-    right: 20, // Distance from the left
-    top: 650, // Distance from the bottom
-    backgroundColor: "#CD5C5C", // Replace with your desired button color
+    position: "relative", // Position the button over the screen
+    backgroundColor: colors.secondary, // Replace with your desired button color
     borderRadius: 35, // Ensure this is half of the width and height for a perfect circle
     overflow: "hidden", // Ensures the image doesn't bleed outside the border radius
     alignItems: "center", // Centers objects according to the secondary axis
@@ -245,9 +260,6 @@ export const styles = StyleSheet.create({
     elevation: 5, // For Android
   },
   userButton: {
-    position: "absolute", // Position the button over the screen
-    bottom: 20,
-    left: 20,
-    top: 650,
+    position: "relative", // Position the button over the screen
   },
 });
