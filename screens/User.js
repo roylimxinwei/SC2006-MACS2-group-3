@@ -83,6 +83,13 @@ const UserScreen = ({ navigation, route }) => {
           <Text style={styles.partyText}>Party</Text>
         </Pressable>
 
+        <Pressable
+          style={styles.partyButton}
+          onPress={() => navigation.navigate("Parties")}
+        >
+          <Text style={styles.partyText}>Parties</Text>
+        </Pressable>
+
         <Text style={styles.title}>Redeem Points</Text>
         <Text style={styles.pointsText}>Points: {currentPoints}</Text>
         <TextInput
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     bottom: 10,
+    marginBottom: 10,
   },
 });
 

@@ -12,6 +12,7 @@ import InputReferralCodePage from "./screens/InputReferralCodePage";
 import LandingScreen from "./screens/LandingScreen";
 import LoginScreen from "./screens/LogInPage"; // Import your login screen
 import PartyPage from "./screens/PartyPage";
+import Parties from "./screens/Parties";
 import RestaurantExperience from "./screens/RestaurantExperiencePage.js";
 import ReviewLandingPage from "./screens/ReviewLandingPage";
 import ReviewPage from "./screens/ReviewPage";
@@ -51,6 +52,7 @@ export default function App() {
         <Stack.Screen name="User" component={UserScreen} />
         <Stack.Screen name="FriendsPage" component={FriendsPage} />
         <Stack.Screen name="PartyPage" component={PartyPage} />
+        <Stack.Screen name="Parties" component={Parties} />
         {/* Add more screens as needed */}
       </Stack.Navigator>
     </NavigationContainer>

@@ -172,8 +172,6 @@ const FriendsPage = ({navigation}) => {
 
     const tempParty = []
 
-    console.log("confirmparty")
-
     for(let i = 0;i<friends.length; i++)
     {
         if(friends[i].isInParty == true){
