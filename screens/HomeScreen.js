@@ -454,37 +454,38 @@ const HomeScreen = ({ navigation, route }) => {
       </TouchableOpacity>
       
 
-      <View style={styles.buttonscontainer}>
-       <TouchableOpacity
-        style={styles.historyButton}
-        onPress={() => navigation.navigate("DiningHistoryPage")}
-      >
-        <Image
-          style={styles.buttonImage}
-          source={require("../assets/diningHistory.png")} // replace with your button image path
-        />
-      </TouchableOpacity>
+      {!isEnabled && (
+  <View style={styles.buttonscontainer}>
+    <TouchableOpacity
+      style={styles.historyButton}
+      onPress={() => navigation.navigate("DiningHistoryPage")}
+    >
+      <Image
+        style={styles.buttonImage}
+        source={require("../assets/diningHistory.png")} // replace with your button image path
+      />
+    </TouchableOpacity>
 
-
-      <TouchableOpacity
-        style={styles.userButton}
-        onPress={() => navigation.navigate("User")}
-      >
-        <Image
-          style={styles.buttonImage}
-          source={require("../assets/friendmenu.png")} // replace with your button image path
-        />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.feedbackButton}
-        onPress={() => navigation.navigate("UserFeedBack")}
-      >
-        <Image
-          style={styles.buttonImage}
-          source={require("../assets/feedback.png")} // replace with your button image path
-        />
-      </TouchableOpacity> 
-      </View>
+    <TouchableOpacity
+      style={styles.userButton}
+      onPress={() => navigation.navigate("User")}
+    >
+      <Image
+        style={styles.buttonImage}
+        source={require("../assets/friendmenu.png")} // replace with your button image path
+      />
+    </TouchableOpacity>
+    <TouchableOpacity
+      style={styles.feedbackButton}
+      onPress={() => navigation.navigate("UserFeedBack")}
+    >
+      <Image
+        style={styles.buttonImage}
+        source={require("../assets/feedback.png")} // replace with your button image path
+      />
+    </TouchableOpacity>
+  </View>
+)}
       
 
       <View style={styles.switch}>
