@@ -43,6 +43,11 @@ const UserScreen = ({ navigation, route }) => {
     // Handle redeeming points here
     console.log("Redeeming points:", redeemPoints);
 
+    if (! redeemPoints || ! Number.isInteger(redeemPoints) || ! redeemPoints > 0) {
+      alert ("Please enter a valid number of points to redeem.");
+      return ;
+    }
+
     let currentPoints = 0;
     const docRef = doc(db, "users", user.uid);
     const docSnap = await getDoc(docRef);
