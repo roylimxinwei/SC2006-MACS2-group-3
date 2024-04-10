@@ -11,13 +11,14 @@ import React, { useEffect, useState } from "react";
 import {
   Button,
   FlatList,
-  StyleSheet,
+  Keyboard,
   Text,
   TextInput,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { auth, db } from "../firebase"; 
-import { styles } from "../css/PartyPage_CSS.js";// Ensure these are correctly imported
+import { styles } from "../css/PartyPage_CSS.js"; // Ensure these are correctly imported
+import { auth, db } from "../firebase";
 
 const PartyPage = ({ navigation }) => {
   const [totalCost, setTotalCost] = useState("");
@@ -104,41 +105,40 @@ const PartyPage = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Party Page</Text>
-      
-      <View style={styles.host}> 
-        <Text style={styles.hostNames}>Host Name: </Text>
-        <Text style={styles.hostNames}>{hostName}</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Party Page</Text>
+
+        <View style={styles.host}>
+          <Text style={styles.hostNames}>Host Name: </Text>
+          <Text style={styles.hostNames}>{hostName}</Text>
+        </View>
+
+        <View style={styles.guest}>
+          <Text style={styles.guestNames}>Guest List:</Text>
+          <FlatList
+            data={guestNames}
+            style={styles.list}
+            keyExtractor={(item) => item.userId}
+            renderItem={({ item }) => (
+              <Text style={styles.guestNames}>{item.name}</Text>
+            )}
+          />
+        </View>
+
+        <View style={styles.container2}>
+          <TextInput
+            placeholder="Enter total cost spent"
+            keyboardType="numeric"
+            value={totalCost}
+            onChangeText={(text) => setTotalCost(text)}
+            style={styles.input}
+          />
+          <Button title="Split Cost" onPress={handleSplitCost} />
+        </View>
       </View>
-      
-      <View style={styles.guest}>
-        <Text style={styles.guestNames}>Guest List:</Text>
-      <FlatList
-        data={guestNames}
-        style={styles.list}
-        keyExtractor={(item) => item.userId}
-        renderItem={({ item }) => (
-          <Text style={styles.guestNames}>{item.name}</Text>
-        )}
-      />
-      </View>
-      
-      <View style={styles.container2} >
-       <TextInput
-        placeholder="Enter total cost spent"
-        keyboardType="numeric"
-        value={totalCost}
-        onChangeText={(text) => setTotalCost(text)}
-        style={styles.input}
-      />
-      <Button title="Split Cost" onPress={handleSplitCost} /> 
-      </View>
-      
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
-
-
 
 export default PartyPage;
