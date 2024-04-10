@@ -125,8 +125,7 @@ const PartyPage = ({ navigation }) => {
             )}
           />
         </View>
-
-        <View style={styles.container2}>
+        
           <TextInput
             placeholder="Enter total cost spent"
             keyboardType="numeric"
@@ -135,7 +134,7 @@ const PartyPage = ({ navigation }) => {
             style={styles.input}
           />
           <Button title="Split Cost" onPress={handleSplitCost} />
-        </View>
+        
       </View>
     </TouchableWithoutFeedback>
   );
