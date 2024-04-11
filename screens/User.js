@@ -118,6 +118,10 @@ const UserScreen = ({ navigation, route }) => {
         </TouchableOpacity> 
         </View>
 
+              <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backButton}>
+              <Text style={styles.backButtonText}>X</Text>
+            </TouchableOpacity>
+
       </View>
     </TouchableWithoutFeedback>
   );

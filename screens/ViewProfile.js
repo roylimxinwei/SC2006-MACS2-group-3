@@ -68,7 +68,6 @@ const ViewProfile = ({ navigation }) => {
 
 	return (
 		<ScrollView contentContainerStyle={styles.scrollContainer}>
-
 			<View style={styles.viewProfile}>
 				<View style={styles.detailContainer}>
 					<Image
@@ -179,6 +178,10 @@ const ViewProfile = ({ navigation }) => {
 					/> */}
 				</View>
 			</View>
+			<TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backButton}>
+				<Text style={styles.backButtonText}>X</Text>
+			</TouchableOpacity>
+
 		</ScrollView>
   	);
 };

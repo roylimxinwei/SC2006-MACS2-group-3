@@ -22,9 +22,11 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Alert,
 } from "react-native";
 import { auth, db } from "../firebase";
 import { styles } from "../css/FriendsPage_CSS.js";
+import { set } from "firebase/database";
 
 const FriendsPage = ({navigation}) => {
   const [friendCode, setFriendCode] = useState("");
@@ -113,6 +115,11 @@ const FriendsPage = ({navigation}) => {
     let codeDoesNotExist = true;
     let friendId = "";
 
+    if (friendCode.trim().length === 0 || friendName.trim().length === 0) {
+      Alert.alert("Unsuccessful", "Please fill in all fields");
+      return;
+    }
+
     //for all current users that is in the app, we check if the QR code is legit so we can add
     //as friend.
     for (let i = 0; i < currentUsers.length; i++) {
@@ -139,10 +146,12 @@ const FriendsPage = ({navigation}) => {
         amountOwed: 0,
       }).then(() => {});
 
-      alert("Friend added");
+      Alert.alert("Success" , "Friend added");
+      setFriendCode("");
+      setFriendName("");
       fetchData();
     } else {
-      alert("Please enter a valid Eater's Code");
+      Alert.alert("Unsuccessful", "Please enter a valid Eater's Code");
     }
   };
   //add someone to your party.
@@ -187,7 +196,7 @@ const FriendsPage = ({navigation}) => {
         host: user.uid,
         guests: tempParty
       }).then(()=>{
-        alert("Party Setting Saved!")
+        Alert.alert("Success", "Party Setting Saved!")
         getParty();
       });
 
@@ -197,10 +206,11 @@ const FriendsPage = ({navigation}) => {
       host: user.uid,
       guests: tempParty
     }).then(() => {
-      alert("Party Setting Saved!")
+        Alert.alert("Success", "Party Setting Saved!")
       getParty();
     });
   }
+  navigation.navigate('User');
   }
 
   useEffect(() => {
@@ -217,13 +227,13 @@ const FriendsPage = ({navigation}) => {
           style={styles.input}
           placeholder="Enter your friend's eater code"
           value={friendCode}
-          onChangeText={(text) => setFriendCode(text)}
+          onChangeText={(text) => setFriendCode(text.trim())}
         />
         <TextInput
           style={styles.input}
           placeholder="Set a name for your friend"
           value={friendName}
-          onChangeText={(text) => setFriendName(text)}
+          onChangeText={(text) => setFriendName(text.trim())}
         />
         <TouchableOpacity onPress={addFriend} style={styles.button3}>
           <Text style={styles.buttonText}>Add Friend</Text>
@@ -231,10 +241,9 @@ const FriendsPage = ({navigation}) => {
 
         <Text style={styles.title}>Your Friends</Text>
         {/* ScrollView for friends list */}
-        {
           <ScrollView style={styles.friendsList}>
             {friends.map((friend, index) => (
-              <View key={index} style={styles.friendItem}>
+              <TouchableOpacity key={index} style={styles.friendItem}  activeOpacity={1}>
                 {/* <Image source={place.imageUrl} style={styles.ImageDesign} /> */}
                 <View style={styles.userInfo}>
                   <Image
@@ -254,7 +263,7 @@ const FriendsPage = ({navigation}) => {
                 {/* If friend is not in party with user, allow them to add friend party. */}
                 {!friend.isInParty && (
                   <TouchableOpacity
-                    style={styles.button}
+                    style={styles.buttonInParty}
                     onPress={() => handleAddToParty(friend,index)}
                   >
                     <Text style={styles.buttonText}>Add to Party {friend.isInParty}</Text>
@@ -270,18 +279,22 @@ const FriendsPage = ({navigation}) => {
                     <Text style={styles.buttonText}>Remove from Party {friend.isInParty}</Text>
                   </TouchableOpacity>
                 )}
-              </View>
+              </TouchableOpacity>
             ))}
             {/* <Text style={styles.pad}>for padding</Text> */}
           </ScrollView>
-        } 
+        
         <TouchableOpacity
                     style={styles.button2}
                     onPress={() => confirmParty()}
                   >
                     <Text style={styles.buttonText2}>Confirm Party</Text>
                   </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('User')} style={styles.backButton}>
+        <Text style={styles.backButtonText}>X</Text>
+      </TouchableOpacity>
       </View>
+
     </TouchableWithoutFeedback>
   );
 };

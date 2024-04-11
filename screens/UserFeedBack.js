@@ -47,8 +47,8 @@ const UserFeedBack = ({navigation}) => {
             <TouchableOpacity onPress={handleFeedbackSubmit} style={styles.button}>
               <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backbutton}>
-              <Text style={styles.buttonText}>Back</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backButton}>
+              <Text style={styles.backButtonText}>X</Text>
             </TouchableOpacity>
         </View>
   );

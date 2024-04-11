@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
   },  
   container2: {
-    marginBottom:70,
+    marginBottom:50,
   }, 
   pointsText:{
     fontWeight: "bold",
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
   },
   container3: {
     flexDirection:'row',
-    gap:30,
+    gap:20,
   },
   title: {
     fontSize: 30,
@@ -49,9 +49,10 @@ export const styles = StyleSheet.create({
     },
   partyButton: {
     backgroundColor: "#007AFF",
-    padding: 10,
-    borderRadius: 5,
+    padding: 12,
+    borderRadius: 20,
     bottom: 20,
+    paddingHorizontal: 15,
     backgroundColor:colors.tertiary,
   },
   redeemButton: {
@@ -71,4 +72,33 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
+      backButton: {
+    backgroundColor: colors.tertiary,
+    // paddingVertical: 10,
+    // paddingHorizontal: 50,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    // margin: 10,
+    marginTop: 20,
+    marginLeft:20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top:0,
+    // left: 0,
+    },
+    backButtonText: {
+    color: "#7F2B0F",
+    // color: "#FFFFFF",
+    // color: colors.secondary,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+
 });

@@ -1,9 +1,10 @@
 // WeatherPage.js
 
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, Image, ImageBackground } from 'react-native';
+import { StyleSheet, View, Text, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import colors from "../config/colors";
 
-const WeatherPage = () => {
+const WeatherPage = ({navigation}) => {
 
   return (
         <View style={styles.container} >
@@ -40,7 +41,9 @@ const WeatherPage = () => {
           <Text style={styles.weathertext}>
             Bring an umbrella to Jiak places!
           </Text>       */}
-
+            <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backButton}>
+              <Text style={styles.backButtonText}>X</Text>
+            </TouchableOpacity>
         </View>
   );
 };
@@ -110,6 +113,34 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
     fontSize: 22,
+  },
+  backButton: {
+    backgroundColor: colors.tertiary,
+    // paddingVertical: 10,
+    // paddingHorizontal: 50,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    // margin: 10,
+    marginTop: 20,
+    marginLeft:20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top:0,
+    // left: 0,
+    },
+    backButtonText: {
+    color: "#7F2B0F",
+    // color: "#FFFFFF",
+    // color: colors.secondary,
+    fontSize: 15,
+    fontWeight: "bold",
   },
 });
 

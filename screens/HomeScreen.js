@@ -363,6 +363,23 @@ const HomeScreen = ({ navigation, route }) => {
           provider={PROVIDER_GOOGLE}
           customMapStyle={MapViewStyle}
         >
+          {processedPlaces.map((place, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: place.latitude,
+                longitude: place.longitude,
+              }}
+              title={place.name}
+              onPress={() => setSelectedPlace(place)}
+            >
+              <Image
+                source={require("../assets/jiakIcon.png")}
+                style={styles.restaurantIcon}
+              />
+            </Marker>
+          ))}
+          
           {currentLocation && (
             <>
               <Marker
@@ -397,26 +414,11 @@ const HomeScreen = ({ navigation, route }) => {
             </>
           )}
 
-          {processedPlaces.map((place, index) => (
-            <Marker
-              key={index}
-              coordinate={{
-                latitude: place.latitude,
-                longitude: place.longitude,
-              }}
-              title={place.name}
-              onPress={() => setSelectedPlace(place)}
-            >
-              <Image
-                source={require("../assets/jiakIcon.png")}
-                style={styles.restaurantIcon}
-              />
-            </Marker>
-          ))}
+
         </MapView>
       )}
 
-      {selectedPlace && (
+      {selectedPlace && ! isEnabled && (
         <RestaurantDetailsScreen
           place={selectedPlace}
           //   place_id={selectedPlace?.place_id} // Pass the place_id as a prop

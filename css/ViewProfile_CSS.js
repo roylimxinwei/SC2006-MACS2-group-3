@@ -5,6 +5,7 @@ export const styles = StyleSheet.create({
     viewProfile:{
         flex: 1,
         backgroundColor: colors.primary, // Replace with your desired background color
+        marginTop: 20,
     },
     detailContainer: {
         flexDirection: "row",
@@ -110,4 +111,33 @@ export const styles = StyleSheet.create({
         fontSize: 13,
         marginTop: 5,
     },
+        backButton: {
+    backgroundColor: colors.tertiary,
+    // paddingVertical: 10,
+    // paddingHorizontal: 50,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    // margin: 10,
+    marginTop: 20,
+    marginLeft:20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    top:0,
+    // left: 0,
+    },
+    backButtonText: {
+    color: "#7F2B0F",
+    // color: "#FFFFFF",
+    // color: colors.secondary,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+
 });

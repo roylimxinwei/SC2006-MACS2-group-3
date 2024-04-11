@@ -16,6 +16,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
+  Alert,
 } from "react-native";
 import { styles } from "../css/PartyPage_CSS.js"; // Ensure these are correctly imported
 import { auth, db } from "../firebase";
@@ -68,16 +69,17 @@ const PartyPage = ({ navigation }) => {
 
   const handleSplitCost = async () => {
     // Ensure handleSplitCost is declared as async
-    checkEmpty();
+    // checkEmpty();
     console.log("Party members at time of split:", guestNames);
 
-    if (!totalCost || guestNames.length === 0) {
-      console.log("Invalid total cost or empty party");
-      return;
-    }
+      if (!totalCost || totalCost <= 0 || isNaN(totalCost)) {
+        Alert.alert("Error", "Enter a valid cost to split");
+        console.log("Invalid total cost or empty party");
+        return;
+      }
 
-    const splitCost = parseFloat(totalCost) / (guestNames.length + 1);
-    console.log(`Each member should pay: ${splitCost}`);
+      const splitCost = parseFloat((totalCost / (guestNames.length + 1)).toFixed(2));
+      console.log(`Each member should pay: ${splitCost}`);
 
     try {
       // Use Promise.all to wait for all the update promises to resolve.
@@ -92,7 +94,7 @@ const PartyPage = ({ navigation }) => {
       );
 
       console.log("All guests' amount owed updated.");
-      alert("success!");
+      Alert.alert("Let's Party!", 'Each guest need to pay $' + splitCost);
     } catch (error) {
       console.error("Error updating guests' amount owed:", error);
     }
