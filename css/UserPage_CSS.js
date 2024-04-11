@@ -24,13 +24,13 @@ export const styles = StyleSheet.create({
   },
   container3: {
     flexDirection:'row',
-    gap:40,
+    gap:30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
-    top: 70,
-    position: "absolute",
+    // top: 70,
+    // position: "absolute",
     color:"#7F2B0F",
   },
   input: {
@@ -53,5 +53,22 @@ export const styles = StyleSheet.create({
     borderRadius: 5,
     bottom: 20,
     backgroundColor:colors.tertiary,
+  },
+  redeemButton: {
+      backgroundColor: "#CD5C5C",
+      paddingVertical: 10,
+      paddingHorizontal: 50,
+      borderRadius: 5,
+      marginTop: 20,
+      borderRadius: 20,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.3,
+      shadowRadius: 4,
+  },
+  redeemText: {
+    color: "#FFFFFF",
+    fontSize: 18,
+    textAlign: "center",
   },
 });

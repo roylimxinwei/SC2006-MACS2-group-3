@@ -141,7 +141,12 @@ useEffect(() => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Your Dining History</Text>
+      <View style={styles.headingContainer}>
+        <Text style={styles.title}>Your Dining History</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backButton}>
+          <Text style={styles.backButtonText}>X</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={diningHistoryData}
         renderItem={renderHistoryItem}

@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Alert
 } from "react-native";
 import {styles} from '../css/ReviewPage_CSS';
 
@@ -82,7 +83,7 @@ const ReviewPage = ({ route, navigation }) => {
 
     }
 
-    alert("Review submitted.");
+    Alert.alert("Review Submitted", "You have earned 5 points!");
     navigation.navigate("HomeScreen"); // Go back to the previous screen
   };
 

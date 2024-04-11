@@ -11,6 +11,8 @@ import {
   TouchableWithoutFeedback,
   View,
   Image,
+  Alert,
+  TouchableOpacity
 } from "react-native";
 import { auth, db } from "../firebase";
 import {styles} from '../css/UserPage_CSS';
@@ -43,8 +45,8 @@ const UserScreen = ({ navigation, route }) => {
     // Handle redeeming points here
     console.log("Redeeming points:", redeemPoints);
 
-    if (! redeemPoints || ! Number.isInteger(redeemPoints) || ! redeemPoints > 0) {
-      alert ("Please enter a valid number of points to redeem.");
+    if (redeemPoints <= 0 || isNaN(redeemPoints) || ! Number.isInteger(redeemPoints)) {
+      Alert.alert ("Redeem failed", "Please enter a valid number of points to redeem.");
       return ;
     }
 
@@ -56,7 +58,7 @@ const UserScreen = ({ navigation, route }) => {
       console.log("current points: " + docSnap.data().points);
       console.log("redeem points: " + redeemPoints);
       if (docSnap.data().points < redeemPoints) {
-        alert("You do not have enough points.");
+        Alert.alert("Redeem failed", "You do not have enough points.");
         return; // Add a return statement here to exit the function if the user doesn't have enough points
       } else {
         currentPoints = currentPoints - redeemPoints;
@@ -68,7 +70,7 @@ const UserScreen = ({ navigation, route }) => {
     }).then((data) => {
       let dollars = redeemPoints * 0.1;
       setCurrentPoints(currentPoints);
-      alert("Succesfully redeemed $" + dollars.toFixed(2));
+      Alert.alert("Redeem Success" , "Succesfully redeemed $" + dollars.toFixed(2));
     });
   };
 
@@ -84,34 +86,36 @@ const UserScreen = ({ navigation, route }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter points to redeem"
-          value={redeemPoints}
-          onChangeText={(text) => setRedeemPoints(parseInt(text))}
+          // value={redeemPoints.toString()}
+          onChangeText={(text) => {setRedeemPoints(Number(text))}}
           keyboardType="numeric"
         />
-        <Button title="Redeem" onPress={redeem}   />
+        <TouchableOpacity onPress={redeem} style={styles.redeemButton}>
+          <Text style={styles.redeemText}>Redeem</Text>
+        </TouchableOpacity>
       </View>
 
         <View style={styles.container3}>
-         <Pressable
+         <TouchableOpacity
           style={styles.partyButton}
           onPress={() => navigation.navigate("FriendsPage")}
         >
           <Text style={styles.partyText}>Friends</Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           style={styles.partyButton}
           onPress={() => navigation.navigate("PartyPage")}
         >
           <Text style={styles.partyText}>Split cost</Text>
-        </Pressable>
+        </TouchableOpacity>
 
-        <Pressable
+        <TouchableOpacity
           style={styles.partyButton}
           onPress={() => navigation.navigate("Parties")}
         >
           <Text style={styles.partyText}>Parties</Text>
-        </Pressable> 
+        </TouchableOpacity> 
         </View>
 
       </View>

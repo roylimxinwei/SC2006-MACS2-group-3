@@ -9,6 +9,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
+    color:"#7F2B0F",
     marginVertical: 20,
     marginLeft: 10,
   },
@@ -22,6 +23,7 @@ export const styles = StyleSheet.create({
   },
   detailsContainer: {
     padding: 20,
+    marginRight: 10,
   },
   image: {
     width: 100,
@@ -47,4 +49,34 @@ export const styles = StyleSheet.create({
     color: "#6e6969",
     fontSize: 12,
   },
+  backButton: {
+    backgroundColor: colors.tertiary,
+    // paddingVertical: 10,
+    // paddingHorizontal: 50,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    // margin: 10,
+    marginTop: 20,
+    marginLeft:20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: 10,
+    // left: 0,
+    },
+    backButtonText: {
+    color: "#7F2B0F",
+    // color: "#FFFFFF",
+    // color: colors.secondary,
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  headingContainer: {
+    flexDirection: "row",
+  }
 });

@@ -6,6 +6,7 @@ import {
     Text,
     TextInput,
     Button,
+    TouchableOpacity
 } from 'react-native';
 import { auth, db } from '../firebase';
 import { styles } from "../css/UserFeedBack_CSS.js";
@@ -36,17 +37,19 @@ const UserFeedBack = ({navigation}) => {
   return (
         <View style={styles.container}>
             <Text style={styles.welcomeText}>Any comments or suggestions for the app?</Text>
+            <Text style={styles.footnote}>Note that your feedback will be completely anonymous.</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Enter your feedback here"
                 value={feedback}
                 onChangeText={setFeedback}
             />
-            <Button 
-                title="Submit" 
-                onPress={handleFeedbackSubmit} 
-                style={styles.button} 
-            />
+            <TouchableOpacity onPress={handleFeedbackSubmit} style={styles.button}>
+              <Text style={styles.buttonText}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backbutton}>
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
         </View>
   );
 };

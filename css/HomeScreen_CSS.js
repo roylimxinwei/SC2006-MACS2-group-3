@@ -10,7 +10,7 @@ export const styles = StyleSheet.create({
   },
 
   dismissButtonJiak: {
-    backgroundColor: colors.tertiary,
+    backgroundColor: colors.secondary,
     alignSelf: "center", // Center button in the container
     justifyContent: "center",
     alignItems: "center",
@@ -42,6 +42,7 @@ export const styles = StyleSheet.create({
   },
   JiakText: {
     fontSize: 16,
+    color: "#FFFFFF",
   },
   CloseText: {
     fontSize: 16,
@@ -59,10 +60,9 @@ export const styles = StyleSheet.create({
   ReviewText: {
     fontSize: 14,
     color: "#7F2B0F",
-    textDecorationLine: "underline",
   },
   UserReviewButton: {
-    backgroundColor: colors.secondary, // or any color you'd like for this button
+    backgroundColor: colors.tertiary, // or any color you'd like for this button
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
@@ -227,7 +227,7 @@ export const styles = StyleSheet.create({
     justifyContent: "center", // Center text vertically
   },
   popupContainer: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.tertiary,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "#CCCCCC",
@@ -235,17 +235,36 @@ export const styles = StyleSheet.create({
     zIndex: 1,
   },
   popupText: {
+    color: "#7F2B0F",
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 5,
   },
+  popupButton:{
+    backgroundColor: colors.secondary,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginTop: 10,
+    borderRadius: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  } ,
+  popupButtonText:{
+    color: "#FFFFFF",
+    fontSize: 15,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
   scrollContainer: {
     position: "absolute",
     top: 290, // You can adjust the top value to your preference
-    left: 10,
-    right: 10,
+    left: 18,
+    right: 18,
     bottom: 20,
     backgroundColor: colors.primary,
+    borderRadius: 10, // Add borderRadius property to make the edges round
   },
   restaurantContainer: {
     position: "relative",

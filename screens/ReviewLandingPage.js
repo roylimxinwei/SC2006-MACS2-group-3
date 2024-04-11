@@ -12,7 +12,7 @@ const ReviewLandingPage = ({ route, navigation }) => {
     navigation.navigate("ReviewPage",selectedRestaurant);
   };
   const handleReviewsPressReferral = () => {
-    navigation.navigate("InputReferralCodePage");
+    navigation.navigate("InputReferralCodePage", selectedRestaurant);
   };
 
   return (

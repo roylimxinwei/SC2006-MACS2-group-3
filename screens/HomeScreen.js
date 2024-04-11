@@ -523,7 +523,9 @@ const SwitchPopup = ({ isEnabled, toggleSwitch }) => {
         <View>
           <Text style={styles.popupText}>Notifications turned on...</Text>
           <Text style={styles.popupText}>Looking for places to Jiak!</Text>
-          <Button title="Close" onPress={toggleSwitch} />
+          <TouchableOpacity style={styles.popupButton} onPress={toggleSwitch}>
+            <Text style={styles.popupButtonText}>Close</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>

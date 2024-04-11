@@ -4,14 +4,15 @@ import {
 	Text, 
 	TextInput, 
 	Button,
-	Alert
+	Alert,
+	TouchableOpacity
 } from 'react-native';
 import {styles} from '../css/InputReferralCodePage_CSS';
 
 import { auth, db, storage} from '../firebase';
 import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 
-const InputReferralCodePage = (navigation) => {
+const InputReferralCodePage = ({route, navigation}) => {
 	const [referralCode, setReferralCode] = useState('');
 	const [validReferralCodes, setValidReferralCodes] = useState([]);
 
@@ -40,6 +41,11 @@ const InputReferralCodePage = (navigation) => {
 		// Handle submission logic here
 		console.log(`Submitting referral code: ${referralCode}`);
 		let valid = false;
+
+		if (referralCode.length === 0) {
+			Alert.alert('Error', 'Please enter a referral code before submitting.');
+			return;
+		}
 		
 		for(let i=0; i<validReferralCodes.length; i++){
 			if(referralCode == validReferralCodes[i].referralCode){
@@ -48,7 +54,15 @@ const InputReferralCodePage = (navigation) => {
 				await updateDoc(docRef, {
 					referralCodeUsed: true
 				}).then(message =>{
-					alert("Code Redeemed")
+					Alert.alert(
+						"Code Redeemed", // Title of the alert
+						"Show this pop-up to the cashier to redeem your discount", // Message of the alert
+						[
+							{ text: "Code Shown", onPress: () => console.log('Code shown') }
+							// You can add a function to handle the press event here
+						]
+						);
+					navigation.navigate('ReviewLandingPage' , route.params )
 				  });
 
 			 valid = true;
@@ -57,7 +71,6 @@ const InputReferralCodePage = (navigation) => {
 		}
 
 		if(!valid){
-
 			Alert.alert(
 				'Invalid Referral Code',
 				'Please enter a valid referral code', // <- this part is optional, you can pass an empty string
@@ -82,13 +95,11 @@ const InputReferralCodePage = (navigation) => {
 				style={styles.input}
 				placeholder="Enter eater code here"
 				value={referralCode}
-				onChangeText={setReferralCode}
+				onChangeText={(text) => {setReferralCode(text.trim())}}
 			/>
-			<Button 
-				title="Submit" 
-				onPress={handleSubmit} 
-				style={styles.button} 
-			/>
+			<TouchableOpacity onPress={handleSubmit} style={styles.button}>
+				<Text style={styles.buttonText}>Submit</Text>
+			</TouchableOpacity>
 		</View>
 	);
 };

@@ -28,6 +28,8 @@ export const styles = StyleSheet.create({
       friendsList: {
         width: "100%",
         marginTop: 20,
+        paddingBottom:200,
+        flex: 1,
       },
       friendItem: {
         flexDirection: "column",
@@ -48,7 +50,7 @@ export const styles = StyleSheet.create({
         fontSize: 16,
       },
       button: {
-        backgroundColor: "#CD5C5C",
+        backgroundColor: colors.secondary,
         paddingVertical: 5,
         paddingHorizontal: 45,
         borderRadius: 5,
@@ -74,14 +76,32 @@ export const styles = StyleSheet.create({
         shadowRadius: 4,
         marginLeft: "auto",
         top: 5,
+
+      },
+      button3: {
+        backgroundColor: "#CD5C5C",
+        paddingVertical: 12,
+        paddingHorizontal: 45,
+        borderRadius: 5,
+        // marginBottom: 60,
+        borderRadius: 20,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        marginLeft: "auto",
+        top: 5,
+
       },
       buttonText: {
         color: "#FFFFFF",
         fontSize: 12,
+        fontWeight: "bold",
       },
       buttonText2: {
         color: "#FFFFFF",
         fontSize: 16,
+        fontWeight: "bold",
       },
       buttonImage: {
         width: 70, // Set the width of your button image
@@ -101,5 +121,10 @@ export const styles = StyleSheet.create({
         alignItems: "flex-start",
         marginLeft: 10,
         top: 15,
+      },
+      pad: {
+        color: "transparent",
+        backgroundColor: colors.primary,
+        paddingBottom: 200,
       },
     });

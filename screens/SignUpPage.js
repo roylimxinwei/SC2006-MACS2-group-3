@@ -92,10 +92,16 @@ const SignUpPage = ({ navigation }) => {
           points: 0,
         });
 
+        Alert.alert("Sign Up Successful", "Continue to finish setting up your profile.");
         navigation.navigate("SelectCuisine");
       })
       .catch((error) => {
-        Alert.alert("Sign Up Failed", error.message);
+        if (error.code === "auth/email-already-in-use") {
+          Alert.alert("Sign Up Failed", "Email is already registered with another user.");
+        } else {
+          Alert.alert("Sign Up Failed", "An error occurred. Please Contact Admin.\nError Message: " + error.message);
+        }
+        console.log(error.message);
         setPassword("");
         setConfirmPassword("");
       });
@@ -146,26 +152,26 @@ const SignUpPage = ({ navigation }) => {
         <TextInput
           style={styles.input}
           placeholder="Username"
-          onChangeText={setUsername}
+          onChangeText={(text) => setUsername(text.trim())}
           value={username}
         />
         <TextInput
           style={styles.input}
           placeholder="Email"
-          onChangeText={setEmail}
+          onChangeText={(text) => setEmail(text.trim())}
           value={email}
         />
         <TextInput
           style={styles.input}
           placeholder="Password"
-          onChangeText={setPassword}
+          onChangeText={(text) => setPassword(text.trim())}
           value={password}
           secureTextEntry
         />
         <TextInput
           style={styles.input}
           placeholder="Confirm Password"
-          onChangeText={setConfirmPassword}
+          onChangeText={(text) => setConfirmPassword(text.trim())}
           value={confirmPassword}
           secureTextEntry
         />

@@ -215,17 +215,21 @@ const FriendsPage = ({navigation}) => {
         <Text style={styles.title}>Add Friend</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter friend code"
+          placeholder="Enter your friend's eater code"
           value={friendCode}
           onChangeText={(text) => setFriendCode(text)}
         />
         <TextInput
           style={styles.input}
-          placeholder="Enter friend name"
+          placeholder="Set a name for your friend"
           value={friendName}
           onChangeText={(text) => setFriendName(text)}
         />
-        <Button title="Add Friend" onPress={addFriend} />
+        <TouchableOpacity onPress={addFriend} style={styles.button3}>
+          <Text style={styles.buttonText}>Add Friend</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.title}>Your Friends</Text>
         {/* ScrollView for friends list */}
         {
           <ScrollView style={styles.friendsList}>
@@ -268,6 +272,7 @@ const FriendsPage = ({navigation}) => {
                 )}
               </View>
             ))}
+            {/* <Text style={styles.pad}>for padding</Text> */}
           </ScrollView>
         } 
         <TouchableOpacity

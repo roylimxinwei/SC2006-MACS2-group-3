@@ -1,10 +1,10 @@
 import * as Location from "expo-location";
 import React, { useEffect, useState } from "react";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import GlobalApi from "../config/GlobalApi";
 import { styles } from "../css/UserReviewScreen_CSS";
 
-const UserReviewScreen = ({ route }) => {
+const UserReviewScreen = ({ route, navigation }) => {
   const { placeId } = route.params;
   const [reviews, setReviews] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -78,6 +78,9 @@ const UserReviewScreen = ({ route }) => {
               <Text style={styles.reviewText}>{review.text}</Text>
             </View>
           ))}
+            <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={styles.backbutton}>
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
         </ScrollView>
       );
     } else {

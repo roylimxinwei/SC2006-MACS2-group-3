@@ -13,17 +13,18 @@ import {
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { styles } from "../css/LogInPage_CSS";
 import { auth } from "../firebase";
+import { set } from "firebase/database";
 
 const LoginPage = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleEmailChange = (text) => {
-    setEmail(text);
+    setEmail(text.trim());
   };
 
   const handlePasswordChange = (text) => {
-    setPassword(text);
+    setPassword(text.trim());
   };
 
   const handleLogIn = () => {
@@ -47,24 +48,24 @@ const LoginPage = ({ navigation }) => {
         navigation.navigate("HomeScreen", { userId: user.displayName });
       })
       .catch((error) => {
-        if (error.code === "auth/user-not-found") {
+        // if (error.code === "auth/user-not-found") {
+        //   Alert.alert(
+        //     "Log in Failed",
+        //     "No user found with this email address."
+        //   );
+        // }
+
+        if (error.code === "auth/invalid-email") {
           Alert.alert(
             "Log in Failed",
             "No user found with this email address."
           );
         }
 
-        if (error.code === "auth/invalid-email") {
-          Alert.alert(
-            "Log in Failed",
-            "The email address is invalid."
-          );
-        }
-
         if (error.code === "auth/invalid-credential") {
           Alert.alert(
             "Log in Failed",
-            "The password is invalid."
+            "The password is incorrect."
           );
         }
 
@@ -75,6 +76,7 @@ const LoginPage = ({ navigation }) => {
           );
         }
 
+        setPassword("");
         console.log(error.message);
       });
   };
