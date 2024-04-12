@@ -122,8 +122,9 @@ import {
         <ScrollView style={styles.scrollView} keyExtractor={(item) => item.partyId}>
           {parties.map((item) => (
             <View key={item.partyId} style={styles.partyItem}>
-              <Text style={styles.hostName}>Host Name: {item.hostName}</Text>
-              <Text style={styles.guestNames}>Guest List:</Text>
+              <Text style={styles.nameTitles}>Host</Text>
+              <Text style={styles.hostName}>{item.hostName}</Text>
+              <Text style={styles.nameTitles2}>Guests</Text>
               <ScrollView style={styles.guestListScrollView}>
                 {item.guestList.map((guest) => (
                   <Text key={guest.userId} style={styles.guestNames}>
@@ -135,13 +136,17 @@ import {
                 style={styles.button}
                 onPress={() => removeFromParty(item)}
               >
-                <Text style={styles.buttonText}>Remove from Party</Text>
+                <Text style={styles.buttonText}>Leave this Party</Text>
               </TouchableOpacity>
             </View>
     
           ))}
     
         </ScrollView>
+                      <TouchableOpacity onPress={() => navigation.navigate('User')} style={styles.backButton}>
+              <Text style={styles.backButtonText}>X</Text>
+            </TouchableOpacity>
+
 
     
       </View>

@@ -72,6 +72,7 @@ useEffect(() => {
     // then create a new review by navigating to the review page
 
       navigation.navigate("ReviewPage",item)
+      
   }
 
   const handleDeleteReview = async (item) => {

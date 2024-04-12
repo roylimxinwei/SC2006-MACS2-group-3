@@ -242,7 +242,7 @@ export const styles = StyleSheet.create({
   pad: {
     color: "transparent",
     backgroundColor: colors.primary,
-    paddingBottom: 200,
+    paddingBottom: 100,
   },
   textContainer: {
     flex: 1, // Take up remaining space

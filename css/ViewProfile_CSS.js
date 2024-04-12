@@ -2,6 +2,9 @@ import colors from '../config/colors';
 import {StyleSheet} from "react-native";
 
 export const styles = StyleSheet.create({
+    scrollContainer: {
+        backgroundColor: colors.primary, // Replace with your desired background color
+    } ,
     viewProfile:{
         flex: 1,
         backgroundColor: colors.primary, // Replace with your desired background color

@@ -62,8 +62,8 @@ const ReviewPage = ({ route, navigation }) => {
 		const docSnap = await getDoc(docRef2);
 		if (docSnap.exists()) {
       currentPoints = docSnap.data().points + 5;
-
-		}
+      Alert.alert("Review Submitted", "You have earned 5 points!")
+    }
       const updateDocRef = doc(db, "users", user.uid);
       await updateDoc(updateDocRef, {
         points: currentPoints
@@ -79,11 +79,10 @@ const ReviewPage = ({ route, navigation }) => {
         name: selectedRestaurant.name,
         rating: rating,
         review: review
-});
-
+  });
+    Alert.alert("Sucess", "Review sucessfully edited!")
     }
 
-    Alert.alert("Review Submitted", "You have earned 5 points!");
     navigation.navigate("HomeScreen"); // Go back to the previous screen
   };
 

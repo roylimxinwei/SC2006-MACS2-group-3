@@ -17,6 +17,8 @@ import {
   TouchableWithoutFeedback,
   View,
   Alert,
+  TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { styles } from "../css/PartyPage_CSS.js"; // Ensure these are correctly imported
 import { auth, db } from "../firebase";
@@ -72,6 +74,12 @@ const PartyPage = ({ navigation }) => {
     // checkEmpty();
     console.log("Party members at time of split:", guestNames);
 
+    if (guestNames.length === 0) {
+      Alert.alert("Empty Party", "Add some friends to start the party");
+      console.log("Empty party");
+      return;
+    }
+
       if (!totalCost || totalCost <= 0 || isNaN(totalCost)) {
         Alert.alert("Error", "Enter a valid cost to split");
         console.log("Invalid total cost or empty party");
@@ -108,16 +116,21 @@ const PartyPage = ({ navigation }) => {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Party Page</Text>
+          {/* <ScrollView> */}
 
+      <View style={styles.container}>
+        <Text style={styles.title}>Your Party</Text>
+
+        <View style={styles.hostContainer}>
+        <Text style={styles.hostTitle}>Host</Text>
         <View style={styles.host}>
-          <Text style={styles.hostNames}>Host Name: </Text>
-          <Text style={styles.hostNames}>{hostName}</Text>
+          <Text style={styles.hostNames}>{hostName == '' ? "No party created" : hostName}</Text>
+        </View>
         </View>
 
+        <View style={styles.guestContainer}>
+        <Text style={styles.guestTitle}>Guests</Text>
         <View style={styles.guest}>
-          <Text style={styles.guestNames}>Guest List:</Text>
           <FlatList
             data={guestNames}
             style={styles.list}
@@ -125,7 +138,9 @@ const PartyPage = ({ navigation }) => {
             renderItem={({ item }) => (
               <Text style={styles.guestNames}>{item.name}</Text>
             )}
+            ListEmptyComponent={<Text style={styles.guestNames}>No guests added</Text>}
           />
+        </View>
         </View>
         
           <TextInput
@@ -135,9 +150,16 @@ const PartyPage = ({ navigation }) => {
             onChangeText={(text) => setTotalCost(text)}
             style={styles.input}
           />
-          <Button title="Split Cost" onPress={handleSplitCost} />
+          <TouchableOpacity onPress={handleSplitCost} style={styles.partyButton}>
+            <Text style={styles.partyButtonText}>Split Cost</Text>
+          </TouchableOpacity>
         
+            <TouchableOpacity onPress={() => navigation.navigate('User')} style={styles.backButton}>
+              <Text style={styles.backButtonText}>X</Text>
+            </TouchableOpacity>
       </View>
+          {/* </ScrollView> */}
+
     </TouchableWithoutFeedback>
   );
 };

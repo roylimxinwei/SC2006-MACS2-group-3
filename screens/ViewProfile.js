@@ -33,13 +33,24 @@ const ViewProfile = ({ navigation }) => {
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
 	const handleSignout = () =>{
-		signOut(auth).then(() => {
-			Alert.alert('You are signed out!');
-			navigation.navigate("LogInPage"); 
 
-		}).catch((error) => {
-		// An error happened.
-		});
+		Alert.alert(
+		'Sign Out Confirmation',
+		'Are you sure you want to Sign Out?', // <- this part is optional, you can pass an empty string
+		[
+			{text: 'Yes', onPress: async () => 
+			await signOut(auth)
+			.then(
+			alert("You are signed out!"),
+			navigation.navigate("LogInPage") 
+			)
+			
+		},
+			{text: 'No', onPress: () => console.log('OK Pressed')}
+
+		],
+		{cancelable: true},
+		);
 	}
 
 	const fetchData = async () =>{
