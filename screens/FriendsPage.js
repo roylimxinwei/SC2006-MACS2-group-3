@@ -28,7 +28,6 @@ import { styles } from "../css/FriendsPage_CSS.js";
 
 const FriendsPage = ({navigation}) => {
   const [friendCode, setFriendCode] = useState("");
-  const [friendName, setFriendName] = useState("");
   let [currentUsers, setCurrentUsers] = useState([]);
   let [friends, setFriends] = useState([]);
   let [party, setParty] = useState([]);
@@ -45,6 +44,7 @@ const FriendsPage = ({navigation}) => {
       tempCurrentUsers.push({
         referralCode: doc.data().referralCode,
         userId: doc.id,
+        name: doc.data().name,
       });
     });
 
@@ -63,7 +63,7 @@ const FriendsPage = ({navigation}) => {
     querySnapshot3.forEach((doc) => {
        isInParty = false;
       //check if the friend is also in the party:
-      console.log("length"+tempGuests)
+
       if(tempGuests.length > 0){
       for (let x = 0; x < tempGuests.guests.length; x++) {
         console.log("guest: "+tempGuests.guests[x])
@@ -112,6 +112,7 @@ const FriendsPage = ({navigation}) => {
   const addFriend = async () => {
     let codeDoesNotExist = true;
     let friendId = "";
+    let friendName = "";
 
     //for all current users that is in the app, we check if the QR code is legit so we can add
     //as friend.
@@ -119,6 +120,7 @@ const FriendsPage = ({navigation}) => {
       if (friendCode == currentUsers[i].referralCode) {
         codeDoesNotExist = false;
         friendId = currentUsers[i].userId;
+        friendName = currentUsers[i].name;
       }
     }
     if (!codeDoesNotExist) {
@@ -219,12 +221,7 @@ const FriendsPage = ({navigation}) => {
           value={friendCode}
           onChangeText={(text) => setFriendCode(text)}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter friend name"
-          value={friendName}
-          onChangeText={(text) => setFriendName(text)}
-        />
+
         <Button title="Add Friend" onPress={addFriend} />
         {/* ScrollView for friends list */}
         {
