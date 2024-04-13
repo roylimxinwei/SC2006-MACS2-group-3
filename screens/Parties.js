@@ -16,7 +16,8 @@ import {
     TextInput,
     View,
     TouchableOpacity,
-    ScrollView
+    ScrollView,
+    Alert
   } from "react-native";
   import { auth, db } from "../firebase";
   import { styles } from "../css/Parties_CSS.js"; // Ensure these are correctly imported
@@ -104,7 +105,7 @@ import {
           host: newItem.hostId,
           guests: newItem.guestList
         }).then(()=>{
-          alert("Removed From Party!")
+          Alert.alert("Sucess", "You have leaved this Party!")
           fetchParties();
         });
     }

@@ -244,6 +244,11 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     paddingBottom: 100,
   },
+    pad2: {
+    color: "transparent",
+    backgroundColor: colors.primary,
+    paddingBottom: 200,
+  },
   textContainer: {
     flex: 1, // Take up remaining space
     justifyContent: "center", // Center text vertically

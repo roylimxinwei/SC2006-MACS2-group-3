@@ -340,7 +340,7 @@ const HomeScreen = ({ navigation, route }) => {
                 </View>
               </View>
             ))}
-            <Text style={styles.pad}>for padding</Text>
+            <Text style={styles.pad2}>for padding</Text>
           </ScrollView>
         );
       } else {
