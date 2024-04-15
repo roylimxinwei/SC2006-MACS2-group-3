@@ -87,15 +87,23 @@ import {
     const removeFromParty = async (item) =>{
 
         //we filter out the record where it is the user's id. 
-        // console.log(item)
+        console.log("item: "+item.guestList)
         const updatedGuestList = item.guestList.filter(
             (guest) => guest.userId !== user.uid
           );
 
+          console.log("updated guest list" +updatedGuestList[0])
+
+          let guestList = []
+
+          for(let i = 0; i<updatedGuestList.length;i++){
+            guestList.push(updatedGuestList[i].userId)
+          }
+
           //reconstruct the item but change the guestList.
           const newItem = {
             ...item,
-            guestList: updatedGuestList,
+            guestList: guestList,
           };
 
           console.log(newItem)
@@ -105,7 +113,7 @@ import {
           host: newItem.hostId,
           guests: newItem.guestList
         }).then(()=>{
-          Alert.alert("Sucess", "You have leaved this Party!")
+          Alert.alert("Success", "You have left this Party!")
           fetchParties();
         });
     }
