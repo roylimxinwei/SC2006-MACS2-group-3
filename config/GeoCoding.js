@@ -3,7 +3,16 @@ import axios from "axios";
 const BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json";
 const API_KEY = "AIzaSyAjbOeXgrY01MK0CSkd-M4IKI_kxvCqzac";
 
-// Typically, the Google API Key is passed as a query parameter, not in the header.
+/**
+ * Fetches the postal address for a given latitude and longitude using the Google Geocoding API.
+ * 
+ * This function constructs a request to the Google Geocoding API with the latitude and longitude
+ * provided, and it expects to return a structured format of address components.
+ * 
+ * @param {number} lat - The latitude of the location.
+ * @param {number} long - The longitude of the location.
+ * @returns {Promise<Object>} A promise that resolves to the geocoding response data from Google.
+ */
 const getAddress = (lat, long) => {
   const params = {
     latlng: `${lat},${long}`,

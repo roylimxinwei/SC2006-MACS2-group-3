@@ -14,7 +14,14 @@ const API_KEY = "AIzaSyAjbOeXgrY01MK0CSkd-M4IKI_kxvCqzac";
 // const NewNearByPlace =(data) => axios.post(BASE_URL,data,config)
 //   .catch(error => console.error('Error fetching nearby places:', error));
 
-// Typically, the Google API Key is passed as a query parameter, not in the header.
+/**
+ * Fetches nearby places from Google Places API based on specified parameters.
+ * @param {string} location - The latitude and longitude of the location (format: "latitude,longitude").
+ * @param {number} radius - The radius around the location in meters within which to search.
+ * @param {string} type - The type of place to search for (e.g., 'restaurant').
+ * @param {string} keyword - Additional keyword to refine the search (e.g., 'sushi').
+ * @returns {Promise} A promise that resolves to the response data from the API if successful.
+ */
 const NewNearByPlace = (location, radius, type, keyword) => {
   const params = {
     location: location, // in the format "latitude,longitude"
@@ -34,6 +41,11 @@ const NewNearByPlace = (location, radius, type, keyword) => {
     });
 };
 
+/**
+ * Fetches detailed reviews for a specific place using Google Place Details API.
+ * @param {Object} params - The parameters for the API request, including the place_id and the API key.
+ * @returns {Promise} A promise that resolves to the detailed place data, including reviews.
+ */
 const GetReviews = (params) => {
   return axios
     .get("https://maps.googleapis.com/maps/api/place/details/json", { params })

@@ -1,5 +1,3 @@
-// landing screen redirects to the welcome(signup/login) screen
-
 import React, { useEffect } from "react";
 import { 
   Image, 
@@ -10,7 +8,17 @@ import {
 } from "react-native";
 import { styles } from "../css/LandingScreen_CSS";
 
+/**
+ * The landing screen that displays a loading indicator and automatically navigates
+ * to the Welcome screen after a delay.
+ * @param {Object} props - Component props.
+ * @param {Object} props.navigation - Navigation object to enable navigating to other screens.
+ */
 const LandingScreen = ({ navigation }) => {
+
+  /**
+   * Sets up a timer to navigate to the WelcomeScreen after 3 seconds. Cleans up on unmount.
+   */
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       console.log("Navigating to WelcomePage");
@@ -22,10 +30,6 @@ const LandingScreen = ({ navigation }) => {
     };
   }, []);
 
-  const handleRedirect = () => {
-    navigation.navigate("WelcomeScreen");
-  };
-
   return (
     <View style={styles.container}>
       <Image source={require("../assets/jiakIcon.png")} />
@@ -36,9 +40,6 @@ const LandingScreen = ({ navigation }) => {
       <Text style={styles.jiakText}>
         Ready to Jiak?
       </Text>
-      {/* <TouchableOpacity style={styles.button} onPress={handleRedirect}>
-        <Text style={styles.buttonText}>Go back to Welcome Screen</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };

@@ -12,31 +12,40 @@ import {styles} from '../css/InputReferralCodePage_CSS';
 import { auth, db, storage} from '../firebase';
 import { doc, setDoc, getDoc, updateDoc, getDocs, collection, Timestamp} from "firebase/firestore"; 
 
+/**
+ * Screen component to input and validate a referral code.
+ * @param {Object} props - Props passed to this component.
+ * @param {Object} props.route - Routing parameter object, containing any params.
+ * @param {Object} props.navigation - Navigation object to enable navigating to other screens.
+ */
 const InputReferralCodePage = ({route, navigation}) => {
 	const [referralCode, setReferralCode] = useState('');
 	const [validReferralCodes, setValidReferralCodes] = useState([]);
 
+	/**
+	 * Fetches all valid referral codes from Firestore that have not been used.
+	 */
 	const fetchData = async () =>{
-
 		let user = auth.currentUser;
 		const codes = [];
 		const querySnapshot = await getDocs(collection(db, "users"));
-      querySnapshot.forEach((doc) => {
-		console.log(doc.data())
-		console.log(doc.id)
-		if(doc.data().referralCodeUsed == false && user.uid != doc.id){
-			codes.push({
-			referralCode: doc.data().referralCode,
-			userId: doc.id
+		querySnapshot.forEach((doc) => {
+			console.log(doc.data())
+			console.log(doc.id)
+			if(doc.data().referralCodeUsed == false && user.uid != doc.id){
+				codes.push({
+					referralCode: doc.data().referralCode,
+					userId: doc.id
+				})
+			}
 		})
-		}
-		
-	  })
-
-	  setValidReferralCodes(codes)
-
+	 	setValidReferralCodes(codes)
 	}
 
+	/**
+	 * Handles the submission of the referral code.
+	 * Validates the entered code against the database and updates the status if valid.
+	 */
 	const handleSubmit = async () => {
 		// Handle submission logic here
 		console.log(`Submitting referral code: ${referralCode}`);
@@ -63,10 +72,8 @@ const InputReferralCodePage = ({route, navigation}) => {
 						]
 						);
 					navigation.navigate('ReviewLandingPage' , route.params )
-				  });
-
-			 valid = true;
-				
+				});
+			 	valid = true;
 			}
 		}
 
@@ -84,6 +91,9 @@ const InputReferralCodePage = ({route, navigation}) => {
 		
 	};
 
+	/**
+	 * Initializes the fetching of data on component mount.
+	 */
 	useEffect(() => {
 		fetchData();
 	}, [])
